@@ -1,3 +1,3 @@
-# GUC STaff Portal
+# GUC Staff Portal
 
-. MERN Stack
+- MERN Stack
