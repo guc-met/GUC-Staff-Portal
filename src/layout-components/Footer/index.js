@@ -40,7 +40,7 @@ const Footer = props => {
           </div>
           <div className="app-footer--second">
             <span>German University in Cairo</span> ©
-            2020 - crafted with <span className="text-danger px-1">❤</span> by 43- BALABIZO
+            2021 - crafted with <span className="text-danger px-1">❤</span> by 43- BALABIZO
           </div>
         </div>
       </Paper>
