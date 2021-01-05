@@ -7,7 +7,8 @@ import { IconButton, Box, Tooltip } from '@material-ui/core';
 
 import { connect } from 'react-redux';
 
-import projectLogo from '../../assets/images/react.svg';
+// import projectLogo from '../../assets/images/react.svg';
+import projectLogo from '../../assets/images/G.png';
 
 import { setSidebarToggleMobile } from '../../reducers/ThemeOptions';
 
@@ -39,7 +40,7 @@ const SidebarHeader = props => {
               />
             </IconButton>
           </Link>
-          <Box className="header-logo-text">Carolina</Box>
+          <Box className="header-logo-text">GUC Staff</Box>
         </Box>
         <Box className="app-sidebar-header-btn-mobile">
           <Tooltip title="Toggle Sidebar" placement="right">

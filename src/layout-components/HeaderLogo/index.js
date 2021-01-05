@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 
 import { IconButton, Box } from '@material-ui/core';
 
-import projectLogo from '../../assets/images/react.svg';
+// import projectLogo from '../../assets/images/react.svg';
+import projectLogo from '../../assets/images/G.png';
 
 const HeaderLogo = props => {
   return (
@@ -26,7 +27,7 @@ const HeaderLogo = props => {
               />
             </IconButton>
           </Link>
-          <Box className="header-logo-text">Carolina</Box>
+          <Box className="header-logo-text">GUC Staff Portal</Box>
         </Box>
       </div>
     </Fragment>

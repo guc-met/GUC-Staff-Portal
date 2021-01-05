@@ -15,7 +15,8 @@ import {
 import { connect } from 'react-redux';
 
 import { setSidebarToggleMobile } from '../../reducers/ThemeOptions';
-import projectLogo from '../../assets/images/react.svg';
+// import projectLogo from '../../assets/images/react.svg';
+import projectLogo from '../../assets/images/G.png';
 
 import HeaderLogo from '../../layout-components/HeaderLogo';
 import HeaderUserbox from '../../layout-components/HeaderUserbox';
@@ -60,7 +61,7 @@ const Header = props => {
                 </IconButton>
               </Link>
               <Hidden smDown>
-                <Box className="app-logo-text">Carolina</Box>
+                <Box className="app-logo-text">GUC Staff Portal</Box>
               </Hidden>
             </Box>
           </Hidden>
@@ -71,9 +72,9 @@ const Header = props => {
                 target="_blank"
                 size="small"
                 variant="contained"
-                color="default"
+                color="primary"
                 className="mr-3">
-                Download now
+                Sign in
               </Button>
               <Button
                 href="https://uifort.com/template/carolina-react-admin-dashboard-material-ui-pro"
@@ -81,7 +82,7 @@ const Header = props => {
                 size="small"
                 variant="contained"
                 color="primary">
-                View PRO Version
+                Sign out
               </Button>
             </Box>
           </Hidden>
