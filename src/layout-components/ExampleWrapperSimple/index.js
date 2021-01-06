@@ -7,7 +7,7 @@ export default class ExampleWrapperSimple extends Component {
     return (
       <Card className="card-box mb-4-spacing overflow-visible">
         <div className="card-header">
-          <div className="card-header--title font-size-md font-weight-bold py-2">
+          <div className="card-header--title font-size-lg font-weight-bold py-2">
             {this.props.sectionHeading}
           </div>
         </div>
