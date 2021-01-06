@@ -36,6 +36,9 @@ const Tabs = lazy(() => import('./example-pages/Tabs'));
 const ApexCharts = lazy(() => import('./example-pages/ApexCharts'));
 const Maps = lazy(() => import('./example-pages/Maps'));
 const ListGroups = lazy(() => import('./example-pages/ListGroups'));
+const FacultiesHR = lazy(() => import('./example-pages/FacultiesHR'));
+const DepartmentsHR = lazy(() => import('./example-pages/DepartmentsHR'));
+const CoursesHR = lazy(() => import('./example-pages/CoursesHR'));
 
 const Routes = () => {
   const location = useLocation();
@@ -112,7 +115,10 @@ const Routes = () => {
                 '/FormsControls',
                 '/ApexCharts',
                 '/Maps',
-                '/ListGroups'
+                '/ListGroups',
+                '/FacultiesHR',
+                '/DepartmentsHR',
+                '/CoursesHR',
               ]}>
               <LeftSidebar>
                 <Switch location={location} key={location.pathname}>
@@ -153,6 +159,9 @@ const Routes = () => {
                     <Route path="/ApexCharts" component={ApexCharts} />
                     <Route path="/Maps" component={Maps} />
                     <Route path="/ListGroups" component={ListGroups} />
+                    <Route path="/FacultiesHR" component={FacultiesHR} />
+                    <Route path="/DepartmentsHR" component={DepartmentsHR} />
+                    <Route path="/CoursesHR" component={CoursesHR} />
                   </motion.div>
                 </Switch>
               </LeftSidebar>

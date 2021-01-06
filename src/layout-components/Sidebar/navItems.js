@@ -205,6 +205,21 @@ export default [
         "to": "/ListGroups"
       }
     ]
+  },
+  {
+    "label": "Faculties",
+    "to": "/FacultiesHR"
+    
+  },
+  {
+    "label": "Departments",
+    "to": "/DepartmentsHR"
+    
+  },
+  {
+    "label": "Courses",
+    "to": "/CoursesHR"
+    
   }
 ]`,
       (key, value) => {
