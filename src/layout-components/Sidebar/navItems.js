@@ -207,6 +207,11 @@ export default [
     ]
   },
   {
+    "label": "Locations",
+    "to": "/LocationsHR"
+    
+  },
+  {
     "label": "Faculties",
     "to": "/FacultiesHR"
     
@@ -228,6 +233,9 @@ export default [
         } else {
           return value;
         }
+
+        console.log(key)
+
       }
     )
   }

@@ -39,7 +39,7 @@ const ListGroups = lazy(() => import('./example-pages/ListGroups'));
 const FacultiesHR = lazy(() => import('./example-pages/FacultiesHR'));
 const DepartmentsHR = lazy(() => import('./example-pages/DepartmentsHR'));
 const CoursesHR = lazy(() => import('./example-pages/CoursesHR'));
-
+const LocationsHR=lazy(() => import('./example-pages/LocationsHR'));
 const Routes = () => {
   const location = useLocation();
   console.log("Loca::",location);
@@ -116,6 +116,7 @@ const Routes = () => {
                 '/ApexCharts',
                 '/Maps',
                 '/ListGroups',
+                '/LocationsHR',
                 '/FacultiesHR',
                 '/DepartmentsHR',
                 '/CoursesHR',
@@ -159,6 +160,7 @@ const Routes = () => {
                     <Route path="/ApexCharts" component={ApexCharts} />
                     <Route path="/Maps" component={Maps} />
                     <Route path="/ListGroups" component={ListGroups} />
+                    <Route path="/LocationsHR" component={LocationsHR} />
                     <Route path="/FacultiesHR" component={FacultiesHR} />
                     <Route path="/DepartmentsHR" component={DepartmentsHR} />
                     <Route path="/CoursesHR" component={CoursesHR} />
