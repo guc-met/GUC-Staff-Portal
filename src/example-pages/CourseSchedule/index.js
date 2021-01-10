@@ -12,7 +12,7 @@ export default function Schedule() {
         titleHeading="Course Schedule"
         titleDescription="Here you can see schedules of courses"
       />
-      <ExampleWrapperSimple sectionHeading="Course Schedule">
+      <ExampleWrapperSimple sectionHeading= {"CSEN 1234"+" Schedule"}>
         <ScheduleTable />
       </ExampleWrapperSimple>
     </Fragment>
