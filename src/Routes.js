@@ -40,6 +40,7 @@ const FacultiesHR = lazy(() => import('./example-pages/FacultiesHR'));
 const DepartmentsHR = lazy(() => import('./example-pages/DepartmentsHR'));
 const CoursesHR = lazy(() => import('./example-pages/CoursesHR'));
 const LocationsHR=lazy(() => import('./example-pages/LocationsHR'));
+const Schedule=lazy(() => import('./example-pages/Schedule'));
 const Routes = () => {
   const location = useLocation();
   console.log("Loca::",location);
@@ -120,6 +121,7 @@ const Routes = () => {
                 '/FacultiesHR',
                 '/DepartmentsHR',
                 '/CoursesHR',
+                '/Schedule',
               ]}>
               <LeftSidebar>
                 <Switch location={location} key={location.pathname}>
@@ -164,6 +166,7 @@ const Routes = () => {
                     <Route path="/FacultiesHR" component={FacultiesHR} />
                     <Route path="/DepartmentsHR" component={DepartmentsHR} />
                     <Route path="/CoursesHR" component={CoursesHR} />
+                    <Route path="/Schedule" component={Schedule} />
                   </motion.div>
                 </Switch>
               </LeftSidebar>
