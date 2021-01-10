@@ -39,7 +39,7 @@ export default function HeaderUserbox() {
         <Box>
           {username}
         </Box>
-        <div className="d-none d-xl-block pl-3">
+        <div className="d-none pl-3">
           <div className="font-weight-bold pt-2 line-height-1">{username}</div>
           <span className="text-white-50">{usertype}</span>
         </div>
