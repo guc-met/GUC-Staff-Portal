@@ -8,7 +8,6 @@ import {
     TableRow,
     Button
   } from '@material-ui/core';
-import ScheduleSlot from '../ScheduleSlot'
 import ScheduleDay from '../ScheduleDay'
 
 const sched = 
@@ -24,6 +23,14 @@ const sched =
 
 const noRad = {borderRadius:"0"};
 
+//Top Left Cell Split
+const CrnrDivStyle = {display: "grid", justifyContent: "space-between", gridTemplateColumns: "repeat(2, 1fr)", gridAutoRows: "1fr",  backgroundSize: "100% 100%", 
+background: 'url("data:image/svg+xml;utf8,<svg xmlns='+"'http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><line x1='0' y1='0' x2='100' y2='100' stroke='black' vector-effect='non-scaling-stroke'/></svg>"+'")'
+};
+const topStyle = { gridColumnStart: "2",textAlign: "right"};
+const botStyle = {gridColumnStart: "1", textAlign: "left"};
+// const lineStyle = {width: "112px", height: "47px", borderBottom: "1px solid red", transform: "translateY(-20px) translateX(5px) rotate(27deg)", position: "absolute", zIndex: "-1"};
+
 export default function LivePreviewExample() {
     return (
     <Fragment>
@@ -38,8 +45,15 @@ export default function LivePreviewExample() {
             </colgroup>
                 <thead className="thead-light">
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">1<sup>st</sup></th>
+                        <th scope="col"> 
+                            <div style={CrnrDivStyle}>
+                                <span style={topStyle}> Slot </span>
+                                <br></br>
+                                <span style={botStyle}> Day </span>
+                                {/* <div style={lineStyle}></div> */}
+                            </div>
+                        </th>
+                        <th scope="col">1<sup>st</sup></th> 
                         <th scope="col">2<sup>nd</sup></th>
                         <th scope="col">3<sup>rd</sup></th>
                         <th scope="col">4<sup>th</sup></th>
