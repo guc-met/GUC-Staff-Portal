@@ -30,8 +30,11 @@ export default function HeaderUserbox() {
         {/* <Box>
           <Avatar sizes="44" alt="Emma Taylor" src={avatar5} />
         </Box> */}
-        <Box>{username}</Box>
-        <div className="d-none d-xl-block pl-3">
+
+        <Box>
+          {username}
+        </Box>
+        <div className="d-none pl-3">
           <div className="font-weight-bold pt-2 line-height-1">{username}</div>
           <span className="text-white-50">{usertype}</span>
         </div>

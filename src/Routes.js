@@ -37,8 +37,13 @@ const Tabs = lazy(() => import('./example-pages/Tabs'));
 const ApexCharts = lazy(() => import('./example-pages/ApexCharts'));
 const Maps = lazy(() => import('./example-pages/Maps'));
 const ListGroups = lazy(() => import('./example-pages/ListGroups'));
+
 const Login = lazy(() => import('./example-pages/login'));
 
+const FacultiesHR = lazy(() => import('./example-pages/FacultiesHR'));
+const DepartmentsHR = lazy(() => import('./example-pages/DepartmentsHR'));
+const CoursesHR = lazy(() => import('./example-pages/CoursesHR'));
+const LocationsHR=lazy(() => import('./example-pages/LocationsHR'));
 const Routes = () => {
   const location = useLocation();
   const pageVariants = {
@@ -101,7 +106,11 @@ const Routes = () => {
                 '/FormsControls',
                 '/ApexCharts',
                 '/Maps',
-                '/ListGroups'
+                '/ListGroups',
+                '/LocationsHR',
+                '/FacultiesHR',
+                '/DepartmentsHR',
+                '/CoursesHR',
               ]}>
               <LeftSidebar>
                 <Switch location={location} key={location.pathname}>
@@ -143,6 +152,10 @@ const Routes = () => {
                     <Route path="/ApexCharts" component={ApexCharts} />
                     <Route path="/Maps" component={Maps} />
                     <Route path="/ListGroups" component={ListGroups} />
+                    <Route path="/LocationsHR" component={LocationsHR} />
+                    <Route path="/FacultiesHR" component={FacultiesHR} />
+                    <Route path="/DepartmentsHR" component={DepartmentsHR} />
+                    <Route path="/CoursesHR" component={CoursesHR} />
                   </motion.div>
                 </Switch>
               </LeftSidebar>

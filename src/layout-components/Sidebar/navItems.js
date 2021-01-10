@@ -205,6 +205,26 @@ export default [
         "to": "/ListGroups"
       }
     ]
+  },
+  {
+    "label": "Locations",
+    "to": "/LocationsHR"
+    
+  },
+  {
+    "label": "Faculties",
+    "to": "/FacultiesHR"
+    
+  },
+  {
+    "label": "Departments",
+    "to": "/DepartmentsHR"
+    
+  },
+  {
+    "label": "Courses",
+    "to": "/CoursesHR"
+    
   }
 ]`,
       (key, value) => {
@@ -213,6 +233,9 @@ export default [
         } else {
           return value;
         }
+
+        console.log(key)
+
       }
     )
   }
