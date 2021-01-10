@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-
+import DropdownsBasic from '../../example-components/Dropdowns/DropdownsBasic';
+import AlertDialog from '../../example-components/AlertDialog';
+import axios from 'axios'
 import {
   TableBody,
   Table,
@@ -32,6 +34,17 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 
+
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import { ExampleWrapperSimple } from '../../layout-components';
+let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiZHVsQGdtYWlsLmNvbSIsImlkIjoiaHItMSIsIm5hbWUiOiJBYmR1bGxhaCIsImlhdCI6MTYxMDExNzU2OH0.0z56DTUtdz3iO0exClqVEzr9S0FkHkLX-cMzin1yOBU'
 const useStyles1 = makeStyles(theme => ({
   root: {
     flexShrink: 0,
@@ -105,10 +118,23 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired
 };
 
-function createData(name, code) {
-  return { id:code,idTemp:code,name,nameTemp:name, code,codeTemp:code,isEditMode: false };
+function createData(code,name, facultyCode,headId) {
+  return { 
+    id:code,idTemp:code,
+    code,codeTemp:code,
+    name,nameTemp:name,
+    facultyCode,facultyCodeTemp:facultyCode,
+    headId,headIdTemp:headId,
+    isEditMode: false };
 }
- let initRow={id:"",idTemp:"",name:"",nameTemp:"", code:"",codeTemp:"",isEditMode: true}
+ let initRow={
+    id:"",idTemp:"",
+    name:"",nameTemp:"",
+    type:"",typeTemp:"",
+    maxCapacity:"",maxCapacityTemp:"",
+    curCapacity:"",curCapacityTemp:"",
+    isEditMode: true
+ }
 
 const useStyles = makeStyles({
   table: {
@@ -124,6 +150,13 @@ const useStyles = makeStyles({
   input: {
     width: 130,
     height: 40
+  },
+  formControl: {
+    margin: '4px',
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: '8px',
   }
 });
 
@@ -133,7 +166,30 @@ const CustomTableCell = ({ row, name, onChange }) => {
     const { isEditMode } = row;
     return (
       <TableCell align="left" className={classes.tableCell}>
-        {isEditMode ? (
+        {row["id"]==""&&name=='typeTemp'?(
+                  <FormControl  className={classes.formControl}>
+                  <Select
+                    value={initRow.typeTemp}
+                    name={name}
+                    // onChange={handleChange}
+                    onChange={(e) => onChange(e, row)}
+                    displayEmpty
+                    className={classes.selectEmpty}
+                    inputProps={{ 'aria-label': 'Without label' }}
+                  >
+                    <MenuItem value="" disabled>
+                      None
+                    </MenuItem>
+                    <MenuItem value={'Office'}>Office</MenuItem>
+                    <MenuItem value={'Tutorial Room'}>Tutorial Room</MenuItem>
+                    <MenuItem value={'Lab'}>Lab</MenuItem>
+                    <MenuItem value={'Hall'}>Hall</MenuItem>
+                  </Select>
+                </FormControl>
+        
+             
+        )
+        :isEditMode&&name!='curCapacityTemp'&&name!='typeTemp' ? (
           <Input
             value={row[name]}
             name={name}
@@ -160,22 +216,51 @@ export default function LivePreviewExample() {
     setPage(0);
   };
   //for responsive entries
-  const [rows, setRows] = React.useState([
-    createData('Law', 'LAW'),
-    createData('Donut', 452),
-    createData('Engineering', 'ENG'),
-    createData('Architecture', 'ARCH'),
-    createData('Gingerbread', 356),
-    createData('Honeycomb', 408),
-    createData('Applied Arts', 'APP'),
-    createData('Jelly Bean', 375),
-    createData('KitKat', 518),
-    createData('Lollipop', 392),
-    createData('Pharmacy', 'PHA'),
-    createData('Nougat', 360),
-    createData('Oreo', 437)
-  ]);
+  const [locType,setLocType]=React.useState('');
+  const [rows, setRows] = React.useState([]);
+  const [open, setOpen] = React.useState([false,'success','all good']);
+  
+  React.useEffect(() => {
+    //console.log(open)
+    async function fetchData() {
+    
+      const result=await axios
+      .get(
+        'http://localhost:3001/hr/location',
+     
+        {
+          headers: {
+          // token: localStorage.getItem('UserToken')  //to be added
+           token
+          }
+        }
+      )
+      .then(function(response) {
+       // console.log(response)
+        if(response.status!=200){//that's an error
+          return [];
+        }else{
+          //return array
+        //  console.log(response)
+          let arr= response.data.map(loc=>createData(loc.name,loc.type,loc.curCapacity!=null?loc.curCapacity:"",loc.maxCapacity))
+          //let x=['a','b']
+         // console.log(arr)
+          return arr;
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+        return [];
+      })
+      //console.log(result)
+
+      setRows(result);
+    }
+    fetchData();
+  }, []);
+ // console.log(rows)
   const [previous, setPrevious] = React.useState({});
+  const [dummy, setDummy] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -204,6 +289,57 @@ export default function LivePreviewExample() {
     //     return row;
     //   });
     // });
+    let name=initRow.nameTemp
+    let type=initRow.typeTemp
+    let maxCapacity=initRow.maxCapacityTemp
+    let curCapacity=initRow.curCapacity
+    let obj={id:name,idTemp:name,type,typeTemp:type,name,nameTemp:name,
+      maxCapacity,maxCapacityTemp:maxCapacity,
+      curCapacity:type=='Office'?0:'',curCapacityTemp:type=='Office'?0:'',
+      isEditMode:false};
+    let body={name,type,maxCapacity};
+    if(type=='Office'){
+      body.curCapacity=0
+    }
+    console.log(body)
+    axios
+      .post(
+        'http://localhost:3001/hr/location',
+        body,
+        {
+          headers: {
+           // 'Content-Type': 'application/json'
+          // token: localStorage.getItem('UserToken')  //to be added
+          token: token
+            //    'auth-token': localStorage.getItem('user'),
+          }
+        }
+      )
+      .then(function(response) {
+        //console.log(response)
+        if(response.status!=200){//that's an error
+           // setOpen({val:true,severity:"error",display:response.data.err});
+            setOpen([true,"error",response.data.err]);
+
+        }else{
+        //  initRow.codeTemp="";
+          initRow.nameTemp="";
+          initRow.maxCapacityTemp="";
+          setLocType('');
+          //setOpen({val:true,severity:"success",display:"Added successfully"});
+          setOpen([true,"success",response.data.msg]);
+          setRows([...rows,obj]);
+
+        }
+      })
+      .catch(function(error) {
+        setOpen([true,"error",error.response.data.err]);
+
+        console.log(error.response.data);
+      });
+   
+    
+     //setRows([obj,...rows]);
   };
 
   const onChange = (e, row) => {
@@ -211,42 +347,98 @@ export default function LivePreviewExample() {
       setPrevious((state) => ({ ...state, [row.id]: row }));
     }
     const value = e.target.value;
+    //console.log(value);
     const name = e.target.name;
     const { id } = row;
     //console.log(name);
     const newRows = rows.map((row) => {
       if (row.id === id) {
-          if(name=="code"){
-             //TODO 
+          if(name=="nameTemp"){
+             //TODO:
              return { ...row, [name]: value ,["idTemp"]:value};
           }
           return { ...row, [name]: value };
       }
       return row;
     });
-    console.log(newRows);
+    if(row.id==''){
+        initRow={...initRow,[name]:value};
+       // console.log(name)
+        if(name=='typeTemp'){
+            setLocType(value);
+           
+        }
+        
+    }
+    //console.log(initRow);
     setRows(newRows);
+    
   };
 
-  const onDelete = (id) => {
-    const newRows = rows.map((row, index) => {
-      if (row.id === id) {
-        rows.splice(index, 1);
-        //return previous[id] ? previous[id] : row;
+  const onDelete =async (e) => {
+    const res=await axios
+    .delete(
+      'http://localhost:3001/hr/location',
+      {
+        headers: {
+          //'Content-Type': 'application/json',
+         token: token,  //to be added
+        // token
+          //    'auth-token': localStorage.getItem('user'),
+        },data:{name:e.id}
       }
-      return row;
+      
+   
+    )
+    .then(function(response) {
+     //console.log(response)
+      if(response.status!=200){//that's an error
+      setOpen([true,"error",response.data.err]);
+        return response.data.err
+      }else{
+        setOpen([true,"success",response.data.msg]);
+        return response.data.msg;
+        //setRows([obj,...rows]);
+        //onToggleEditMode(e.id);
+      }
+    })
+    .catch(function(error) {
+      console.log(error.response.data);
+      setOpen([true,"error",error.response.data.err]);
+      //onToggleEditMode(e.id);
     });
-    setRows(newRows);
-    setPrevious((state) => {
-      delete state[id];
-      return state;
-    });
-    onToggleEditMode(id);
+    
+    //console.log(rows)
+    if(res&&res.charAt(0)=='D'){
+      const newRows = rows.map((row, index) => {
+        const indexx = rows.indexOf(row)
+       // console.log(indexx)
+        if (row.id == e.id) {
+          //console.log(indexx)
+          rows.splice(indexx, 1);
+          //return previous[id] ? previous[id] : row;
+        }
+        return row;
+      });
+      //console.log(newRows)
+      //setRows(newRows);
+      setDummy(dummy+1)
+      setPrevious((state) => {
+        delete state[e.id];
+        return state;
+      });
+    }else{
+      //display error
+      setOpen([true,"error","Something wrong happened"]);
+    }
+    
   };
   const onCancel = (id) => {
     const newRows = rows.map((row, index) => {
        if (row.id === id) {
-           row.codeTemp=row.code;
+           row.maxCapacityTemp=row.maxCapacity;
+           //row.curCapacityTemp=row.curCapacity;
+           //row.typeTemp=row.type;
            row.nameTemp=row.name;
            row.idTemp=row.id;
          return row;
@@ -261,42 +453,124 @@ export default function LivePreviewExample() {
       return state;
     });
     onToggleEditMode(id);
+    /////////////////////////////////
+    
   };
     const onApproval = (id) => {
-    const newRows = rows.map((row, index) => {
-       if (row.id === id) {
-           row.code=row.codeTemp;
-           row.name=row.nameTemp;
-           row.idTemp=row.codeTemp;
-           row.id=row.idTemp;
-         return { ...row, isEditMode: !row.isEditMode };
-         //return previous[id] ? previous[id] : row;
+    // const newRows = rows.map((row, index) => {
+    //    if (row.id === id) {
+    //       // row.type=row.typeTemp;
+    //        row.maxCapacity=row.maxCapacityTemp;
+    //        //row.curCapacity=row.curCapacityTemp;
+    //        row.name=row.nameTemp;
+    //        row.idTemp=row.nameTemp;
+    //        row.id=row.idTemp;
+    //      return { ...row, isEditMode: !row.isEditMode };
+    //      //return previous[id] ? previous[id] : row;
+    //    }
+    //   return row;
+    // });
+    // setRows(newRows);
+    // setPrevious((state) => {
+    //   delete state[id];
+    //   return state;
+    // });
+    //////////////////
+    let obj={};
+    for(let i=0;i<rows.length;i++) {
+       if (rows[i].id === id) {
+           obj=rows[i];
+           break
        }
-      return row;
-    });
-    setRows(newRows);
+    }
+   // console.log(obj)
+   
     setPrevious((state) => {
       delete state[id];
       return state;
     });
-    console.log(newRows)
+    axios
+    .put(
+      'http://localhost:3001/hr/location',
+      {
+        key:obj.id,
+        name:obj.nameTemp,
+        maxCapacity:obj.maxCapacityTemp
+      },
+      {
+        headers: {
+         // 'Content-Type': 'application/json'
+        // token: localStorage.getItem('UserToken')  //to be added
+        token: token
+          //    'auth-token': localStorage.getItem('user'),
+        }
+      }
+    )
+    .then(function(response) {
+      //console.log(response)
+      if(response.status!=200){//that's an error
+        console.log(obj)
+        setOpen([true,"error",response.data.err]);
+        //setRows(newRows);
+      //display error
+        setDummy(dummy+1)
+
+      }else{
+       // onToggleEditMode(id);
+       const newRows = rows.map((row, index) => {
+        if (row.id === id) {
+          row.id=row.idTemp;
+          row.maxCapacity=row.maxCapacityTemp;
+          row.name=row.nameTemp;
+            
+          return { ...row, isEditMode: !row.isEditMode };
+          //return previous[id] ? previous[id] : row;
+        }
+       return row;
+     });
+        
+        //obj.
+        //console.log(obj)
+        setOpen([true,"success",response.data.msg]);
+        setRows(newRows);
+        setDummy(dummy+1)
+       // setRows([obj,...rows]);
+       //display success
+      }
+    })
+    .catch(function(error) {
+      setOpen([true,"error",error.response.data.err]);
+      console.log(error.response.data);
+    });
+   // console.log(newRows)
    // onToggleEditMode(id);
+  };
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+     // setOpen(true);
+      return;
+    }
+
+    setOpen([false,open[1],open[2]]);
   };
   //end of responsive entries
 
   return (
+    <>
     <Fragment>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="custom pagination table">
         <TableHead>
           <TableRow>
             <TableCell align="left" />
-            <TableCell align="left">Code</TableCell>
             <TableCell align="left">Name</TableCell>
+            <TableCell align="left">Type</TableCell>
+            <TableCell align="left">Current Capacity</TableCell>
+            <TableCell align="left">Maximum Capacity</TableCell>
           </TableRow>
         </TableHead>
           <TableBody>
-          <TableRow key="add">
+          <TableRow key="">
                   <TableCell className={classes.selectTableCell}>
                     <IconButton
                       title="add"
@@ -308,8 +582,10 @@ export default function LivePreviewExample() {
                      
               </TableCell>
               {/* component="th" scope="row" */}
-              <CustomTableCell  {...{ row:initRow, name: "codeTemp", onChange }} />
               <CustomTableCell  {...{ row:initRow, name: "nameTemp", onChange }} />
+              <CustomTableCell  {...{ row:initRow, name: "typeTemp", onChange }} />
+              <CustomTableCell  {...{ row:initRow, name: "curCapacityTemp", onChange }} />
+              <CustomTableCell  {...{ row:initRow, name: "maxCapacityTemp", onChange }} />
              
               </TableRow>
             {(rowsPerPage > 0
@@ -344,20 +620,15 @@ export default function LivePreviewExample() {
                   >
                     <EditIcon />
                   </IconButton>
-                    <IconButton
-                      title="delete"
-                      aria-label="delete"
-                      onClick={() => onDelete(row.id)}
-                    >
-                      
-                      <DeleteIcon />
-                    </IconButton>
+                  <AlertDialog entry='Department' onClick={(e)=>onDelete({...e,id:row.id})} row={row.id}> </AlertDialog>
                   </>
                 )}
               </TableCell>
               {/* component="th" scope="row" */}
-              <CustomTableCell  {...{ row, name: "codeTemp", onChange }} />
               <CustomTableCell  {...{ row, name: "nameTemp", onChange }} />
+              <CustomTableCell  {...{ row, name: "typeTemp", onChange }} />
+              <CustomTableCell  {...{ row, name: "curCapacityTemp", onChange }} />
+              <CustomTableCell  {...{ row, name: "maxCapacityTemp", onChange }} />
              
                 {/* <TableCell component="th" scope="row" >
                   {row.name}
@@ -393,5 +664,11 @@ export default function LivePreviewExample() {
         </Table>
       </TableContainer>
     </Fragment>
+    <Snackbar open={open[0]} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal :'right'}}>
+    <MuiAlert variant='filled' onClose={handleClose} severity={open[1]}>
+      {open[2]}
+    </MuiAlert>
+  </Snackbar>
+  </>
   );
 }
