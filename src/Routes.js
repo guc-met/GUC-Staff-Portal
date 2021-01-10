@@ -21,7 +21,7 @@ import Scrollable from './example-pages/Scrollable';
 import Badges from './example-pages/Badges';
 import Icons from './example-pages/Icons';
 import UtilitiesHelpers from './example-pages/UtilitiesHelpers';
-import RegularTables1 from './example-pages/RegularTables1';
+import RegularTables1 from './example-pages/personalSchedule';
 import RegularTables4 from './example-pages/RegularTables4';
 import FormsControls from './example-pages/FormsControls';
 
@@ -40,6 +40,7 @@ const FacultiesHR = lazy(() => import('./example-pages/FacultiesHR'));
 const DepartmentsHR = lazy(() => import('./example-pages/DepartmentsHR'));
 const CoursesHR = lazy(() => import('./example-pages/CoursesHR'));
 const LocationsHR=lazy(() => import('./example-pages/LocationsHR'));
+const personalScheduleAC=lazy(()=>import('./example-pages/personalSchedule'));
 const Routes = () => {
   const location = useLocation();
   console.log("Loca::",location);
@@ -120,6 +121,7 @@ const Routes = () => {
                 '/FacultiesHR',
                 '/DepartmentsHR',
                 '/CoursesHR',
+                '/personalScheduleAC'
               ]}>
               <LeftSidebar>
                 <Switch location={location} key={location.pathname}>
@@ -164,6 +166,7 @@ const Routes = () => {
                     <Route path="/FacultiesHR" component={FacultiesHR} />
                     <Route path="/DepartmentsHR" component={DepartmentsHR} />
                     <Route path="/CoursesHR" component={CoursesHR} />
+                    <Route path="/personalScheduleAC" component={personalScheduleAC} />
                   </motion.div>
                 </Switch>
               </LeftSidebar>

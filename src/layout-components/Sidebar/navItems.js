@@ -225,6 +225,11 @@ export default [
     "label": "Courses",
     "to": "/CoursesHR"
     
+  },
+  {
+    "label": "PersonalSchedule",
+    "to": "/personalScheduleAC"
+    
   }
 ]`,
       (key, value) => {

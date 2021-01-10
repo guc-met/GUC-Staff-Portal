@@ -4,16 +4,15 @@ import { PageTitle } from '../../layout-components';
 
 import { ExampleWrapperSimple } from '../../layout-components';
 
-import RegularTables1Example1 from '../../example-components/RegularTables1/RegularTables1Example1';
+import RegularTables1Example1 from '../../example-components/personalScheduleTable';
 export default function RegularTables1() {
   return (
     <Fragment>
       <PageTitle
-        titleHeading="Tables examples 1"
-        titleDescription="Tables are the backbone of almost all web applications."
+        titleHeading="PersonalSchedule"
+        titleDescription=""
       />
-
-      <ExampleWrapperSimple sectionHeading="Basic">
+      <ExampleWrapperSimple sectionHeading="Schedule">
         <RegularTables1Example1 />
       </ExampleWrapperSimple>
     </Fragment>
