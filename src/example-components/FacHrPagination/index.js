@@ -270,7 +270,7 @@ export default  function LivePreviewExample() {
           initRow.nameTemp="";
           //setOpen({val:true,severity:"success",display:"Added successfully"});
           setOpen([true,"success",response.data.msg]);
-          setRows([obj,...rows]);
+          setRows([...rows,obj]);
 
         }
       })
@@ -362,6 +362,7 @@ export default  function LivePreviewExample() {
       });
     }else{
       //display error
+      setOpen([true,"error","Something wrong happened"]);
     }
     
   };

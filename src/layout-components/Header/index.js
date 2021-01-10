@@ -47,7 +47,7 @@ const Header = props => {
           <Hidden lgUp>
             <Box
               className="app-logo-wrapper"
-              title="Carolina React Admin Dashboard with Material-UI Free">
+              title="">
               <Link to="/DashboardDefault" className="app-logo-link">
                 <IconButton
                   color="primary"
@@ -55,7 +55,7 @@ const Header = props => {
                   className="app-logo-btn">
                   <img
                     className="app-logo-img"
-                    alt="Carolina React Admin Dashboard with Material-UI Free"
+                    alt="Home"
                     src={projectLogo}
                   />
                 </IconButton>
