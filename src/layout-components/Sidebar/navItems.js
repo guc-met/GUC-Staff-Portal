@@ -227,8 +227,8 @@ export default [
     
   },
   {
-    "label": "Schedule",
-    "to": "/Schedule"
+    "label": "Course Schedule",
+    "to": "/CourseSchedule"
     
   }
 ]`,

@@ -11,7 +11,16 @@ import {
 import ScheduleSlot from '../ScheduleSlot'
 import ScheduleDay from '../ScheduleDay'
 
-const sched = { 'Saturday': { '1st': [ { Location:'C3.102', Staff: 'N/A' }, { Location:'C5.208', Staff:'Eithar Elhinamy' }, { Location:'C3.305', Staff: 'Belal Medhat' } ], '2nd': [ { Location:'H11', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' } ], '3rd': [ ], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 'Sunday': { '1st': [ { Location:'C3.102', Staff: 'N/A' }, { Location:'C5.208', Staff:'Eithar Elhinamy' }, { Location:'C3.305', Staff: 'Belal Medhat' } ], '2nd': [ { Location:'H11', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' } ], '3rd': [ ], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 'Monday': { '1st': [ { Location:'C3.102', Staff: 'N/A' }, { Location:'C5.208', Staff:'Eithar Elhinamy' }, { Location:'C3.305', Staff: 'Belal Medhat' } ], '2nd': [ { Location:'H11', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' } ], '3rd': [ ], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 'Tuesday': { '1st': [ { Location:'C3.102', Staff: 'N/A' }, { Location:'C5.208', Staff:'Eithar Elhinamy' }, { Location:'C3.305', Staff: 'Belal Medhat' } ], '2nd': [ { Location:'H11', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' } ], '3rd': [ ], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 'Wednesday': { '1st': [ { Location:'C3.102', Staff: 'N/A' }, { Location:'C5.208', Staff:'Eithar Elhinamy' }, { Location:'C3.305', Staff: 'Belal Medhat' } ], '2nd': [ { Location:'H11', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' } ], '3rd': [ ], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 'Thursday': { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }, 'Friday': { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] } };
+const sched = 
+{ 
+    'Saturday': { '1st': [ { Location:'C3.102', Staff: 'N/A' }, { Location:'C5.208', Staff:'Eithar Elhinamy' }, { Location:'C3.305', Staff: 'Belal Medhat' } ], '2nd': [ { Location:'H11', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' } ], '3rd': [ ], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 
+      'Sunday': { '1st': [  { Location:'C5.208', Staff:'Eithar yom el7d' }, { Location:'C3.305', Staff: 'Belal Medhat' } ], '2nd': [ { Location:'H11', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' } ], '3rd': [ ], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 
+      'Monday': { '1st': [ { Location:'C3.102', Staff: 'N/A' },  ], '2nd': [ ], '3rd': [ { Location:'H elgmdan', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' }], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 
+     'Tuesday': { '1st': [ { Location:'C3.102', Staff: 'N/A' }, { Location:'C5.208', Staff:'Eslam isa' }, { Location:'C3.305', Staff: 'Belal Medhat' } ], '2nd': [ { Location:'H11', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' } ], '3rd': [ ], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 
+   'Wednesday': { '1st': [ { Location:'C3.102', Staff: 'N/A' }, { Location:'C5.208', Staff:'Balabizo gamed' }, { Location:'C3.305', Staff: 'Belal Medhat' } ], '2nd': [ { Location:'H11', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' } ], '3rd': [ ], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 
+    'Thursday': { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }, 
+      'Friday': { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }      
+}
 
 const noRad = {borderRadius:"0"};
 
@@ -39,27 +48,27 @@ export default function LivePreviewExample() {
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"> Saturday</th>
+                        <th scope="row" style={{textAlign:"Center"}}> Saturday</th>
                         <ScheduleDay day={sched['Saturday']} />
                     </tr>
                     <tr>
-                        <th scope="row"> Sunday</th>
+                        <th scope="row" style={{textAlign:"Center"}}> Sunday</th>
                         <ScheduleDay day={sched['Sunday']} />
                     </tr>
                     <tr>
-                        <th scope="row"> Monday</th>
+                        <th scope="row" style={{textAlign:"Center"}}> Monday</th>
                         <ScheduleDay day={sched['Monday']} />
                     </tr>
                     <tr>
-                        <th scope="row"> Tuesday</th>
+                        <th scope="row" style={{textAlign:"Center"}}> Tuesday</th>
                         <ScheduleDay day={sched['Tuesday']} />
                     </tr>
                     <tr>
-                        <th scope="row"> Wednesday</th>
+                        <th scope="row" style={{textAlign:"Center"}}> Wednesday</th>
                         <ScheduleDay day={sched['Wednesday']} />
                     </tr>
                     <tr>
-                        <th scope="row"> Thursday</th>
+                        <th scope="row" style={{textAlign:"Center"}}> Thursday</th>
                         <ScheduleDay day={sched['Thursday']} />
                     </tr>
                 </tbody>

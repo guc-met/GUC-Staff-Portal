@@ -9,10 +9,10 @@ export default function Schedule() {
   return (
     <Fragment>
       <PageTitle
-        titleHeading="Schedule"
-        titleDescription="Here is your schedule in addition to all relevant features"
+        titleHeading="Course Schedule"
+        titleDescription="Here you can see schedules of courses"
       />
-      <ExampleWrapperSimple sectionHeading="Your Current Schedule">
+      <ExampleWrapperSimple sectionHeading="Course Schedule">
         <ScheduleTable />
       </ExampleWrapperSimple>
     </Fragment>
