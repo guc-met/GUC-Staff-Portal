@@ -45,6 +45,7 @@ const Header = props => {
         {!props.isCollapsedLayout && <HeaderLogo />}
         <Box className="app-header-toolbar">
           <Hidden lgUp>
+
             <Box
               className="app-logo-wrapper"
               title="">

@@ -21,7 +21,6 @@ export default function Cards3() {
         titleHeading="Cards examples 3"
         titleDescription="Wide selection of cards with multiple styles, borders, actions and hover effects."
       />
-
       <ExampleWrapperSeamless sectionHeading="Cards 1">
         <Cards1Examples1 />
       </ExampleWrapperSeamless>

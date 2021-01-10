@@ -137,7 +137,7 @@ export default [
         "to": "/Accordions"
       },
       {
-        "label": "Modal dialogs",
+        "label": "Arousi",
         "description": "Wide selection of modal dialogs styles and animations available.",
         "to": "/Modals"
       },
