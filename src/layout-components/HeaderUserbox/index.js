@@ -1,26 +1,20 @@
 import React, { Fragment } from 'react';
-
+import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import {
-  Avatar,
-  Box,
-  Menu,
-  Button,
-  List,
-  ListItem,
-  Tooltip,
-  Divider
-} from '@material-ui/core';
+import { Box, Menu, Button, List, ListItem, Divider } from '@material-ui/core';
 
-import avatar5 from '../../assets/images/avatars/avatar5.jpg';
-const username = "ESLAM Hegazy"
-const usertype = "HOD PROF"
+const username = 'ESLAM Hegazy';
+const usertype = 'HOD PROF';
 export default function HeaderUserbox() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const history = useHistory();
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
+  };
+  const logOut = () => {
+    localStorage.removeItem('UserToken');
+    history.push('/Login');
   };
 
   const handleClose = () => {
@@ -36,9 +30,7 @@ export default function HeaderUserbox() {
         {/* <Box>
           <Avatar sizes="44" alt="Emma Taylor" src={avatar5} />
         </Box> */}
-        <Box>
-          {username}
-        </Box>
+        <Box>{username}</Box>
         <div className="d-none d-xl-block pl-3">
           <div className="font-weight-bold pt-2 line-height-1">{username}</div>
           <span className="text-white-50">{usertype}</span>
@@ -72,9 +64,7 @@ export default function HeaderUserbox() {
               <div className="font-weight-bold text-center pt-2 line-height-1">
                 {username}
               </div>
-              <span className="text-black-50 text-center">
-                {usertype}
-              </span>
+              <span className="text-black-50 text-center">{usertype}</span>
             </div>
             <Divider className="w-100 mt-2" />
             <ListItem button>View Profile</ListItem>
@@ -82,7 +72,9 @@ export default function HeaderUserbox() {
             <ListItem button>Sign out</ListItem>
             <Divider className="w-100" />
             <ListItem className="d-block rounded-bottom px-3 pt-3 pb-0 text-center">
-              <ListItem button>Log out</ListItem>
+              <ListItem button onClick={logOut}>
+                Log out
+              </ListItem>
             </ListItem>
           </List>
         </div>

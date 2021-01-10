@@ -15,7 +15,6 @@ export default function LivePreviewExample() {
             <img alt="..." className="card-img-top" src={stock1} />
             <CardContent className="p-3">
               <h5 className="card-title font-weight-bold font-size-lg">
-                Card title
               </h5>
               <p className="card-text">
                 Some quick example text to build on the card title and make up

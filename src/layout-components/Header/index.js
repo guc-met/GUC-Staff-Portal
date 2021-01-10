@@ -45,9 +45,7 @@ const Header = props => {
         {!props.isCollapsedLayout && <HeaderLogo />}
         <Box className="app-header-toolbar">
           <Hidden lgUp>
-            <Box
-              className="app-logo-wrapper"
-              title="Carolina React Admin Dashboard with Material-UI Free">
+            <Box className="app-logo-wrapper">
               <Link to="/DashboardDefault" className="app-logo-link">
                 <IconButton
                   color="primary"

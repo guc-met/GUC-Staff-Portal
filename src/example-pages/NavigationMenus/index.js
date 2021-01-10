@@ -12,7 +12,6 @@ export default function NavigationMenus() {
         titleHeading="Navigation menus"
         titleDescription="Navigation menus are one of the basic building blocks for any web or mobile app."
       />
-
       <ExampleWrapperSimple sectionHeading="Vertical menus">
         <NavigationMenusVerticalBasic />
       </ExampleWrapperSimple>
