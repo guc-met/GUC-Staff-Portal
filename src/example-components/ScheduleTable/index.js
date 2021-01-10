@@ -45,19 +45,12 @@ export default function LivePreviewExample() {
             </colgroup>
                 <thead className="thead-light">
                     <tr>
-                        <th scope="col"> 
-                            <div style={CrnrDivStyle}>
-                                <span style={topStyle}> Slot </span>
-                                <br></br>
-                                <span style={botStyle}> Day </span>
-                                {/* <div style={lineStyle}></div> */}
-                            </div>
-                        </th>
-                        <th scope="col">1<sup>st</sup></th> 
-                        <th scope="col">2<sup>nd</sup></th>
-                        <th scope="col">3<sup>rd</sup></th>
-                        <th scope="col">4<sup>th</sup></th>
-                        <th scope="col">5<sup>th</sup></th>
+                        <th scope="col" style={{textAlign:"Center"}}> </th>
+                        <th scope="col" style={{textAlign:"Center"}}>1<sup>st</sup></th> 
+                        <th scope="col" style={{textAlign:"Center"}}>2<sup>nd</sup></th>
+                        <th scope="col" style={{textAlign:"Center"}}>3<sup>rd</sup></th>
+                        <th scope="col" style={{textAlign:"Center"}}>4<sup>th</sup></th>
+                        <th scope="col" style={{textAlign:"Center"}}>5<sup>th</sup></th>
                     </tr>
                 </thead>
                 <tbody>
