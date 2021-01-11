@@ -9,7 +9,7 @@ export default function RegularTables1() {
   return (
     <Fragment>
       <PageTitle
-        titleHeading="PersonalSchedule"
+        titleHeading="Personal Schedule"
         titleDescription=""
       />
       <ExampleWrapperSimple sectionHeading="Schedule">

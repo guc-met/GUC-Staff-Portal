@@ -227,8 +227,13 @@ export default [
     
   },
   {
-    "label": "PersonalSchedule",
+    "label": "Personal Schedule",
     "to": "/personalScheduleAC"
+    
+  },
+  {
+    "label": "My Requests",
+    "to": "/myRequestsAC"
     
   }
 ]`,

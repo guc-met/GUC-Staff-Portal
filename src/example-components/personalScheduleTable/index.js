@@ -1,26 +1,40 @@
 import React, { Fragment } from 'react';
 import axios from 'axios'
+import { makeStyles } from '@material-ui/core/styles'
 
 let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtoYWxlZC5nYW1lZEBndWMuY29tIiwiaWQiOiJhYy0xIiwibmFtZSI6ImtoYWxlZCBnYW1lZCIsInJvbGUiOiJIT0QiLCJpYXQiOjE2MTAzMDE4NDZ9.zGhbG2WJPamGpNbdPFtYFa-q2NLuD4ksVe7EePpU5Js'
 
 
+const useStyles = makeStyles({
+  cell: {
+   // justifyContent: "center",
+   // alignItems: "center",
+   margin: "80px",
+    width: "180px",
+    height: "70px",
+    fontStyle:"italic",
+    fontWeight: "bold",
+    "&:hover": {
+      background: "#efefef"
+    }
+  },
+})
 
-// let scheduleEntries=[{day:"Sunday",slot:"4th",course:"CSEN703",location:"C5.202"},
-// {day:"Monday",slot:"5th",course:"CSEN703",location:"C5.202"},
-// {day:"Tuesday",slot:"4th",course:"CSEN703",location:"C5.202"},
-// {day:"Tuesday",slot:"1st",course:"CSEN703",location:"C5.202"},
-// {day:"Thursday",slot:"2nd",course:"CSEN703",location:"C5.202"},
-// {day:"Sunday",slot:"3rd",course:"CSEN703",location:"C5.202"}]
 
-
-
-let dayFunc=(s,arr,d)=>{
-  let slot=arr.filter(e=>e.slot==s&&e.day==d)
-  return (slot.length==0)?<td></td>:<td>{slot[0].location} {slot[0].course}</td>
-}
 
 export default function LivePreviewExample() {
-  const [scheduleEntries, setSchedule] = React.useState([]);
+
+  const classes=useStyles()
+  let dayFunc=(s,arr,d)=>{
+
+    let slot=arr.filter(e=>e.slot==s&&e.day==d)
+    return (slot.length==0)?<td></td>:
+    <td className={classes.cell}>{slot[0].location}<br></br>{slot[0].course}</td> // className={classes.cell}
+  }
+  
+
+
+  const [scheduleEntries, setSchedule] = React.useState([])
 
   React.useEffect(() => {
 
@@ -57,7 +71,7 @@ export default function LivePreviewExample() {
     <Fragment>
    
       <div className="table-responsive">
-        <table className="table table-striped table-hover table-bordered mb-4">
+        <table className="table table-striped  table-bordered mb-4">
           <thead className="thead-light">
             <tr>
               <th scope="col">day \ slot</th>
