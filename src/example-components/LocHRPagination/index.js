@@ -178,7 +178,7 @@ const CustomTableCell = ({ row, name, onChange }) => {
                     inputProps={{ 'aria-label': 'Without label' }}
                   >
                     <MenuItem value="" disabled>
-                      None
+                      
                     </MenuItem>
                     <MenuItem value={'Office'}>Office</MenuItem>
                     <MenuItem value={'Tutorial Room'}>Tutorial Room</MenuItem>
