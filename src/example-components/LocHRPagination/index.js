@@ -44,7 +44,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { ExampleWrapperSimple } from '../../layout-components';
-let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiZHVsQGdtYWlsLmNvbSIsImlkIjoiaHItMSIsIm5hbWUiOiJBYmR1bGxhaCIsImlhdCI6MTYxMDExNzU2OH0.0z56DTUtdz3iO0exClqVEzr9S0FkHkLX-cMzin1yOBU'
+// let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiZHVsQGdtYWlsLmNvbSIsImlkIjoiaHItMSIsIm5hbWUiOiJBYmR1bGxhaCIsImlhdCI6MTYxMDExNzU2OH0.0z56DTUtdz3iO0exClqVEzr9S0FkHkLX-cMzin1yOBU'
 const useStyles1 = makeStyles(theme => ({
   root: {
     flexShrink: 0,
@@ -178,7 +178,7 @@ const CustomTableCell = ({ row, name, onChange }) => {
                     inputProps={{ 'aria-label': 'Without label' }}
                   >
                     <MenuItem value="" disabled>
-                      None
+                      
                     </MenuItem>
                     <MenuItem value={'Office'}>Office</MenuItem>
                     <MenuItem value={'Tutorial Room'}>Tutorial Room</MenuItem>
@@ -230,8 +230,8 @@ export default function LivePreviewExample() {
      
         {
           headers: {
-          // token: localStorage.getItem('UserToken')  //to be added
-           token
+           token: localStorage.getItem('UserToken')  //to be added
+          // token
           }
         }
       )
@@ -309,8 +309,8 @@ export default function LivePreviewExample() {
         {
           headers: {
            // 'Content-Type': 'application/json'
-          // token: localStorage.getItem('UserToken')  //to be added
-          token: token
+           token: localStorage.getItem('UserToken')  //to be added
+          //token: token
             //    'auth-token': localStorage.getItem('user'),
           }
         }
@@ -382,9 +382,9 @@ export default function LivePreviewExample() {
       {
         headers: {
           //'Content-Type': 'application/json',
-         token: token,  //to be added
+       //  token: token,  //to be added
         // token
-          //    'auth-token': localStorage.getItem('user'),
+              token: localStorage.getItem('UserToken'),
         },data:{name:e.id}
       }
       
@@ -500,8 +500,8 @@ export default function LivePreviewExample() {
       {
         headers: {
          // 'Content-Type': 'application/json'
-        // token: localStorage.getItem('UserToken')  //to be added
-        token: token
+         token: localStorage.getItem('UserToken')  //to be added
+        //token: token
           //    'auth-token': localStorage.getItem('user'),
         }
       }

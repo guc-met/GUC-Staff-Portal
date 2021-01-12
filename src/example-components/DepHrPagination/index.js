@@ -44,7 +44,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { ExampleWrapperSimple } from '../../layout-components';
-let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiZHVsQGdtYWlsLmNvbSIsImlkIjoiaHItMSIsIm5hbWUiOiJBYmR1bGxhaCIsImlhdCI6MTYxMDExNzU2OH0.0z56DTUtdz3iO0exClqVEzr9S0FkHkLX-cMzin1yOBU'
+//let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiZHVsQGdtYWlsLmNvbSIsImlkIjoiaHItMSIsIm5hbWUiOiJBYmR1bGxhaCIsImlhdCI6MTYxMDExNzU2OH0.0z56DTUtdz3iO0exClqVEzr9S0FkHkLX-cMzin1yOBU'
 const useStyles1 = makeStyles(theme => ({
   root: {
     flexShrink: 0,
@@ -118,7 +118,7 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired
 };
 
-function createData(code,name, facultyCode,headId) {
+function createData(code,name,facultyCode,headId) {
   return { 
     id:code,idTemp:code,
     code,codeTemp:code,
@@ -128,12 +128,12 @@ function createData(code,name, facultyCode,headId) {
     isEditMode: false };
 }
  let initRow={
-    id:"",idTemp:"",
-    name:"",nameTemp:"",
-    type:"",typeTemp:"",
-    maxCapacity:"",maxCapacityTemp:"",
-    curCapacity:"",curCapacityTemp:"",
-    isEditMode: true
+  id:"",idTemp:"",
+  code:"",codeTemp:"",
+  name:"",nameTemp:"",
+  facultyCode:"",facultyCodeTemp:"",
+  headId:"",headIdTemp:"",
+  isEditMode: true 
  }
 
 const useStyles = makeStyles({
@@ -161,12 +161,13 @@ const useStyles = makeStyles({
 });
 
 //////
-const CustomTableCell = ({ row, name, onChange }) => {
+const CustomTableCell = ({ row, name, onChange,facs}) => {
     const classes = useStyles();
     const { isEditMode } = row;
+    console.log(row)
     return (
       <TableCell align="left" className={classes.tableCell}>
-        {row["id"]==""&&name=='typeTemp'?(
+        {name=='facultyCodeTemp'&&isEditMode?(
                   <FormControl  className={classes.formControl}>
                   <Select
                     value={initRow.typeTemp}
@@ -177,19 +178,17 @@ const CustomTableCell = ({ row, name, onChange }) => {
                     className={classes.selectEmpty}
                     inputProps={{ 'aria-label': 'Without label' }}
                   >
-                    <MenuItem value="" disabled>
-                      None
+                    <MenuItem value={row[name]} disabled>
                     </MenuItem>
-                    <MenuItem value={'Office'}>Office</MenuItem>
-                    <MenuItem value={'Tutorial Room'}>Tutorial Room</MenuItem>
-                    <MenuItem value={'Lab'}>Lab</MenuItem>
-                    <MenuItem value={'Hall'}>Hall</MenuItem>
+                    {facs.map(fac=>(<MenuItem value={fac.code}>{fac.code}</MenuItem>))}
+                   
+                    
                   </Select>
                 </FormControl>
         
              
         )
-        :isEditMode&&name!='curCapacityTemp'&&name!='typeTemp' ? (
+        :isEditMode &&!(name=='headIdTemp'&&row.id=='')? (//TODO
           <Input
             value={row[name]}
             name={name}
@@ -218,6 +217,7 @@ export default function LivePreviewExample() {
   //for responsive entries
   const [locType,setLocType]=React.useState('');
   const [rows, setRows] = React.useState([]);
+  const [facs, setFacs] = React.useState([]);
   const [open, setOpen] = React.useState([false,'success','all good']);
   
   React.useEffect(() => {
@@ -226,12 +226,46 @@ export default function LivePreviewExample() {
     
       const result=await axios
       .get(
-        'http://localhost:3001/hr/location',
+        'http://localhost:3001/hr/department',
      
         {
           headers: {
-          // token: localStorage.getItem('UserToken')  //to be added
-           token
+           token: localStorage.getItem('UserToken')  //to be added
+          // token
+          }
+        }
+      )
+      .then(function(response) {
+       // console.log(response)
+        if(response.status!=200){//that's an error
+          return [];
+        }else{
+          //return array
+          //console.log(response.data)
+          let arr= response.data.map(dep=>{
+            //console.log(dep)
+            return createData(dep._doc.code,dep._doc.name,dep.faculty,dep.head)
+          })
+          //let x=['a','b']
+          //console.log(arr)
+          return arr;
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+        return [];
+      })
+      //console.log(result)
+
+      //retrieve facs to show them
+      const facs=await axios
+      .get(
+        'http://localhost:3001/hr/faculty',
+     
+        {
+          headers: {
+           token: localStorage.getItem('UserToken')  //to be added
+          // token
           }
         }
       )
@@ -242,18 +276,17 @@ export default function LivePreviewExample() {
         }else{
           //return array
         //  console.log(response)
-          let arr= response.data.map(loc=>createData(loc.name,loc.type,loc.curCapacity!=null?loc.curCapacity:"",loc.maxCapacity))
+         // let arr= response.data.map(fac=>createData(fac.name,fac.code))
           //let x=['a','b']
          // console.log(arr)
-          return arr;
+          return response.data;
         }
       })
       .catch(function(error) {
         console.log(error);
         return [];
       })
-      //console.log(result)
-
+      setFacs(facs);
       setRows(result);
     }
     fetchData();
@@ -280,37 +313,28 @@ export default function LivePreviewExample() {
     });
   };
   const onAdding = (id) => {
-      //TODO
-    // setRows((state) => {
-    //   return rows.map((row) => {
-    //     if (row.id === id) {
-    //       return { ...row, isEditMode: !row.isEditMode };
-    //     }
-    //     return row;
-    //   });
+     
     // });
     let name=initRow.nameTemp
-    let type=initRow.typeTemp
-    let maxCapacity=initRow.maxCapacityTemp
-    let curCapacity=initRow.curCapacity
-    let obj={id:name,idTemp:name,type,typeTemp:type,name,nameTemp:name,
-      maxCapacity,maxCapacityTemp:maxCapacity,
-      curCapacity:type=='Office'?0:'',curCapacityTemp:type=='Office'?0:'',
+    let code=initRow.codeTemp
+    let facCode=initRow.facultyCodeTemp;
+    let headOfDepartmentId=initRow.headIdTemp
+    let obj={id:code,idTemp:code,code,codeTemp:code,name,nameTemp:name,
+      facultyCode:facCode,facultyCodeTemp:facCode,
+      headId:"N/A",headIdTemp:"N/A",
       isEditMode:false};
-    let body={name,type,maxCapacity};
-    if(type=='Office'){
-      body.curCapacity=0
-    }
+    let body={name,code,facCode};
+   
     console.log(body)
     axios
       .post(
-        'http://localhost:3001/hr/location',
+        'http://localhost:3001/hr/department',
         body,
         {
           headers: {
            // 'Content-Type': 'application/json'
-          // token: localStorage.getItem('UserToken')  //to be added
-          token: token
+           token: localStorage.getItem('UserToken')  //to be added
+          //token: token
             //    'auth-token': localStorage.getItem('user'),
           }
         }
@@ -324,8 +348,9 @@ export default function LivePreviewExample() {
         }else{
         //  initRow.codeTemp="";
           initRow.nameTemp="";
-          initRow.maxCapacityTemp="";
-          setLocType('');
+          initRow.codeTemp="";
+          initRow.headIdTemp="";
+         // setLocType(''); //TODOOOOO
           //setOpen({val:true,severity:"success",display:"Added successfully"});
           setOpen([true,"success",response.data.msg]);
           setRows([...rows,obj]);
@@ -353,7 +378,7 @@ export default function LivePreviewExample() {
     //console.log(name);
     const newRows = rows.map((row) => {
       if (row.id === id) {
-          if(name=="nameTemp"){
+          if(name=="codeTemp"){
              //TODO:
              return { ...row, [name]: value ,["idTemp"]:value};
           }
@@ -361,7 +386,7 @@ export default function LivePreviewExample() {
       }
       return row;
     });
-    if(row.id==''){
+    if(row.id==''){//RECHECKK TODO HOBA LALAA
         initRow={...initRow,[name]:value};
        // console.log(name)
         if(name=='typeTemp'){
@@ -376,22 +401,23 @@ export default function LivePreviewExample() {
   };
 
   const onDelete =async (e) => {
+    //console.log(e.id)
     const res=await axios
     .delete(
-      'http://localhost:3001/hr/location',
+      'http://localhost:3001/hr/department',
       {
         headers: {
           //'Content-Type': 'application/json',
-         token: token,  //to be added
+        // token: token,  //to be added
+        token: localStorage.getItem('UserToken'),  //to be added
+
         // token
           //    'auth-token': localStorage.getItem('user'),
-        },data:{name:e.id}
+        },data:{code:e.id}
       }
-      
-   
     )
     .then(function(response) {
-     //console.log(response)
+  //   console.log(response)
       if(response.status!=200){//that's an error
       setOpen([true,"error",response.data.err]);
         return response.data.err
@@ -405,10 +431,11 @@ export default function LivePreviewExample() {
     .catch(function(error) {
       console.log(error.response.data);
       setOpen([true,"error",error.response.data.err]);
+      return "";
       //onToggleEditMode(e.id);
     });
     
-    //console.log(rows)
+   // console.log(res)
     if(res&&res.charAt(0)=='D'){
       const newRows = rows.map((row, index) => {
         const indexx = rows.indexOf(row)
@@ -439,7 +466,10 @@ export default function LivePreviewExample() {
            row.maxCapacityTemp=row.maxCapacity;
            //row.curCapacityTemp=row.curCapacity;
            //row.typeTemp=row.type;
+           row.codeTemp=row.code;
            row.nameTemp=row.name;
+           row.headIdTemp=row.headId;
+           row.facultyCodeTemp=row.facultyCode;
            row.idTemp=row.id;
          return row;
          //return previous[id] ? previous[id] : row;
@@ -491,17 +521,19 @@ export default function LivePreviewExample() {
     });
     axios
     .put(
-      'http://localhost:3001/hr/location',
+      'http://localhost:3001/hr/department',
       {
         key:obj.id,
         name:obj.nameTemp,
-        maxCapacity:obj.maxCapacityTemp
+        code:obj.codeTemp,
+        facCode:obj.facultyCodeTemp,
+        headOfDepartmentId:obj.headIdTemp
       },
       {
         headers: {
          // 'Content-Type': 'application/json'
-        // token: localStorage.getItem('UserToken')  //to be added
-        token: token
+         token: localStorage.getItem('UserToken')  //to be added
+        //token: token
           //    'auth-token': localStorage.getItem('user'),
         }
       }
@@ -520,8 +552,10 @@ export default function LivePreviewExample() {
        const newRows = rows.map((row, index) => {
         if (row.id === id) {
           row.id=row.idTemp;
-          row.maxCapacity=row.maxCapacityTemp;
+          row.code=row.codeTemp;
           row.name=row.nameTemp;
+          row.headId=row.headIdTemp;
+          row.facultyCode=row.facultyCodeTemp;
             
           return { ...row, isEditMode: !row.isEditMode };
           //return previous[id] ? previous[id] : row;
@@ -554,7 +588,7 @@ export default function LivePreviewExample() {
     setOpen([false,open[1],open[2]]);
   };
   //end of responsive entries
-
+  console.log(rows)
   return (
     <>
     <Fragment>
@@ -563,10 +597,10 @@ export default function LivePreviewExample() {
         <TableHead>
           <TableRow>
             <TableCell align="left" />
+            <TableCell align="left">Code</TableCell>
             <TableCell align="left">Name</TableCell>
-            <TableCell align="left">Type</TableCell>
-            <TableCell align="left">Current Capacity</TableCell>
-            <TableCell align="left">Maximum Capacity</TableCell>
+            <TableCell align="left">Faculty Code</TableCell>
+            <TableCell align="left">Head ID</TableCell>
           </TableRow>
         </TableHead>
           <TableBody>
@@ -582,10 +616,10 @@ export default function LivePreviewExample() {
                      
               </TableCell>
               {/* component="th" scope="row" */}
-              <CustomTableCell  {...{ row:initRow, name: "nameTemp", onChange }} />
-              <CustomTableCell  {...{ row:initRow, name: "typeTemp", onChange }} />
-              <CustomTableCell  {...{ row:initRow, name: "curCapacityTemp", onChange }} />
-              <CustomTableCell  {...{ row:initRow, name: "maxCapacityTemp", onChange }} />
+              <CustomTableCell  {...{ row:initRow, name: "codeTemp", onChange ,facs}} />
+              <CustomTableCell  {...{ row:initRow, name: "nameTemp", onChange ,facs}} />
+              <CustomTableCell  {...{ row:initRow, name: "facultyCodeTemp", onChange,facs }} />
+              <CustomTableCell  {...{ row:initRow, name: "headIdTemp", onChange,facs }} />
              
               </TableRow>
             {(rowsPerPage > 0
@@ -625,11 +659,11 @@ export default function LivePreviewExample() {
                 )}
               </TableCell>
               {/* component="th" scope="row" */}
-              <CustomTableCell  {...{ row, name: "nameTemp", onChange }} />
-              <CustomTableCell  {...{ row, name: "typeTemp", onChange }} />
-              <CustomTableCell  {...{ row, name: "curCapacityTemp", onChange }} />
-              <CustomTableCell  {...{ row, name: "maxCapacityTemp", onChange }} />
-             
+            
+              <CustomTableCell  {...{ row, name: "codeTemp", onChange ,facs}} />
+              <CustomTableCell  {...{ row, name: "nameTemp", onChange ,facs}} />
+              <CustomTableCell  {...{ row, name: "facultyCodeTemp", onChange ,facs}} />
+              <CustomTableCell  {...{ row, name: "headIdTemp", onChange,facs }} />
                 {/* <TableCell component="th" scope="row" >
                   {row.name}
                 </TableCell>
