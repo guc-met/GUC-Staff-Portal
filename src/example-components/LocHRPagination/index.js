@@ -245,6 +245,8 @@ export default function LivePreviewExample() {
           let arr= response.data.map(loc=>createData(loc.name,loc.type,loc.curCapacity!=null?loc.curCapacity:"",loc.maxCapacity))
           //let x=['a','b']
          // console.log(arr)
+         arr.sort((a,b)=>(a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1)
+
           return arr;
         }
       })
