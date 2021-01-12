@@ -80,7 +80,7 @@ const Routes = () => {
           }>
           <Switch>
             <Redirect exact from="/" to="/Login" />
-            <Route path="/LandingPage" component={LandingPage} />
+            {/* <Route path="/LandingPage" component={LandingPage} /> */}
             <Route path="/Login" component={Login} />
             <Route
               path={[

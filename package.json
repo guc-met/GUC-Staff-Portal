@@ -1,16 +1,15 @@
 {
-  "name": "carolina-react-admin-dashboard-material-ui-free",
+  "name": "gucportal",
   "version": "1.0.0",
-  "title": "Carolina React Admin Dashboard with Material-UI Free",
-  "homepage": "https://demo.uifort.com/carolina-react-admin-dashboard-material-ui-free",
-  "description": "This free React admin template is powered by Material-UI components framework and features a clean and fresh design following Google&#39;s Material Design specifications.",
+  "title": "GUCPortal",
+  "homepage": "",
+  "description": "Website for guc staff",
   "author": {
-    "name": "UiFort.com",
-    "url": "https://uifort.com"
+    "name": "Team-1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/uifort/carolina-react-admin-dashboard-material-ui-free"
+    "url": "https://github.com/guc-met/milestone-2-team-1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.27",
@@ -22,7 +21,6 @@
     "@material-ui/data-grid": "^4.0.0-alpha.15",
     "@material-ui/icons": "4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.57",
-
     "apexcharts": "3.15.6",
     "axios": "^0.21.1",
     "clsx": "1.1.0",
@@ -32,7 +30,6 @@
     "jsonwebtoken": "^8.5.1",
     "leaflet": "1.6.0",
     "node-sass": "^4.14.1",
-
     "pe7-icon": "1.0.4",
     "react": "16.12.0",
     "react-apexcharts": "1.3.6",
