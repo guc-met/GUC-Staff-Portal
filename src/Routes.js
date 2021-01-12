@@ -8,7 +8,7 @@ import MuiTheme from './theme';
 
 // Layout Blueprints
 
-import { LeftSidebar, PresentationLayout } from './layout-blueprints';
+import { LeftSidebar } from './layout-blueprints';
 
 // Example Pages
 
@@ -26,6 +26,7 @@ import RegularTables4 from './example-pages/RegularTables4';
 import FormsControls from './example-pages/FormsControls';
 
 const DashboardDefault = lazy(() => import('./example-pages/DashboardDefault'));
+const AttendanceLogs = lazy(() => import('./example-pages/AttendanceLogs'));
 const Cards3 = lazy(() => import('./example-pages/Cards3'));
 const LandingPage = lazy(() => import('./example-pages/LandingPage'));
 const Accordions = lazy(() => import('./example-pages/Accordions'));
@@ -36,6 +37,9 @@ const Tabs = lazy(() => import('./example-pages/Tabs'));
 const ApexCharts = lazy(() => import('./example-pages/ApexCharts'));
 const Maps = lazy(() => import('./example-pages/Maps'));
 const ListGroups = lazy(() => import('./example-pages/ListGroups'));
+
+const Login = lazy(() => import('./example-pages/login'));
+
 const FacultiesHR = lazy(() => import('./example-pages/FacultiesHR'));
 const DepartmentsHR = lazy(() => import('./example-pages/DepartmentsHR'));
 const CoursesHR = lazy(() => import('./example-pages/CoursesHR'));
@@ -44,7 +48,6 @@ const personalScheduleAC=lazy(()=>import('./example-pages/personalSchedule'));
 const myRequestsAC=lazy(()=>import('./example-pages/MyRequests'))
 const Routes = () => {
   const location = useLocation();
-  console.log("Loca::",location);
   const pageVariants = {
     initial: {
       opacity: 0,
@@ -78,24 +81,12 @@ const Routes = () => {
             </div>
           }>
           <Switch>
-            <Redirect exact from="/" to="/LandingPage" />
-            <Route path={['/LandingPage']}>
-              <PresentationLayout>
-                <Switch location={location} key={location.pathname}>
-                  <motion.div
-                    initial="initial"
-                    animate="in"
-                    exit="out"
-                    variants={pageVariants}
-                    transition={pageTransition}>
-                    <Route path="/LandingPage" component={LandingPage} />
-                  </motion.div>
-                </Switch>
-              </PresentationLayout>
-            </Route>
-
+            <Redirect exact from="/" to="/Login" />
+            {/* <Route path="/LandingPage" component={LandingPage} /> */}
+            <Route path="/Login" component={Login} />
             <Route
               path={[
+                '/AttendanceLogs',
                 '/DashboardDefault',
                 '/Buttons',
                 '/Dropdowns',
@@ -137,6 +128,7 @@ const Routes = () => {
                       path="/DashboardDefault"
                       component={DashboardDefault}
                     />
+                    <Route path="/AttendanceLogs" component={AttendanceLogs} />
                     <Route path="/Buttons" component={Buttons} />
                     <Route path="/Dropdowns" component={Dropdowns} />
                     <Route

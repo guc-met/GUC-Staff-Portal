@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-
 import { PageTitle } from '../../layout-components';
 import { Grid } from '@material-ui/core';
 import { ExampleWrapperSeamless } from '../../layout-components';

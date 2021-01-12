@@ -1,8 +1,10 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import axios from 'axios';
 import {
   Hidden,
   IconButton,
@@ -34,78 +36,139 @@ const Header = props => {
     sidebarToggleMobile,
     setSidebarToggleMobile
   } = props;
+  const [open, setOpen] = useState([
+    false,
+    'Signed in in university',
+    'Signed out from university'
+  ]);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      // setOpen(true);
+      return;
+    }
+    setOpen([false, open[1], open[2]]);
+  };
+
+  const signIn = async () => {
+    axios
+      .post(
+        'http://localhost:3001/staff/signIn',
+        {},
+        {
+          headers: {
+            token: localStorage.getItem('UserToken')
+          }
+        }
+      )
+      .then(function(response) {
+        setOpen([true, 'success', response.data.msg]);
+      })
+      .catch(function(error) {
+        console.log(error.response.data);
+        setOpen([true, 'error', error.response.data.err + '']);
+      });
+  };
+  const signOut = async () => {
+    axios
+      .post(
+        'http://localhost:3001/staff/signOut',
+        {},
+        {
+          headers: {
+            token: localStorage.getItem('UserToken')
+          }
+        }
+      )
+      .then(function(response) {
+        setOpen([true, 'success', response.data.msg]);
+      })
+      .catch(function(error) {
+        console.log(error.response.data);
+        setOpen([true, 'error', error.response.data.err + '']);
+      });
+  };
 
   return (
-    <Fragment>
-      <AppBar
-        color="secondary"
-        className={clsx('app-header', {})}
-        position={headerFixed ? 'fixed' : 'absolute'}
-        elevation={headerShadow ? 11 : 3}>
-        {!props.isCollapsedLayout && <HeaderLogo />}
-        <Box className="app-header-toolbar">
-          <Hidden lgUp>
-            <Box
-              className="app-logo-wrapper"
-              title="Carolina React Admin Dashboard with Material-UI Free">
-              <Link to="/DashboardDefault" className="app-logo-link">
-                <IconButton
+    <>
+      <Fragment>
+        <AppBar
+          color="secondary"
+          className={clsx('app-header', {})}
+          position={headerFixed ? 'fixed' : 'absolute'}
+          elevation={headerShadow ? 11 : 3}>
+          {!props.isCollapsedLayout && <HeaderLogo />}
+          <Box className="app-header-toolbar">
+            <Hidden lgUp>
+              <Box className="app-logo-wrapper" title="">
+                <Link to="/DashboardDefault" className="app-logo-link">
+                  <IconButton
+                    color="primary"
+                    size="medium"
+                    className="app-logo-btn">
+                    <img
+                      className="app-logo-img"
+                      alt="Home"
+                      src={projectLogo}
+                    />
+                  </IconButton>
+                </Link>
+                <Hidden smDown>
+                  <Box className="app-logo-text">GUC Staff Portal</Box>
+                </Hidden>
+              </Box>
+            </Hidden>
+            <Hidden mdDown>
+              <Box className="d-flex align-items-center">
+                <Button
+                  target="_blank"
+                  size="small"
+                  variant="contained"
                   color="primary"
-                  size="medium"
-                  className="app-logo-btn">
-                  <img
-                    className="app-logo-img"
-                    alt="Carolina React Admin Dashboard with Material-UI Free"
-                    src={projectLogo}
-                  />
-                </IconButton>
-              </Link>
-              <Hidden smDown>
-                <Box className="app-logo-text">GUC Staff Portal</Box>
-              </Hidden>
-            </Box>
-          </Hidden>
-          <Hidden mdDown>
+                  onClick={signIn}
+                  className="mr-3">
+                  Sign in
+                </Button>
+                <Button
+                  target="_blank"
+                  size="small"
+                  onClick={signOut}
+                  variant="contained"
+                  color="primary">
+                  Sign out
+                </Button>
+              </Box>
+            </Hidden>
             <Box className="d-flex align-items-center">
-              <Button
-                href="https://uifort.com/template/carolina-react-admin-dashboard-material-ui-free"
-                target="_blank"
-                size="small"
-                variant="contained"
-                color="primary"
-                className="mr-3">
-                Sign in
-              </Button>
-              <Button
-                href="https://uifort.com/template/carolina-react-admin-dashboard-material-ui-pro"
-                target="_blank"
-                size="small"
-                variant="contained"
-                color="primary">
-                Sign out
-              </Button>
-            </Box>
-          </Hidden>
-          <Box className="d-flex align-items-center">
-            <HeaderUserbox />
-            <Box className="toggle-sidebar-btn-mobile">
-              <Tooltip title="Toggle Sidebar" placement="right">
-                <IconButton
-                  color="inherit"
-                  onClick={toggleSidebarMobile}
-                  size="medium">
-                  {sidebarToggleMobile ? (
-                    <MenuOpenRoundedIcon />
-                  ) : (
-                    <MenuRoundedIcon />
-                  )}
-                </IconButton>
-              </Tooltip>
+              <HeaderUserbox />
+              <Box className="toggle-sidebar-btn-mobile">
+                <Tooltip title="Toggle Sidebar" placement="right">
+                  <IconButton
+                    color="inherit"
+                    onClick={toggleSidebarMobile}
+                    size="medium">
+                    {sidebarToggleMobile ? (
+                      <MenuOpenRoundedIcon />
+                    ) : (
+                      <MenuRoundedIcon />
+                    )}
+                  </IconButton>
+                </Tooltip>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </AppBar>
-    </Fragment>
+        </AppBar>
+      </Fragment>
+      <Snackbar
+        open={open[0]}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        <MuiAlert variant="filled" onClose={handleClose} severity={open[1]}>
+          {open[2]}
+        </MuiAlert>
+      </Snackbar>
+    </>
   );
 };
 
