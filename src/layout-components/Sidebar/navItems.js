@@ -225,6 +225,16 @@ export default [
     "label": "Courses",
     "to": "/CoursesHR"
     
+  },
+  {
+    "label": "Personal Schedule",
+    "to": "/personalScheduleAC"
+    
+  },
+  {
+    "label": "My Requests",
+    "to": "/myRequestsAC"
+    
   }
 ]`,
       (key, value) => {
