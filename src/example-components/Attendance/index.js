@@ -62,8 +62,7 @@ export default function Attendance() {
                 'https://www.cusd80.com/cms/lib/AZ01001175/Centricity/Domain/1290/Attendance%20Image%20.png'
               }
             />
-            <CardContent className="p-3">
-              {/* <h5 className="card-title font-weight-bold font-size-lg">Attendance</h5> */}
+            <CardContent>
               <div>
                 <p style={{ marginTop: 2, display: 'inline-block' }}>
                   Missing days : {days}

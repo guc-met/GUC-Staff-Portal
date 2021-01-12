@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 import clsx from 'clsx';
 
-import { Paper, List, ListItem, ListItemText } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 
 import { connect } from 'react-redux';
 
@@ -16,31 +16,9 @@ const Footer = props => {
           'app-footer--fixed': footerFixed
         })}>
         <div className="app-footer--inner">
-          <div className="app-footer--first">
-            <List dense className="d-flex align-items-center">
-              <ListItem
-                className="rounded-sm text-nowrap"
-                button
-                component="a"
-                href="https://uifort.com/template/carolina-react-admin-dashboard-material-ui-free"
-                target="_blank"
-                rel="noopener">
-                <ListItemText primary="Download now" />
-              </ListItem>
-              <ListItem
-                className="rounded-sm text-nowrap"
-                button
-                component="a"
-                href="https://uifort.com/template/carolina-react-admin-dashboard-material-ui-pro"
-                target="_blank"
-                rel="noopener">
-                <ListItemText primary="View PRO Version" />
-              </ListItem>
-            </List>
-          </div>
           <div className="app-footer--second">
-            <span>German University in Cairo</span> ©
-            2021 - crafted with <span className="text-danger px-1">❤</span> by 43- BALABIZO
+            <span>German University in Cairo</span> © 2021 - crafted with{' '}
+            <span className="text-danger px-1">❤</span> by 43- BALABIZO
           </div>
         </div>
       </Paper>

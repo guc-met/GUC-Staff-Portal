@@ -25,9 +25,7 @@ const SidebarHeader = props => {
   return (
     <Fragment>
       <div className={clsx('app-sidebar-header', {})}>
-        <Box
-          className="header-logo-wrapper"
-          title="Carolina React Admin Dashboard with Material-UI Free">
+        <Box className="header-logo-wrapper" title="Guc portal">
           <Link to="/DashboardDefault" className="header-logo-wrapper-link">
             <IconButton
               color="primary"
@@ -35,7 +33,7 @@ const SidebarHeader = props => {
               className="header-logo-wrapper-btn">
               <img
                 className="app-sidebar-logo"
-                alt="Carolina React Admin Dashboard with Material-UI Free"
+                alt="Guc logo"
                 src={projectLogo}
               />
             </IconButton>
