@@ -227,6 +227,10 @@ export default [
     
   },
   {
+    "label": "Course Schedule",
+    "to": "/CourseSchedule"
+  },
+  {
     "label": "Personal Schedule",
     "to": "/personalScheduleAC"
     
@@ -238,8 +242,7 @@ export default [
   },
   {
     "label": "DayOff For Staff",
-    "to": "/DayOffStaffHOD"
-    
+    "to": "/DayOffStaffHOD" 
   }
 ]`,
       (key, value) => {

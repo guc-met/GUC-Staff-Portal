@@ -244,10 +244,12 @@ export default function LivePreviewExample() {
           //console.log(response.data)
           let arr= response.data.map(dep=>{
             //console.log(dep)
+            
             return createData(dep._doc.code,dep._doc.name,dep.faculty,dep.head)
           })
           //let x=['a','b']
           //console.log(arr)
+          arr.sort((a,b)=>(a.facultyCode.toLowerCase() > b.facultyCode.toLowerCase()) ? 1 : -1)
           return arr;
         }
       })

@@ -199,6 +199,7 @@ export default  function LivePreviewExample() {
           //return array
         //  console.log(response)
           let arr= response.data.map(fac=>createData(fac.name,fac.code))
+          arr.sort((a,b)=>(a.code.toLowerCase() > b.code.toLowerCase()) ? 1 : -1)
           //let x=['a','b']
          // console.log(arr)
           return arr;
