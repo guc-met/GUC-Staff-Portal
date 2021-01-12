@@ -48,7 +48,7 @@ export default function AlertDialogSlide(props) {
         <DialogTitle id="alert-dialog-slide-title">{`Are you sure you want to remove this ${props.entry}?`}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-           {props.entry} will be removed permanently
+           {props.entry} will be removed permanently {props.entry=='Course'?'from the chosen department':''}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -137,7 +137,7 @@ export default [
         "to": "/Accordions"
       },
       {
-        "label": "Modal dialogs",
+        "label": "Arousi",
         "description": "Wide selection of modal dialogs styles and animations available.",
         "to": "/Modals"
       },
@@ -229,7 +229,15 @@ export default [
   {
     "label": "Course Schedule",
     "to": "/CourseSchedule"
+  },
+  {
+    "label": "Personal Schedule",
+    "to": "/personalScheduleAC"
     
+  },
+  {
+    "label": "My Requests",
+    "to": "/myRequestsAC"    
   }
 ]`,
       (key, value) => {
