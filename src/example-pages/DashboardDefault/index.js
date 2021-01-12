@@ -53,7 +53,6 @@ export default function DashboardDefault() {
   };
 
   const onApporval = async () => {
-    console.log(localStorage.getItem('UserToken'));
     axios
       .put(
         'http://localhost:3001/staff/updateProfile',

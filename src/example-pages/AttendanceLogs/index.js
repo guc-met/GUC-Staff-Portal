@@ -9,9 +9,6 @@ export default function AttendanceLogs() {
   const [MissingDays, setMissingDays] = useState([]);
   const loc = useLocation();
   const isMissingDays = loc.state.isMissingDays;
-  const options = {
-    filterType: 'checkbox'
-  };
   const columns = [
     {
       icons: DeleteIcon,
@@ -109,7 +106,6 @@ export default function AttendanceLogs() {
   return (
     <div style={{ height: 700, width: '100%' }}>
       <DataGrid
-        options={options}
         rows={isMissingDays ? MissingDays : logs}
         columns={isMissingDays ? columnsMissingDays : columns}
         pageSize={isMissingDays ? 5 : 10}
