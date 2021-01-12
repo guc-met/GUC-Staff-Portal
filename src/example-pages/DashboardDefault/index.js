@@ -43,7 +43,6 @@ export default function DashboardDefault() {
 
   const [profile, setProfile] = useState('');
   const [email, setEmail] = useState('');
-
   const onChangeEmail = e => {
     setEmail(e.target.value);
   };
