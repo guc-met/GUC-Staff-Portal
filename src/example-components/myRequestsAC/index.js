@@ -26,6 +26,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import BasicButtonGroup from '../../example-components/BasicGroupButton';
+import { AirlineSeatReclineNormalRounded } from '@material-ui/icons';
 
 let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtoYWxlZC5nYW1lZEBndWMuY29tIiwiaWQiOiJhYy0xIiwibmFtZSI6ImtoYWxlZCBnYW1lZCIsInJvbGUiOiJIT0QiLCJpYXQiOjE2MTAzMDE4NDZ9.zGhbG2WJPamGpNbdPFtYFa-q2NLuD4ksVe7EePpU5Js'
 
@@ -147,18 +148,17 @@ export default function LivePreviewExample() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [requestView,setRequestView]=React.useState('all')
   const [requestType,setRequestType]=React.useState('replacementRequests')
-
-  const [requests, setRequests] = React.useState([])
+  const [requestsFiltered, setRequestsFiltered] = React.useState([])
+  const [requests, setRequests] = React.useState([[],[],[],[],[]])
+  const [dummy,setDummy]=React.useState(0)
 
   React.useEffect(() => {
 
     async function fetchData() {
     
       const result=await axios
-      .post(
+      .get(
         'http://localhost:3001/ac/viewStatusOfRequests',
-        
-       {view:requestView},
         
         {
           headers: {
@@ -170,31 +170,27 @@ export default function LivePreviewExample() {
         }
       )
       .then(function(response) {
-       // console.log(response)
-       
         return response.data
       })
       .catch(function(error) {
         console.log(error.response);
         return [];
       })
-      let resultRequest=[]
-      let sw =requestType
-        switch(sw){
-            case 'replacementRequests':resultRequest=result.replacementsSent;break;
-            case 'leaveRequests':resultRequest=result.leavesSent;break;
-            case 'changeDayOffRequests':resultRequest=result.changeDayOffSent;break;
-            case 'slotLinkingRequests':resultRequest=result.slotLinkingSent;break;
-        }
-      setRequests(resultRequest)
+      
+      setRequests(result)      
     }
     fetchData();
   }, []);
-  console.log(requestView)
-  console.log(requestType)
+  
+
+  // console.log('1111')
+  // console.log(requestView)
+  // console.log(requestType)
+  // console.log(requestsFiltered)
+
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, requestsFiltered.length - page * rowsPerPage);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -204,24 +200,58 @@ export default function LivePreviewExample() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  //onClick={() =>setRequestView('all')}
-//onClick={setRequestView('pending')}
-//onClick={setRequestView('accepted')}
-//onClick={setRequestView('rejected')}
+  const setButtonColor=(button,type)=>{
+    if(type==1){
+      if(requestView==button)
+        return 'inherit'
+      else
+        return 'secondary'
+    }else{
+      
+      if(requestType==button)
+        return 'inherit'
+      else
+        return 'primary'
+    }
+  }
+  const onClickFunc=(data,type)=>{
+    let viewx=requestView
+    let typex=requestType
+    if(type==1){
+      viewx=data
+      setRequestView(data)
+    }else{
+      typex=data
+      setRequestType(data)
+    }
+    let replacement=(viewx=='all')?requests[0]:requests[0].filter(e=>e.statusInst==viewx||e.statusHod==viewx)
+    let leave=(viewx=='all')?requests[2]:requests[2].filter(e=>e.status==viewx)
+    let changeDay=(viewx=='all')?requests[3]:requests[3].filter(e=>e.status==viewx)
+    let slot=(viewx=='all')?requests[4]:requests[4].filter(e=>e.status==viewx)
+    switch(typex){
+      case 'replacementRequests':setRequestsFiltered(replacement);break;
+      case 'leaveRequests':setRequestsFiltered(leave);break;
+      case 'changeDayOffRequests':setRequestsFiltered(changeDay);break;
+      case 'slotLinkingRequests':setRequestsFiltered(slot);break;
+    }
+    console.log(requestView)
+    //setDummy(dummy+1)
+  }
+
   return (
       <Fragment>
         <div className={classes3.root}>
       <ButtonGroup variant="contained" color="secondary" aria-label="contained primary button group">
-        <Button onClick={() =>setRequestView('all')}>All</Button>
-        <Button onClick={() =>setRequestView('pending')}>Pending</Button>
-        <Button onClick={() =>setRequestView('accepted')}>Accepted</Button>
-        <Button onClick={() =>setRequestView('rejected')}>Rejected</Button>
+        <Button color={setButtonColor('all',1)} onClick={() =>onClickFunc('all',1)}>All</Button>
+        <Button color={setButtonColor('pending',1)} onClick={() =>onClickFunc('pending',1)}>Pending</Button>
+        <Button color={setButtonColor('accepted',1)} onClick={() =>onClickFunc('accepted',1)}>Accepted</Button>
+        <Button color={setButtonColor('rejected',1)} onClick={() =>onClickFunc('rejected',1)}>Rejected</Button>
       </ButtonGroup>
       <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
-        <Button onClick={()=>setRequestType('replacementRequests')}>Replacement</Button>
-        <Button onClick={()=>setRequestType('leaveRequests')}>Leave</Button>
-        <Button onClick={()=>setRequestType('slotLinkingRequests')}>Slot Linking</Button>
-        <Button onClick={()=>setRequestType('changeDayOffRequests')}>Change Day Off</Button>
+        <Button color={setButtonColor('replacementRequests',2)} onClick={()=>onClickFunc('replacementRequests',2)}>Replacement</Button>
+        <Button color={setButtonColor('leaveRequests',2)} onClick={()=>onClickFunc('leaveRequests',2)}>Leave</Button>
+        <Button color={setButtonColor('slotLinkingRequests',2)} onClick={()=>onClickFunc('slotLinkingRequests',2)}>Slot Linking</Button>
+        <Button color={setButtonColor('changeDayOffRequests',2)} onClick={()=>onClickFunc('changeDayOffRequests',2)}>Change Day Off</Button>
       </ButtonGroup>
     </div>
     <Fragment><h3>Sent Requests</h3>
@@ -229,13 +259,13 @@ export default function LivePreviewExample() {
         <Table className={classes.table} aria-label="custom pagination table">
           <TableBody>
             {(rowsPerPage > 0
-              ? requests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : requests
-            ).map(row => (
-              <TableRow key={row.statusInst}>
+              ? requestsFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : requestsFiltered
+            ).map((row,index) => (
+              <TableRow key={index}>
                 <TableCell><OpenDialog status={row.senderId}></OpenDialog></TableCell>
                 <TableCell component="th" scope="row" align="left">
-                {row.statusInst}
+                {index+1}
                 </TableCell>
                 <TableCell >{row.Date}</TableCell>
                 <TableCell >{row.slot}</TableCell>
