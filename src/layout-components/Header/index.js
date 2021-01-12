@@ -17,7 +17,7 @@ import {
 import { connect } from 'react-redux';
 
 import { setSidebarToggleMobile } from '../../reducers/ThemeOptions';
-// import projectLogo from '../../assets/images/react.svg';
+
 import projectLogo from '../../assets/images/G.png';
 
 import HeaderLogo from '../../layout-components/HeaderLogo';
@@ -114,7 +114,7 @@ const Header = props => {
                   </IconButton>
                 </Link>
                 <Hidden smDown>
-                  <Box className="app-logo-text">GUC Staff Portal</Box>
+                  <Box>GUC Staff Portal</Box>
                 </Hidden>
               </Box>
             </Hidden>

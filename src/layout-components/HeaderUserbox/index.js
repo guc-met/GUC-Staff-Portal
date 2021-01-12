@@ -1,18 +1,33 @@
 import React, { Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { Box, Menu, Button, List, ListItem, Divider } from '@material-ui/core';
+import axios from 'axios';
 
-const username = 'ESLAM Hegazy';
-const usertype = 'HOD PROF';
+const jwt = require('jsonwebtoken');
+const tokenS = 'sdkjfhjsdhafhkjhjkwekfhjkasdfjkh';
+const result = jwt.verify(localStorage.getItem('UserToken'), tokenS);
+const username = result.name;
+const usertype = result.role;
 export default function HeaderUserbox() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory();
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
-  const logOut = () => {
+  const logOut = async () => {
+    axios
+      .get('http://localhost:3001/staff/logout', {
+        headers: {
+          token: localStorage.getItem('UserToken')
+        }
+      })
+      .then(function(response) {
+        console.log(response.data);
+      })
+      .catch(function(error) {
+        console.log(error.response.data);
+      });
     localStorage.removeItem('UserToken');
     history.push('/Login');
   };
@@ -31,9 +46,7 @@ export default function HeaderUserbox() {
           <Avatar sizes="44" alt="Emma Taylor" src={avatar5} />
         </Box> */}
 
-        <Box>
-          {username}
-        </Box>
+        <Box>{username}</Box>
         <div className="d-none pl-3">
           <div className="font-weight-bold pt-2 line-height-1">{username}</div>
           <span className="text-white-50">{usertype}</span>
@@ -60,9 +73,6 @@ export default function HeaderUserbox() {
         className="ml-2">
         <div className="dropdown-menu-right dropdown-menu-lg overflow-hidden p-0">
           <List className="text-left bg-transparent d-flex align-items-center flex-column pt-0">
-            {/* <Box>
-              <Avatar sizes="44" alt="Emma Taylor" src={avatar5} />
-            </Box> */}
             <div className="pl-3  pr-3">
               <div className="font-weight-bold text-center pt-2 line-height-1">
                 {username}
