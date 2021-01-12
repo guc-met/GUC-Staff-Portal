@@ -64,14 +64,44 @@ export default function Attendance() {
             />
             <CardContent className="p-3">
               {/* <h5 className="card-title font-weight-bold font-size-lg">Attendance</h5> */}
-              <p>Missing days : {days}</p>
-              <p>Missing hours : {hours.Missinghours}</p>
-              <p>Extra hours : {hours.ExtraHours}</p>
+              <div>
+                <p style={{ marginTop: 2, display: 'inline-block' }}>
+                  Missing days : {days}
+                </p>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  size="small"
+                  style={{ float: 'right' }}
+                  onClick={() =>
+                    history.push({
+                      pathname: '/AttendanceLogs',
+                      state: {
+                        isMissingDays: true
+                      }
+                    })
+                  }>
+                  Missing days
+                </Button>
+              </div>
+              <p style={{ marginTop: 2, display: 'block' }}>
+                Missing hours : {hours.Missinghours}
+              </p>
+              <p style={{ marginTop: 2, display: 'block' }}>
+                Extra hours : {hours.ExtraHours}
+              </p>
               <div style={{ textAlign: 'center' }}>
                 <Button
                   color="primary"
                   variant="contained"
-                  onClick={() => history.push('/AttendanceLogs')}>
+                  onClick={() =>
+                    history.push({
+                      pathname: '/AttendanceLogs',
+                      state: {
+                        isMissingDays: false
+                      }
+                    })
+                  }>
                   View logs
                 </Button>
               </div>
