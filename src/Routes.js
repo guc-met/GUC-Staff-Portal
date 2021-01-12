@@ -44,6 +44,7 @@ const FacultiesHR = lazy(() => import('./example-pages/FacultiesHR'));
 const DepartmentsHR = lazy(() => import('./example-pages/DepartmentsHR'));
 const CoursesHR = lazy(() => import('./example-pages/CoursesHR'));
 const LocationsHR=lazy(() => import('./example-pages/LocationsHR'));
+const CourseSchedule=lazy(() => import('./example-pages/CourseSchedule'));
 const personalScheduleAC=lazy(()=>import('./example-pages/personalSchedule'));
 const myRequestsAC=lazy(()=>import('./example-pages/MyRequests'))
 const Routes = () => {
@@ -113,6 +114,7 @@ const Routes = () => {
                 '/FacultiesHR',
                 '/DepartmentsHR',
                 '/CoursesHR',
+                '/CourseSchedule',
                 '/personalScheduleAC',
                 '/myRequestsAC'
               ]}>
@@ -160,6 +162,8 @@ const Routes = () => {
                     <Route path="/FacultiesHR" component={FacultiesHR} />
                     <Route path="/DepartmentsHR" component={DepartmentsHR} />
                     <Route path="/CoursesHR" component={CoursesHR} />
+                    <Route path="/CourseSchedule" component={CourseSchedule} />
+
                     <Route path="/personalScheduleAC" component={personalScheduleAC} />
                     <Route path="/myRequestsAC" component={myRequestsAC} />
                   </motion.div>

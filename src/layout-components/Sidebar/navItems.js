@@ -227,14 +227,17 @@ export default [
     
   },
   {
+    "label": "Course Schedule",
+    "to": "/CourseSchedule"
+  },
+  {
     "label": "Personal Schedule",
     "to": "/personalScheduleAC"
     
   },
   {
     "label": "My Requests",
-    "to": "/myRequestsAC"
-    
+    "to": "/myRequestsAC"    
   }
 ]`,
       (key, value) => {
