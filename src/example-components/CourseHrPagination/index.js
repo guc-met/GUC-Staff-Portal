@@ -118,14 +118,14 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired
 };
 
-function createData(code,name,mainDepartment,deps) {
+function createData(code,name,mainDepartment,deps,coverage) {
   return { 
     id:code,idTemp:code,
     code,codeTemp:code,
     name,nameTemp:name,
     mainDepartment,mainDepartmentTemp:mainDepartment,
     depTemp:mainDepartment,dep:mainDepartment,
-    deps,
+    deps,coverage,
     // headId,headIdTemp:headId,
     isEditMode: false };
 }
@@ -169,7 +169,7 @@ const CustomTableCell = ({ row, name, onChange,facs}) => {
     console.log(row)
     return (
       <TableCell align="left" className={classes.tableCell}>
-        { name=='depTemp'&&!row.id==''&&!isEditMode?(
+        { name=='depTemp'&&!row.id==''?(
                   <>
                   <FormControl  className={classes.formControl}>
                   <Select
@@ -193,7 +193,7 @@ const CustomTableCell = ({ row, name, onChange,facs}) => {
              
         )
         :
-        isEditMode &&!((name=='depTemp'||name=='mainDepartmentTemp')&&row.id!='')&&!(row.id==''&&name=='mainDepartmentTemp')? (//TODO }
+        isEditMode &&!((name=='depTemp'||name=='mainDepartmentTemp')&&row.id!='')&&!(row.id==''&&name=='mainDepartmentTemp')&&name!='coverage'? (//TODO }
           <Input
             value={row[name]}
             name={name}
@@ -220,7 +220,7 @@ export default function LivePreviewExample() {
     setPage(0);
   };
   //for responsive entries
-  const [locType,setLocType]=React.useState('');
+  const [role,setRole]=React.useState('');
   const [rows, setRows] = React.useState([]);
   const [facs, setFacs] = React.useState([]);
   const [open, setOpen] = React.useState([false,'success','all good']);
@@ -231,7 +231,7 @@ export default function LivePreviewExample() {
     
       const result=await axios
       .get(
-        'http://localhost:3001/hr/course',
+        'http://localhost:3001/staff/course',
      
         {
           headers: {
@@ -250,7 +250,7 @@ export default function LivePreviewExample() {
           let arr= response.data.map(crs=>{
             //console.log(dep)
             
-            return createData(crs._doc.code,crs._doc.name,crs._doc.mainDepartment,crs.deps)
+            return createData(crs._doc.code,crs._doc.name,crs._doc.mainDepartment,crs.deps,crs._doc.coverage)
           })
           //let x=['a','b']
           console.log(arr)
@@ -265,35 +265,36 @@ export default function LivePreviewExample() {
       //console.log(result)
 
       //retrieve facs to show them
-      // const facs=await axios
-      // .get(
-      //   'http://localhost:3001/hr/course',
+      const udata=await axios
+      .get(
+        'http://localhost:3001/staff/getUserData',
      
-      //   {
-      //     headers: {
-      //      token: localStorage.getItem('UserToken')  //to be added
-      //     // token
-      //     }
-      //   }
-      // )
-      // .then(function(response) {
-      //  // console.log(response)
-      //   if(response.status!=200){//that's an error
-      //     return [];
-      //   }else{
-      //     //return array
-      //   //  console.log(response)
-      //    // let arr= response.data.map(fac=>createData(fac.name,fac.code))
-      //     //let x=['a','b']
-      //    // console.log(arr)
-      //     return response.data;
-      //   }
-      // })
-      // .catch(function(error) {
-      //   console.log(error);
-      //   return [];
-      // })
-      // setFacs(facs);
+        {
+          headers: {
+           token: localStorage.getItem('UserToken')  //to be added
+          // token
+          }
+        }
+      )
+      .then(function(response) {
+       // console.log(response)
+        if(response.status!=200){//that's an error
+          return {};
+        }else{
+          //return array
+        //  console.log(response)
+         // let arr= response.data.map(fac=>createData(fac.name,fac.code))
+          //let x=['a','b']
+         // console.log(arr)
+          return response.data;
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+        return {};
+      })
+      setRole(udata.role);
+      
       setRows(result);
     }
     fetchData();
@@ -406,12 +407,12 @@ export default function LivePreviewExample() {
         initRow={...initRow,[name]:value};
        // console.log(name)
         if(name=='typeTemp'){
-            setLocType(value);
+          //  setLocType(value);
            
         }
         
     }
-    console.log(initRow);
+   // console.log(initRow);
     setRows(newRows);
     
   };
@@ -618,11 +619,13 @@ export default function LivePreviewExample() {
             <TableCell align="left" />
             <TableCell align="left">Code</TableCell>
             <TableCell align="left">Name</TableCell>
-            <TableCell align="left">Department Code(First department is the main one)</TableCell>
+            <TableCell align="left">Departments Codes</TableCell>
             <TableCell align="left">Main Department</TableCell>
+            <TableCell align="left">Coverage </TableCell>
           </TableRow>
         </TableHead>
           <TableBody>
+         { role=='HR'?<>
           <TableRow key="">
                   <TableCell className={classes.selectTableCell}>
                     <IconButton
@@ -634,19 +637,22 @@ export default function LivePreviewExample() {
                     </IconButton>
                      
               </TableCell>
-              {/* component="th" scope="row" */}
               <CustomTableCell  {...{ row:initRow, name: "codeTemp", onChange ,facs}} />
               <CustomTableCell  {...{ row:initRow, name: "nameTemp", onChange ,facs}} />
               <CustomTableCell  {...{ row:initRow, name: "depTemp", onChange,facs }} />             
               <CustomTableCell  {...{ row:initRow, name: "mainDepartmentTemp", onChange,facs }} />
+              
+            
               </TableRow>
+              </>:<></>
+             }
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
             ).map(row => (
               <TableRow key={row.id}>
                   <TableCell className={classes.selectTableCell}>
-                {row.isEditMode ? (
+                {role=='HR'&&row.isEditMode ? (
                   <>
                     <IconButton
                       title="confirm"
@@ -663,7 +669,7 @@ export default function LivePreviewExample() {
                       <CancelIcon />
                     </IconButton>
                   </>
-                ) : (
+                ) : role=='HR'?(
                   <>
                   <IconButton
                     title="edit"
@@ -674,7 +680,7 @@ export default function LivePreviewExample() {
                   </IconButton>
                   <AlertDialog entry='Course' onClick={(e)=>onDelete({...e,id:row.id,dep:row.depTemp})} row={row.id}> </AlertDialog>
                   </>
-                )}
+                ):<></>}
               </TableCell>
               {/* component="th" scope="row" */}
             
@@ -682,7 +688,8 @@ export default function LivePreviewExample() {
               <CustomTableCell  {...{ row, name: "nameTemp", onChange ,facs}} />
               <CustomTableCell  {...{ row, name: "depTemp", onChange ,facs}} />
               <CustomTableCell  {...{ row, name: "mainDepartmentTemp", onChange,facs }} />
-                {/* <TableCell component="th" scope="row" >
+              <CustomTableCell  {...{ row, name: "coverage", onChange,facs }} />
+                              {/* <TableCell component="th" scope="row" >
                   {row.name}
                 </TableCell>
                 <TableCell align="right">{row.code}</TableCell> */}

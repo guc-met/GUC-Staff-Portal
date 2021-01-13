@@ -207,6 +207,11 @@ export default [
     ]
   },
   {
+    "label": "Staff",
+    "to": "/StaffHR"
+    
+  },
+  {
     "label": "Locations",
     "to": "/LocationsHR"
     
