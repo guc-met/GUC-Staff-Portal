@@ -237,7 +237,12 @@ export default [
   },
   {
     "label": "My Requests",
-    "to": "/myRequestsAC"    
+    "to": "/myRequestsAC"
+    
+  },
+  {
+    "label": "DayOff For Staff",
+    "to": "/DayOffStaffHOD" 
   }
 ]`,
       (key, value) => {
