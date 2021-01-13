@@ -2,11 +2,16 @@ import React, { Fragment, useState } from 'react';
 
 import Input from '@material-ui/core/Input';
 import { ExampleWrapperSimple } from '../../layout-components';
-import { Grid, makeStyles, IconButton } from '@material-ui/core';
+import { Grid, makeStyles, IconButton, Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import DoneIcon from '@material-ui/icons/DoneAllTwoTone';
-
 import CancelIcon from '@material-ui/icons/CancelOutlined';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import Attendance from '../../example-components/Attendance';
 
@@ -17,7 +22,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function DashboardDefault() {
+export default function HomePage() {
   const classes = useStyles();
   React.useEffect(() => {
     async function FetchData() {
@@ -43,15 +48,80 @@ export default function DashboardDefault() {
 
   const [profile, setProfile] = useState('');
   const [email, setEmail] = useState('');
+  const [oldPass, setOldPass] = useState('');
+  const [newPass, setnewPass] = useState('');
+  const [newPass2, setnewPass2] = useState('');
+  const [open, setOpen] = useState([false, '', '']);
+  const [openDial, setopenDial] = React.useState(false);
+
   const onChangeEmail = e => {
     setEmail(e.target.value);
   };
-
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen([false, open[1], open[2]]);
+  };
   const onCancel = () => {
     setEmail(profile.Email);
     setProfile({ ...profile, isEditMode: !profile.isEditMode });
   };
-
+  const setDialog = () => {
+    setopenDial(true);
+  };
+  const takeOldPass = e => {
+    setOldPass(e.target.value);
+  };
+  const takeNewPass = e => {
+    setnewPass(e.target.value);
+  };
+  const takeNewPass2 = e => {
+    setnewPass2(e.target.value);
+  };
+  const resetPass = () => {
+    if (newPass !== newPass2) {
+      setOpen([true, 'error', 'New password does not match']);
+      return;
+    }
+    axios
+      .put(
+        'http://localhost:3001/staff/resetPassword',
+        {
+          oldPassword: oldPass,
+          newPassword: newPass
+        },
+        {
+          headers: {
+            token: localStorage.getItem('UserToken')
+          }
+        }
+      )
+      .then(function(response) {
+        console.log(response.data);
+        if (response.data === 'please enter your old password') {
+          setOpen([true, 'error', response.data]);
+        }
+        if (response.data === 'Your password has changed successfully') {
+          setOpen([true, 'success', response.data]);
+          setopenDial(false);
+        }
+      })
+      .catch(function(error) {
+        console.log(error.response.data);
+        if (error.response.data === 'Old password is not correct') {
+          setOpen([true, 'error', error.response.data]);
+        }
+        if (
+          error.response.data === 'New password must has at least 6 charachters'
+        ) {
+          setOpen([true, 'error', error.response.data]);
+        }
+      });
+    setnewPass('');
+    setnewPass2('');
+    setOldPass('');
+  };
   const onApporval = async () => {
     axios
       .put(
@@ -66,6 +136,10 @@ export default function DashboardDefault() {
         }
       )
       .then(function(response) {
+        if (response.data === 'Cannot update empty mail') {
+          setOpen([true, 'error', response.data]);
+          return;
+        }
         if (response.data !== 'This email already in use') {
           setEmail(response.data);
           setProfile({
@@ -73,19 +147,21 @@ export default function DashboardDefault() {
             isEditMode: !profile.isEditMode,
             Email: response.data
           });
+          setOpen([true, 'success', 'Email updated successfully']);
         } else {
-          console.log('This email already in use');
+          setOpen([true, 'error', response.data]);
         }
       })
       .catch(function(error) {
-        console.log(error.response.data);
+        console.log(error.response.data.err);
+        setOpen([true, 'error', error.response.data.err]);
       });
   };
   return (
     <>
       <Fragment>
         <ExampleWrapperSimple sectionHeading="Profile">
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             <Grid item xs={12} lg={4}>
               <h6> Name </h6>
             </Grid>
@@ -140,7 +216,17 @@ export default function DashboardDefault() {
                 </>
               )}
             </Grid>
-
+            <Grid item xs={12} lg={4}>
+              <h6> Password </h6>
+            </Grid>
+            <Grid item xs={12} lg={7}>
+              *********
+            </Grid>
+            <Grid item xs={12} lg={1}>
+              <IconButton title="edit" aria-label="edit" onClick={setDialog}>
+                <EditIcon />
+              </IconButton>
+            </Grid>
             <Grid item xs={12} lg={4}>
               <h6> Office </h6>
             </Grid>
@@ -207,6 +293,80 @@ export default function DashboardDefault() {
         </ExampleWrapperSimple>
       </Fragment>
       <Attendance />
+      <div>
+        <Dialog open={openDial}>
+          <h1
+            style={{
+              textAlign: 'center',
+              width: '400px',
+              font: 'bold',
+              fontSize: '19px'
+            }}>
+            Reset Password
+          </h1>
+          <DialogContent>
+            <TextField
+              autoFocus
+              variant="outlined"
+              margin="normal"
+              id="oldpass"
+              label="Old Password"
+              value={oldPass}
+              onChange={takeOldPass}
+              type="password"
+              fullWidth
+            />
+          </DialogContent>
+          <DialogContent>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              id="newpass"
+              label="New Password"
+              value={newPass}
+              onChange={takeNewPass}
+              type="password"
+              fullWidth
+            />
+          </DialogContent>
+          <DialogContent>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              id="newpass2"
+              value={newPass2}
+              onChange={takeNewPass2}
+              label="Re-enter new password"
+              type="password"
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              color="primary"
+              onClick={() => {
+                setopenDial(false);
+                setnewPass('');
+                setnewPass2('');
+                setOldPass('');
+              }}>
+              Cancel
+            </Button>
+            <Button color="primary" onClick={resetPass}>
+              Reset
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+      <Snackbar
+        open={open[0]}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        <MuiAlert variant="filled" onClose={handleClose} severity={open[1]}>
+          {open[2]}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 }

@@ -27,7 +27,6 @@ export default function HeaderUserbox() {
   }, []);
   const [userName, setUserName] = React.useState('');
   const [userRole, setUserRole] = React.useState('');
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory();
   const handleClick = event => {
@@ -55,63 +54,64 @@ export default function HeaderUserbox() {
   };
 
   const viewProfileClick = () => {
-    history.push('/DashboardDefault');
+    history.push('/HomePage');
   };
 
   return (
-    <Fragment>
-      <Button
-        color="inherit"
-        onClick={handleClick}
-        className="text-capitalize px-3 text-left btn-inverse d-flex align-items-center">
-        <Box>{userName}</Box>
-        <div className="d-none pl-3">
-          <div>{userName}</div>
-          <span className="text-white-50">{userRole}</span>
-        </div>
-        <span className="pl-1 pl-xl-3">
-          <FontAwesomeIcon icon={['fas', 'angle-down']} className="opacity-5" />
-        </span>
-      </Button>
+    <>
+      <Fragment>
+        <Button
+          color="inherit"
+          onClick={handleClick}
+          className="text-capitalize px-3 text-left btn-inverse d-flex align-items-center">
+          <Box>{userName}</Box>
+          <div className="d-none pl-3">
+            <div>{userName}</div>
+            <span className="text-white-50">{userRole}</span>
+          </div>
+          <span className="pl-1 pl-xl-3">
+            <FontAwesomeIcon
+              icon={['fas', 'angle-down']}
+              className="opacity-5"
+            />
+          </span>
+        </Button>
 
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        getContentAnchorEl={null}
-        open={Boolean(anchorEl)}
-        anchorOrigin={{
-          vertical: 'center',
-          horizontal: 'center'
-        }}
-        transformOrigin={{
-          vertical: 'center',
-          horizontal: 'center'
-        }}
-        onClose={handleClose}
-        className="ml-2">
-        <div className="dropdown-menu-right dropdown-menu-lg overflow-hidden p-0">
-          <List className="text-left bg-transparent d-flex align-items-center flex-column pt-0">
-            <div className="pl-3  pr-3">
-              <div className="font-weight-bold text-center pt-2 line-height-1">
-                {userName}
+        <Menu
+          anchorEl={anchorEl}
+          keepMounted
+          getContentAnchorEl={null}
+          open={Boolean(anchorEl)}
+          anchorOrigin={{
+            vertical: 'center',
+            horizontal: 'center'
+          }}
+          transformOrigin={{
+            vertical: 'center',
+            horizontal: 'center'
+          }}
+          onClose={handleClose}
+          className="ml-2">
+          <div className="dropdown-menu-right dropdown-menu-lg overflow-hidden p-0">
+            <List className="text-left bg-transparent d-flex align-items-center flex-column pt-0">
+              <div className="pl-3  pr-3">
+                <div className="font-weight-bold text-center pt-2 line-height-1">
+                  {userName}
+                </div>
+                <span className="text-black-50 text-center">{userRole}</span>
               </div>
-              <span className="text-black-50 text-center">{userRole}</span>
-            </div>
-            <Divider className="w-100" />
-            <ListItem button onClick={viewProfileClick}>
-              View Profile
-            </ListItem>
-            {/* <ListItem button>Sign in</ListItem>
-            <ListItem button>Sign out</ListItem> */}
-            <Divider className="w-100" />
-            <ListItem button>Reset password</ListItem>
-            <Divider className="w-100" />
-            <ListItem button onClick={logOut}>
-              Log out
-            </ListItem>
-          </List>
-        </div>
-      </Menu>
-    </Fragment>
+              <Divider className="w-100" />
+              <ListItem button onClick={viewProfileClick}>
+                View Profile
+              </ListItem>
+              <Divider className="w-100" />
+              <ListItem button onClick={logOut}>
+                Log out
+              </ListItem>
+            </List>
+          </div>
+        </Menu>
+      </Fragment>
+    </>
   );
 }
