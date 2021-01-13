@@ -41,6 +41,9 @@ var iconsMap = {
 export default [
   {
     label: 'Navigation menu',
+    Scrollable:true,
+    Scrolling:true,
+    Scrollbars:true,
     content: JSON.parse(
       `[
   {
@@ -243,6 +246,10 @@ export default [
   {
     "label": "DayOff For Staff",
     "to": "/DayOffStaffHOD" 
+  },
+  {
+    "label": "Staff In Department",
+    "to": "/StaffInDepHOD" 
   }
 ]`,
       (key, value) => {
