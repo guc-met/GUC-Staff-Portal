@@ -9,10 +9,9 @@ export default function Pagination() {
   return (
     <Fragment>
       <PageTitle
-        titleHeading="My Requests"
-        titleDescription="Send View Accept or Reject"
+        titleHeading="DayOff for Staff"
       />
-      <ExampleWrapperSimple sectionHeading="Requests">
+      <ExampleWrapperSimple sectionHeading="DaysOff">
         <PaginationBasic />
       </ExampleWrapperSimple>
     </Fragment>
