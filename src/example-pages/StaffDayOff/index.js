@@ -4,7 +4,7 @@ import { PageTitle } from '../../layout-components';
 
 import { ExampleWrapperSimple } from '../../layout-components';
 
-import PaginationBasic from '../../example-components/DayOffStaffHOD';
+import PaginationBasic from '../../example-components/StaffDayOffHOD';
 export default function Pagination() {
   return (
     <Fragment>
