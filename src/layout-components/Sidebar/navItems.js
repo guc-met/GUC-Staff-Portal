@@ -245,7 +245,7 @@ export default [
   },
   {
     "label": "DayOff For Staff",
-    "to": "/DayOffStaffHOD" 
+    "to": "/staffDayOffHOD" 
   },
   {
     "label": "Staff In Department",

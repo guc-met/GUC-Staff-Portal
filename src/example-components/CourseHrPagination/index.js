@@ -220,7 +220,7 @@ export default function LivePreviewExample() {
     setPage(0);
   };
   //for responsive entries
-  const [locType,setLocType]=React.useState('');
+  const [locType,setLocType] = React.useState('');
   const [rows, setRows] = React.useState([]);
   const [facs, setFacs] = React.useState([]);
   const [open, setOpen] = React.useState([false,'success','all good']);

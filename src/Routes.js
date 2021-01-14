@@ -47,7 +47,7 @@ const LocationsHR=lazy(() => import('./example-pages/LocationsHR'));
 const CourseSchedule=lazy(() => import('./example-pages/CourseSchedule'));
 const personalScheduleAC=lazy(()=>import('./example-pages/personalSchedule'));
 const myRequestsAC=lazy(()=>import('./example-pages/MyRequests'))
-const DayOffStaffHOD=lazy(()=>import('./example-pages/DayOffStaff'))
+const StaffDayOffHOD=lazy(()=>import('./example-pages/StaffDayOff'))
 const StaffInDepHOD=lazy(()=>import('./example-pages/StaffInDep'))
 
 const Routes = () => {
@@ -120,7 +120,7 @@ const Routes = () => {
                 '/CourseSchedule',
                 '/personalScheduleAC',
                 '/myRequestsAC',
-                '/DayOffStaffHOD',
+                '/StaffDayOffHOD',
                 '/StaffInDepHOD'
               ]}>
               <LeftSidebar>
@@ -168,10 +168,9 @@ const Routes = () => {
                     <Route path="/DepartmentsHR" component={DepartmentsHR} />
                     <Route path="/CoursesHR" component={CoursesHR} />
                     <Route path="/CourseSchedule" component={CourseSchedule} />
-
                     <Route path="/personalScheduleAC" component={personalScheduleAC} />
                     <Route path="/myRequestsAC" component={myRequestsAC} />
-                    <Route path="/DayOffStaffHOD" component={DayOffStaffHOD} />
+                    <Route path="/StaffDayOffHOD" component={StaffDayOffHOD} />
                     <Route path="/StaffInDepHOD" component={StaffInDepHOD} />
                   </motion.div>
                 </Switch>
