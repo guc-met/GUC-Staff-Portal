@@ -160,19 +160,8 @@ const Sidebar = props => {
       ]
     },
     {
-      "label": "Locations",
-      "to": "/LocationsHR"
-      
-    },
-    {
-      "label": "Faculties",
-      "to": "/FacultiesHR"
-      
-    },
-    {
-      "label": "Departments",
-      "to": "/DepartmentsHR"
-      
+      "label": "Dropdowns",
+      "to": "/Dropdowns"
     },
     {
       "label": "Courses",
@@ -212,15 +201,23 @@ const Sidebar = props => {
           console.log(error.response.data);
           return '';
         });
-      if (response.role === 'instructor') {
-        navItems[0].content.push({
-          label: 'Dropdowns',
-          description:
-            'A drop-down list is a graphical control element, similar to a list box, that allows the user to choose one value from a list.',
-          to: '/Dropdowns'
-        });
-        setNav(navItems);
+      if (response.role === 'HR') {
+        navItems[0].content.push(
+          {
+            label: 'Locations',
+            to: '/LocationsHR'
+          },
+          {
+            label: 'Faculties',
+            to: '/FacultiesHR'
+          },
+          {
+            label: 'Departments',
+            to: '/DepartmentsHR'
+          }
+        );
       }
+      setNav(navItems);
     }
     FetchData();
   }, []);

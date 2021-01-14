@@ -53,6 +53,10 @@ export default function HomePage() {
   const [newPass2, setnewPass2] = useState('');
   const [open, setOpen] = useState([false, '', '']);
   const [openDial, setopenDial] = React.useState(false);
+  const [openDialD, setopenDialD] = React.useState(false);
+  const [dayyOff, setTakeDayyOff] = useState('');
+  const [reason, setReason] = useState('');
+  const [comment, setComment] = useState('');
 
   const onChangeEmail = e => {
     setEmail(e.target.value);
@@ -70,6 +74,9 @@ export default function HomePage() {
   const setDialog = () => {
     setopenDial(true);
   };
+  const setDayOff = () => {
+    setopenDialD(true);
+  };
   const takeOldPass = e => {
     setOldPass(e.target.value);
   };
@@ -78,6 +85,15 @@ export default function HomePage() {
   };
   const takeNewPass2 = e => {
     setnewPass2(e.target.value);
+  };
+  const takeDayyOff = e => {
+    setTakeDayyOff(e.target.value);
+  };
+  const takeReason = e => {
+    setReason(e.target.value);
+  };
+  const takeComment = e => {
+    setComment(e.target.value);
   };
   const resetPass = () => {
     if (newPass !== newPass2) {
@@ -122,6 +138,32 @@ export default function HomePage() {
     setnewPass2('');
     setOldPass('');
   };
+
+  const sendDayOffRequest = async () => {
+    axios
+      .post(
+        'http://localhost:3001/ac/changeDayOff',
+        {
+          newday: dayyOff,
+          reasonOfChange: reason,
+          comment: comment
+        },
+        {
+          headers: {
+            token: localStorage.getItem('UserToken')
+          }
+        }
+      )
+      .then(function(response) {
+        setopenDialD(false);
+        setOpen([true, 'success', response.data]);
+      })
+      .catch(function(error) {
+        console.log(error.response.data.err);
+        setOpen([true, 'error', error.response.data.err]);
+      });
+  };
+
   const onApporval = async () => {
     axios
       .put(
@@ -265,10 +307,14 @@ export default function HomePage() {
             <Grid item xs={12} lg={4}>
               <h6> Dayoff</h6>
             </Grid>
-            <Grid item xs={12} lg={8}>
+            <Grid item xs={12} lg={7}>
               {profile['Off day']}
             </Grid>
-
+            <Grid item xs={12} lg={1}>
+              <IconButton title="edit" aria-label="edit" onClick={setDayOff}>
+                <EditIcon />
+              </IconButton>
+            </Grid>
             <Grid item xs={12} lg={4}>
               <h6> Faculty </h6>
             </Grid>
@@ -354,6 +400,70 @@ export default function HomePage() {
             </Button>
             <Button color="primary" onClick={resetPass}>
               Reset
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+
+      <div>
+        <Dialog open={openDialD}>
+          <h1
+            style={{
+              textAlign: 'center',
+              width: '400px',
+              font: 'bold',
+              fontSize: '19px'
+            }}>
+            Day Off Request
+          </h1>
+          <DialogContent>
+            <TextField
+              autoFocus
+              variant="outlined"
+              margin="normal"
+              id="day"
+              label="day"
+              value={dayyOff}
+              onChange={takeDayyOff}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogContent>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              id="reason"
+              label="Reason"
+              value={reason}
+              onChange={takeReason}
+              fullWidth
+            />
+          </DialogContent>
+
+          <DialogContent>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              id="comment"
+              value={comment}
+              onChange={takeComment}
+              label="Comment"
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              color="primary"
+              onClick={() => {
+                setDayOff('');
+                setReason('');
+                setComment('');
+                setopenDialD(false);
+              }}>
+              Cancel
+            </Button>
+            <Button color="primary" onClick={sendDayOffRequest}>
+              Request
             </Button>
           </DialogActions>
         </Dialog>
