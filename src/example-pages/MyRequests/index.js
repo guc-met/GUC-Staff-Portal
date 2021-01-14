@@ -10,7 +10,7 @@ export default function Pagination() {
     <Fragment>
       <PageTitle
         titleHeading="My Requests"
-        titleDescription="Send View Accept or Reject"
+        titleDescription="Make, View, Cancel, Accept or Reject"
       />
       <ExampleWrapperSimple sectionHeading="Requests">
         <PaginationBasic />
