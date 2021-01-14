@@ -225,6 +225,8 @@ const useStyles3 = makeStyles((theme) => ({
     },
   },
 }));
+// let replaceHolder={rl:1,colleagueId:'',date:'',slot:'',reason:''}
+// let leaveHolder={rl:2,typeOfLeave:'',startDate:'',periodOfLeave:'',compensatingDay:'',reason:'',document:''}
 
 export default function LivePreviewExample() {
   const classes3=useStyles3()
@@ -254,6 +256,8 @@ export default function LivePreviewExample() {
   const [replaceHolder,setReplaceHolder]=React.useState({rl:1,colleagueId:'',date:'',slot:'',reason:''})
   const [leaveHolder,setLeaveHolder]=React.useState({rl:2,typeOfLeave:'',
   startDate:'',periodOfLeave:'',compensatingDay:'',reason:'',document:''})
+
+  //const [dummy,setDummy]=React.useState(0)
 
   const [open, setOpen] = React.useState([false,'bottom','success','all good']);
 
@@ -458,6 +462,7 @@ const reRender=async()=>{
   }
 
   const onClickFunc=(data,type)=>{
+    console.log(requests)
     let viewx=requestView
     let typex=requestType
     if(type==1){
@@ -1053,6 +1058,8 @@ const CustomTableCell = ({ row, name, onChange }) => {
     </TableCell>
   );
 };
+//setReplaceHolder(newRow)
+//    setLeaveHolder(newRow)
 
 const onChange = (e, row) => {
   const value = e.target.value;
@@ -1060,9 +1067,10 @@ const onChange = (e, row) => {
   let newRow={ ...row, [name]:value };
   let {rl}=row
   if(rl==1)
-    setReplaceHolder(newRow)
+  setReplaceHolder(newRow)
   else
     setLeaveHolder(newRow)
+  //setDummy(dummy+1)
 };
 
 
@@ -1227,10 +1235,19 @@ const receivedRequestsEnable=()=>{
   )
               }
 }
-
-const makeRequest=()=>{
-  if(replaceOrLeave=='replacement')
-    return (
+ 
+  return (
+      <>
+      <Fragment>
+        <h3>Make a Request</h3>
+        <div className={classes3.root}>
+        <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
+        <Button color={setButtonColorMake('replacement')} onClick={()=>setReplaceOrLeave('replacement')}>Replacement Request</Button>
+        <Button color={setButtonColorMake('leave')} onClick={()=>setReplaceOrLeave('leave')}>Leave Request</Button>
+        </ButtonGroup>
+        </div>
+        {
+  (replaceOrLeave=='replacement')?
       <Table className={classes.table}>
       <TableHead >
         <TableRow >
@@ -1253,16 +1270,30 @@ const makeRequest=()=>{
                   </IconButton>
                    
             </TableCell>
-              <CustomTableCell  {...{ row:replaceHolder, name: "colleagueId", onChange }} />
+            <TableCell align="center" className={classes.tableCell}>
+            <Input
+          value={replaceHolder['colleagueId']}
+          name={'colleagueId'}
+          onChange={(e) => onChange(e, replaceHolder)}
+          className={classes.input}
+        />
+        </TableCell>
               <CustomTableCell  {...{ row:replaceHolder, name: "date", onChange }} />
               <CustomTableCell  {...{ row:replaceHolder, name: "slot", onChange }} />
-              <CustomTableCell  {...{ row:replaceHolder, name: "reason", onChange }} />
+              <TableCell align="center" className={classes.tableCell}>
+              <Input
+                value={replaceHolder['reason']}
+                name={'reason'}
+                onChange={(e) => onChange(e, replaceHolder)}
+                className={classes.input}
+              />
+              </TableCell>
             </TableRow>
       </TableBody>
       </Table>
-    )
-  else
-    return(
+
+  :
+
       <Table className={classes.table}>
       <TableHead >
         <TableRow >
@@ -1272,7 +1303,7 @@ const makeRequest=()=>{
           <TableCell align="center">Period Of Leave</TableCell>
           <TableCell align="center">Compensating Day <h6 style={{color:'skyblue'}}>Only for Compensation Leaves</h6></TableCell>
           <TableCell align="center">Reason</TableCell>
-          <TableCell align="center">Document</TableCell>
+          <TableCell align="center">Document <h6 style={{color:'skyblue'}}>Put Google Drive link</h6></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -1289,27 +1320,36 @@ const makeRequest=()=>{
             </TableCell>
               <CustomTableCell  {...{ row:leaveHolder, name: "typeOfLeave", onChange }} />
               <CustomTableCell  {...{ row:leaveHolder, name: "startDate", onChange }} />
-              <CustomTableCell  {...{ row:leaveHolder, name: "periodOfLeave", onChange }} />
+              <TableCell align="center" className={classes.tableCell}>
+              <Input
+                value={leaveHolder['periodOfLeave']}
+                name={'periodOfLeave'}
+                onChange={(e) => onChange(e, leaveHolder)}
+                className={classes.input}
+              />
+              </TableCell>
               <CustomTableCell  {...{ row:leaveHolder, name: "compensatingDay", onChange }} />
-              <CustomTableCell  {...{ row:leaveHolder, name: "reason", onChange }} />
-              <CustomTableCell  {...{ row:leaveHolder, name: "document", onChange }} />
+              <TableCell align="center" className={classes.tableCell}>
+              <Input
+                value={leaveHolder['reason']}
+                name={'reason'}
+                onChange={(e) => onChange(e, leaveHolder)}
+                className={classes.input}
+              />
+              </TableCell>
+              <TableCell align="center" className={classes.tableCell}>
+              <Input
+                value={leaveHolder['document']}
+                name={'document'}
+                onChange={(e) => onChange(e, leaveHolder)}
+                className={classes.input}
+              />
+              </TableCell>
             </TableRow>
       </TableBody>
       </Table>
-    )    
-}
   
-  return (
-      <>
-      <Fragment>
-        <h3>Make a Request</h3>
-        <div className={classes3.root}>
-        <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
-        <Button color={setButtonColorMake('replacement')} onClick={()=>setReplaceOrLeave('replacement')}>Replacement Request</Button>
-        <Button color={setButtonColorMake('leave')} onClick={()=>setReplaceOrLeave('leave')}>Leave Request</Button>
-        </ButtonGroup>
-        </div>
-        {makeRequest()}
+}
       </Fragment>
       <br/><br/>
     <Fragment><h3>Sent Requests</h3>
@@ -1382,7 +1422,7 @@ const makeRequest=()=>{
     <br/>
     <br/>
     {receivedRequestsEnable()}
-    <Snackbar open={open[0]} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical:open[1], horizontal :'center'}}>
+    <Snackbar open={open[0]} onClose={handleClose} anchorOrigin={{ vertical:open[1], horizontal :'center'}}>
       <MuiAlert variant='filled' onClose={handleClose} severity={open[2]}>
         {open[3]}
       </MuiAlert>
