@@ -39,6 +39,7 @@ const ListGroups = lazy(() => import('./example-pages/ListGroups'));
 
 const Login = lazy(() => import('./example-pages/login'));
 
+const StaffHR = lazy(() => import('./example-pages/StaffHR'));
 const FacultiesHR = lazy(() => import('./example-pages/FacultiesHR'));
 const DepartmentsHR = lazy(() => import('./example-pages/DepartmentsHR'));
 const CoursesHR = lazy(() => import('./example-pages/CoursesHR'));
@@ -112,6 +113,7 @@ const Routes = () => {
                 '/ApexCharts',
                 '/Maps',
                 '/ListGroups',
+                '/StaffHR',
                 '/LocationsHR',
                 '/FacultiesHR',
                 '/DepartmentsHR',
@@ -159,6 +161,7 @@ const Routes = () => {
                     <Route path="/ApexCharts" component={ApexCharts} />
                     <Route path="/Maps" component={Maps} />
                     <Route path="/ListGroups" component={ListGroups} />
+                    <Route path="/StaffHR" component={StaffHR} />
                     <Route path="/LocationsHR" component={LocationsHR} />
                     <Route path="/FacultiesHR" component={FacultiesHR} />
                     <Route path="/DepartmentsHR" component={DepartmentsHR} />

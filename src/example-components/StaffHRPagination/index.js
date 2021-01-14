@@ -121,35 +121,49 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired
 };
 
-function createData(code, name, mainDepartment, deps, coverage) {
+function createData(
+  id,
+  email,
+  name,
+  salary,
+  gender,
+  officeLocation,
+  role,
+  signInLogs,
+  dayOff,
+  department
+) {
   return {
-    id: code,
-    idTemp: code,
-    code,
-    codeTemp: code,
+    id,
+    email,
     name,
-    nameTemp: name,
-    mainDepartment,
-    mainDepartmentTemp: mainDepartment,
-    depTemp: mainDepartment,
-    dep: mainDepartment,
-    deps,
-    coverage,
+    salary,
+    salaryTemp: salary,
+    gender,
+    officeLocation,
+    officeLocationTemp: officeLocation,
+    role,
+    roleTemp: role,
+    signInLogs,
+    dayOff,
+    department,
+    departmentTemp: department,
     // headId,headIdTemp:headId,
     isEditMode: false
   };
 }
+// "email" : "foo@guc.edu.eg","name" : "timo",
+// "salary" : 10000000000,"gender" : "male","officeLocation" : "C3.320","role": "TA","dayOff" :"Tuesday","department" :  "MET"
 let initRow = {
   id: "",
-  idTemp: "",
-  code: "",
-  codeTemp: "",
+  email: "",
   name: "",
-  nameTemp: "",
-  mainDepartment: "",
-  mainDepartmentTemp: "",
-  dep: "",
-  depTemp: "",
+  salary: "",
+  gender: "",
+  officeLocation: "",
+  dayOff: "",
+  role: "",
+  department: "",
   isEditMode: true
 };
 
@@ -178,13 +192,13 @@ const useStyles = makeStyles({
 });
 
 //////
-const CustomTableCell = ({ row, name, onChange, facs }) => {
+const CustomTableCell = ({ row, name, onChange, deps }) => {
   const classes = useStyles();
   const { isEditMode } = row;
   console.log(row);
   return (
     <TableCell align="left" className={classes.tableCell}>
-      {name == "depTemp" && !row.id == "" ? (
+      {name == "gender" && row.id == "" ? (
         <>
           <FormControl className={classes.formControl}>
             <Select
@@ -197,25 +211,57 @@ const CustomTableCell = ({ row, name, onChange, facs }) => {
               inputProps={{ "aria-label": "Without label" }}
             >
               <MenuItem value={row[name]} disabled></MenuItem>
-              {row.deps.map(dep => (
-                <MenuItem value={dep}>{dep}</MenuItem>
-              ))}
+              {/* {row.deps.map(dep => ( */}
+              <MenuItem value="male">Male</MenuItem>
+              <MenuItem value="female">Female</MenuItem>
+              {/* ))} */}
             </Select>
           </FormControl>
         </>
-      ) : isEditMode &&
-        !(
-          (name == "depTemp" || name == "mainDepartmentTemp") &&
-          row.id != ""
-        ) &&
-        !(row.id == "" && name == "mainDepartmentTemp") &&
-        name != "coverage" ? ( //TODO }
-        <Input
-          value={row[name]}
-          name={name}
-          onChange={e => onChange(e, row)}
-          className={classes.input}
-        />
+      ) : name == "role" && row.id == "" ? ( //TODO }
+        <FormControl className={classes.formControl}>
+          <Select
+            value={row.depTemp}
+            name={name}
+            // onChange={handleChange}
+            onChange={e => onChange(e, row)}
+            displayEmpty
+            className={classes.selectEmpty}
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value={row[name]} disabled></MenuItem>
+            {/* {row.deps.map(dep => ( */}
+            <MenuItem value="HR">HR</MenuItem>
+            <MenuItem value="HOD">HOD</MenuItem>
+            <MenuItem value="instructor">instructor</MenuItem>
+            <MenuItem value="coordinator">coordinator</MenuItem>
+            <MenuItem value="TA">TA</MenuItem>
+            {/* ))} */}
+          </Select>
+        </FormControl>
+      ) : // <Input
+      //   value={row[name]}
+      //   name={name}
+      //   onChange={e => onChange(e, row)}
+      //   className={classes.input}
+      // />
+      name == "department" && row.id == "" ? (
+        <FormControl className={classes.formControl}>
+          <Select
+            value={row.depTemp}
+            name={name}
+            // onChange={handleChange}
+            onChange={e => onChange(e, row)}
+            displayEmpty
+            className={classes.selectEmpty}
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value={row[name]} disabled></MenuItem>
+            {deps.map(dep => (
+              <MenuItem value={dep}>{dep}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       ) : (
         row[name]
       )}
@@ -237,13 +283,13 @@ export default function LivePreviewExample() {
   };
   //for responsive entries
   const [role, setRole] = React.useState("");
-
   const [rows, setRows] = React.useState([]);
   const [facs, setFacs] = React.useState([]);
+  const [deps, setDeps] = React.useState([]);
   const [open, setOpen] = React.useState([false, "success", "all good"]);
 
   React.useEffect(() => {
-    console.log('omar rgola')
+    //console.log(open)
     async function fetchData() {
       const result = await axios
         .get(
@@ -552,11 +598,13 @@ export default function LivePreviewExample() {
     });
     axios
       .put(
-        "http://localhost:3001/hr/course",
+        "http://localhost:3001/hr/department",
         {
           key: obj.id,
           name: obj.nameTemp,
           code: obj.codeTemp,
+          facCode: obj.facultyCodeTemp,
+          headOfDepartmentId: obj.headIdTemp
         },
         {
           headers: {
@@ -583,8 +631,8 @@ export default function LivePreviewExample() {
               row.id = row.idTemp;
               row.code = row.codeTemp;
               row.name = row.nameTemp;
-            //  row.headId = row.headIdTemp;
-              //row.facultyCode = row.facultyCodeTemp;
+              row.headId = row.headIdTemp;
+              row.facultyCode = row.facultyCodeTemp;
 
               return { ...row, isEditMode: !row.isEditMode };
               //return previous[id] ? previous[id] : row;
@@ -695,7 +743,7 @@ export default function LivePreviewExample() {
                         </IconButton>
                       </>
                     ) : role == "HR" ? (
-                      <div style={{display:'flex'}}>
+                      <div style={{ display: "flex" }}>
                         <IconButton
                           title="edit"
                           aria-label="edit"
@@ -704,7 +752,7 @@ export default function LivePreviewExample() {
                           <EditIcon />
                         </IconButton>
                         <AlertDialog
-                          entry="Course"
+                          entry="Staff Member"
                           onClick={e =>
                             onDelete({ ...e, id: row.id, dep: row.depTemp })
                           }

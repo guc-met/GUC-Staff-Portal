@@ -89,6 +89,7 @@ export default function Login() {
         history.push('/HomePage');
       })
       .catch(function(error) {
+        console.log(error);
         console.log(error.response.data);
         if (
           error.response.data['msg'] ===
