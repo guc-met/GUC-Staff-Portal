@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(20),
-    height: '550px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    height: "550px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
   avatar: {
     margin: theme.spacing(2),
-    backgroundColor: 'black'
+    backgroundColor: "black"
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(10)
   },
   submit: {
@@ -31,25 +31,25 @@ const useStyles = makeStyles(theme => ({
   },
   bigDiv: {
     backgroundImage:
-      'url(https://burst.shopifycdn.com/photos/coding-on-laptop.jpg?width=1200&format=pjpg&exif=0&iptc=0)',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    height: '100%',
-    width: '100%',
-    margin: '0',
-    position: 'absolute'
+      "url(https://burst.shopifycdn.com/photos/coding-on-laptop.jpg?width=1200&format=pjpg&exif=0&iptc=0)",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    height: "100%",
+    width: "100%",
+    margin: "0",
+    position: "absolute"
   },
   container: {
     // backgroundImage : "url(https://images2.alphacoders.com/774/thumb-1920-774372.jpg)",
-    backgroundColor: '#f9f9f9',
-    borderRadius: '6px',
-    opacity: '0.8'
+    backgroundColor: "#f9f9f9",
+    borderRadius: "6px",
+    opacity: "0.8"
   }
 }));
 
 export default function Login() {
-  const [username, setName] = useState('');
-  const [password, setPass] = useState('');
+  const [username, setName] = useState("");
+  const [password, setPass] = useState("");
   const [newPasswordFlag, setNewPasswordFlag] = useState(false);
   const [newPass, setNewPass] = useState(false);
   const history = useHistory();
@@ -64,15 +64,15 @@ export default function Login() {
   const takeNewPass = e => {
     setNewPass(e.target.value);
   };
-  const token = localStorage.getItem('UserToken');
+  const token = localStorage.getItem("UserToken");
   if (token) {
-    history.push('/HomePage');
+    history.push("/HomePage");
   }
 
   const signIn = () => {
     axios
       .post(
-        'http://localhost:3001/login',
+        "http://localhost:3001/login",
         {
           email: username,
           password: password,
@@ -80,23 +80,23 @@ export default function Login() {
         },
         {
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
           }
         }
       )
       .then(function(response) {
-        localStorage.setItem('UserToken', response.data);
-        history.push('/HomePage');
+        localStorage.setItem("UserToken", response.data);
+        history.push("/HomePage");
       })
       .catch(function(error) {
         console.log(error);
         console.log(error.response.data);
         if (
-          error.response.data['msg'] ===
-          'Must enter a new password on your first login'
+          error.response.data["msg"] ===
+          "Must enter a new password on your first login"
         ) {
           setNewPasswordFlag(true);
-          setNewPass('');
+          setNewPass("");
         }
       });
   };
@@ -150,7 +150,7 @@ export default function Login() {
               onChange={takeNewPass}
               id="Newpassword"
               autoComplete="current-password"
-              style={{ display: newPasswordFlag ? 'block' : 'none' }}
+              style={{ display: newPasswordFlag ? "block" : "none" }}
             />
             {/* <Link to={signIn} className="app-logo-link"> */}
             <Button
@@ -158,7 +158,8 @@ export default function Login() {
               variant="contained"
               color="primary"
               onClick={signIn}
-              className={classes.submit}>
+              className={classes.submit}
+            >
               Sign In
             </Button>
             {/* </Link> */}
