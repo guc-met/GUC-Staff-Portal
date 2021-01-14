@@ -66,7 +66,7 @@ export default function Login() {
   };
   const token = localStorage.getItem('UserToken');
   if (token) {
-    history.push('/DashboardDefault');
+    history.push('/HomePage');
   }
 
   const signIn = () => {
@@ -86,7 +86,7 @@ export default function Login() {
       )
       .then(function(response) {
         localStorage.setItem('UserToken', response.data);
-        history.push('/DashboardDefault');
+        history.push('/HomePage');
       })
       .catch(function(error) {
         console.log(error);

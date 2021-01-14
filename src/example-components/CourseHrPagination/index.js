@@ -237,6 +237,7 @@ export default function LivePreviewExample() {
   };
   //for responsive entries
   const [role, setRole] = React.useState("");
+
   const [rows, setRows] = React.useState([]);
   const [facs, setFacs] = React.useState([]);
   const [open, setOpen] = React.useState([false, "success", "all good"]);

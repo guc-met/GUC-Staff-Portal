@@ -88,7 +88,6 @@ const Header = props => {
         setOpen([true, 'error', error.response.data.err + '']);
       });
   };
-
   return (
     <>
       <Fragment>
@@ -101,7 +100,7 @@ const Header = props => {
           <Box className="app-header-toolbar">
             <Hidden lgUp>
               <Box className="app-logo-wrapper" title="">
-                <Link to="/DashboardDefault" className="app-logo-link">
+                <Link to="/HomePage" className="app-logo-link">
                   <IconButton
                     color="primary"
                     size="medium"

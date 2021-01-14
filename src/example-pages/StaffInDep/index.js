@@ -4,15 +4,14 @@ import { PageTitle } from '../../layout-components';
 
 import { ExampleWrapperSimple } from '../../layout-components';
 
-import PaginationBasic from '../../example-components/myRequestsAC';
+import PaginationBasic from '../../example-components/StaffInDepHOD';
 export default function Pagination() {
   return (
     <Fragment>
       <PageTitle
-        titleHeading="My Requests"
-        titleDescription="Make, View, Cancel, Accept or Reject"
+        titleHeading="Staff In This Department"
       />
-      <ExampleWrapperSimple sectionHeading="Requests">
+      <ExampleWrapperSimple sectionHeading="Staff">
         <PaginationBasic />
       </ExampleWrapperSimple>
     </Fragment>
