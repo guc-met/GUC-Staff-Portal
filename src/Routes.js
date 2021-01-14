@@ -25,10 +25,9 @@ import RegularTables1 from './example-pages/personalSchedule';
 import RegularTables4 from './example-pages/RegularTables4';
 import FormsControls from './example-pages/FormsControls';
 
-const DashboardDefault = lazy(() => import('./example-pages/DashboardDefault'));
+const HomePage = lazy(() => import('./example-pages/HomePage'));
 const AttendanceLogs = lazy(() => import('./example-pages/AttendanceLogs'));
 const Cards3 = lazy(() => import('./example-pages/Cards3'));
-const LandingPage = lazy(() => import('./example-pages/LandingPage'));
 const Accordions = lazy(() => import('./example-pages/Accordions'));
 const Modals = lazy(() => import('./example-pages/Modals'));
 const Notifications = lazy(() => import('./example-pages/Notifications'));
@@ -44,10 +43,14 @@ const StaffHR = lazy(() => import('./example-pages/StaffHR'));
 const FacultiesHR = lazy(() => import('./example-pages/FacultiesHR'));
 const DepartmentsHR = lazy(() => import('./example-pages/DepartmentsHR'));
 const CoursesHR = lazy(() => import('./example-pages/CoursesHR'));
+
 const LocationsHR=lazy(() => import('./example-pages/LocationsHR'));
 const CourseSchedule=lazy(() => import('./example-pages/CourseSchedule'));
 const personalScheduleAC=lazy(()=>import('./example-pages/personalSchedule'));
 const myRequestsAC=lazy(()=>import('./example-pages/MyRequests'))
+const StaffDayOffHOD=lazy(()=>import('./example-pages/StaffDayOff'))
+const StaffInDepHOD=lazy(()=>import('./example-pages/StaffInDep'))
+
 const Routes = () => {
   const location = useLocation();
   const pageVariants = {
@@ -84,12 +87,11 @@ const Routes = () => {
           }>
           <Switch>
             <Redirect exact from="/" to="/Login" />
-            {/* <Route path="/LandingPage" component={LandingPage} /> */}
             <Route path="/Login" component={Login} />
             <Route
               path={[
                 '/AttendanceLogs',
-                '/DashboardDefault',
+                '/HomePage',
                 '/Buttons',
                 '/Dropdowns',
                 '/NavigationMenus',
@@ -118,7 +120,9 @@ const Routes = () => {
                 '/CoursesHR',
                 '/CourseSchedule',
                 '/personalScheduleAC',
-                '/myRequestsAC'
+                '/myRequestsAC',
+                '/StaffDayOffHOD',
+                '/StaffInDepHOD'
               ]}>
               <LeftSidebar>
                 <Switch location={location} key={location.pathname}>
@@ -128,10 +132,7 @@ const Routes = () => {
                     exit="out"
                     variants={pageVariants}
                     transition={pageTransition}>
-                    <Route
-                      path="/DashboardDefault"
-                      component={DashboardDefault}
-                    />
+                    <Route path="/HomePage" component={HomePage} />
                     <Route path="/AttendanceLogs" component={AttendanceLogs} />
                     <Route path="/Buttons" component={Buttons} />
                     <Route path="/Dropdowns" component={Dropdowns} />
@@ -166,9 +167,14 @@ const Routes = () => {
                     <Route path="/DepartmentsHR" component={DepartmentsHR} />
                     <Route path="/CoursesHR" component={CoursesHR} />
                     <Route path="/CourseSchedule" component={CourseSchedule} />
+                    <Route
+                      path="/personalScheduleAC"
+                      component={personalScheduleAC}
+                    />
 
-                    <Route path="/personalScheduleAC" component={personalScheduleAC} />
                     <Route path="/myRequestsAC" component={myRequestsAC} />
+                    <Route path="/StaffDayOffHOD" component={StaffDayOffHOD} />
+                    <Route path="/StaffInDepHOD" component={StaffInDepHOD} />
                   </motion.div>
                 </Switch>
               </LeftSidebar>
