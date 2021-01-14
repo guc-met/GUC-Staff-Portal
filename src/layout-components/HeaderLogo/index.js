@@ -12,10 +12,8 @@ const HeaderLogo = props => {
   return (
     <Fragment>
       <div className={clsx('app-header-logo', {})}>
-        <Box
-          className="header-logo-wrapper"
-          title="Home">
-          <Link to="/DashboardDefault" className="header-logo-wrapper-link">
+        <Box className="header-logo-wrapper" title="Home">
+          <Link to="/HomePage" className="header-logo-wrapper-link">
             <IconButton
               color="primary"
               size="medium"

@@ -26,7 +26,7 @@ const SidebarHeader = props => {
     <Fragment>
       <div className={clsx('app-sidebar-header', {})}>
         <Box className="header-logo-wrapper" title="Guc portal">
-          <Link to="/DashboardDefault" className="header-logo-wrapper-link">
+          <Link to="/HomePage" className="header-logo-wrapper-link">
             <IconButton
               color="primary"
               size="medium"

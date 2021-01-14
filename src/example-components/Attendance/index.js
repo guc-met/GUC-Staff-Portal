@@ -20,6 +20,7 @@ export default function Attendance() {
           console.log(error.response.data);
           return '';
         });
+      console.log(response)
       setDays(response);
     }
     FetchData();
