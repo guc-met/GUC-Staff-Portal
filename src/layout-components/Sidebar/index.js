@@ -1,22 +1,23 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState } from "react";
 
-import clsx from 'clsx';
+import clsx from "clsx";
 
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Hidden, Drawer, Paper } from '@material-ui/core';
+import PerfectScrollbar from "react-perfect-scrollbar";
+import { Hidden, Drawer, Paper } from "@material-ui/core";
 
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import SidebarHeader from '../../layout-components/SidebarHeader';
-import SidebarMenu from '../../layout-components/SidebarMenu';
+import navItems from './navItems';
+import SidebarHeader from "../../layout-components/SidebarHeader";
+import SidebarMenu from "../../layout-components/SidebarMenu";
 
-import { setSidebarToggleMobile } from '../../reducers/ThemeOptions';
-import axios from 'axios';
+import { setSidebarToggleMobile } from "../../reducers/ThemeOptions";
+import axios from "axios";
 
 const Sidebar = props => {
   let navItems = [
     {
-      label: 'Menu',
+      label: "Menu",
       content: JSON.parse(
         `[
           {
@@ -160,13 +161,33 @@ const Sidebar = props => {
       ]
     },
     {
-      "label": "Dropdowns",
-      "to": "/Dropdowns"
+      "label": "Staff",
+      "to": "/StaffHR"
+      
+    },
+    {
+      "label": "Locations",
+      "to": "/LocationsHR"
+      
+    },
+    {
+      "label": "Faculties",
+      "to": "/FacultiesHR"
+      
+    },
+    {
+      "label": "Departments",
+      "to": "/DepartmentsHR"
+      
     },
     {
       "label": "Courses",
       "to": "/CoursesHR"
       
+    },
+    {
+      "label": "Dropdowns",
+      "to": "/Dropdowns"
     },
     {
       "label": "Course Schedule",
@@ -185,42 +206,55 @@ const Sidebar = props => {
       )
     }
   ];
-  const [nav, setNav] = useState([]);
-  React.useEffect(() => {
-    async function FetchData() {
-      const response = await axios
-        .get('http://localhost:3001/staff/getUserData', {
-          headers: {
-            token: localStorage.getItem('UserToken')
-          }
-        })
-        .then(function(response) {
-          return response.data;
-        })
-        .catch(function(error) {
-          console.log(error.response.data);
-          return '';
-        });
-      if (response.role === 'HR') {
-        navItems[0].content.push(
-          {
-            label: 'Locations',
-            to: '/LocationsHR'
-          },
-          {
-            label: 'Faculties',
-            to: '/FacultiesHR'
-          },
-          {
-            label: 'Departments',
-            to: '/DepartmentsHR'
-          }
-        );
-      }
-      setNav(navItems);
-    }
-    FetchData();
-  }, []);
+  const [nav, setNav] = useState(navItems);
+  // const [nav, setNav] = useState([]);
+  // React.useEffect(() => {
+  //   async function FetchData() {
+  //     const response = await axios
+  //       .get("http://localhost:3001/staff/getUserData", {
+  //         headers: {
+  //           token: localStorage.getItem("UserToken")
+  //         }
+  //       })
+  //       .then(function(response) {
+  //         return response.data;
+  //       })
+  //       .catch(function(error) {
+  //         console.log(error.response.data);
+  //         return "";
+  //       });
+  //     if (response.role === "HR") {
+  //       navItems[0].content.push(
+  //         {
+  //           label: "Locations",
+  //           to: "/LocationsHR"
+  //         },
+  //         {
+  //           label: "Faculties",
+  //           to: "/FacultiesHR"
+  //         },
+  //         {
+  //           label: "Departments",
+  //           to: "/DepartmentsHR"
+  //         }
+  //       );
+  //     }
+  //     if (response.role === "instructor" || response.role === "HOD") {
+  //       navItems[0].content.push(
+  //         {
+  //           label: "DayOff For Staff",
+  //           to: "/staffDayOffHOD"
+  //         },
+  //         {
+  //           label: "Staff In Department",
+  //           to: "/StaffInDepHOD"
+  //         }
+  //       );
+  //     }
+  //     setNav(navItems);
+  //   }
+  //   FetchData();
+  // }, []);
   const {
     setSidebarToggleMobile,
     sidebarToggleMobile,
@@ -253,7 +287,8 @@ const Sidebar = props => {
           onClose={closeDrawer}
           variant="temporary"
           elevation={4}
-          className="app-sidebar-wrapper-lg">
+          className="app-sidebar-wrapper-lg"
+        >
           <SidebarHeader />
           <PerfectScrollbar>{sidebarMenuContent}</PerfectScrollbar>
         </Drawer>
@@ -261,16 +296,18 @@ const Sidebar = props => {
 
       <Hidden mdDown>
         <Paper
-          className={clsx('app-sidebar-wrapper', {
-            'app-sidebar-wrapper-fixed': sidebarFixed
+          className={clsx("app-sidebar-wrapper", {
+            "app-sidebar-wrapper-fixed": sidebarFixed
           })}
           square
-          elevation={sidebarShadow ? 11 : 3}>
+          elevation={sidebarShadow ? 11 : 3}
+        >
           <SidebarHeader />
           <div
             className={clsx({
-              'app-sidebar-menu': sidebarFixed
-            })}>
+              "app-sidebar-menu": sidebarFixed
+            })}
+          >
             <PerfectScrollbar options={{ wheelPropagation: false }}>
               {sidebarMenuContent}
             </PerfectScrollbar>
