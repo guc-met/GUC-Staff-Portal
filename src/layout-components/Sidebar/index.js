@@ -15,7 +15,7 @@ import { setSidebarToggleMobile } from "../../reducers/ThemeOptions";
 import axios from "axios";
 
 const Sidebar = props => {
-  let navItems = [
+  let navItemss = [
     {
       label: "Menu",
       content: JSON.parse(
