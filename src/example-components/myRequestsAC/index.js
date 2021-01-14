@@ -277,7 +277,8 @@ export default function LivePreviewExample() {
           console.log(error.response.data);
           return '';
         });
-      setUserRole(response.role);
+     setUserRole(response.role);
+      
     }
     FetchData();
   }, []);
@@ -309,22 +310,15 @@ export default function LivePreviewExample() {
         return [];
       })
       
-      setRequests(result)  //mesh sha8ala leh?
-
+      setRequests(result)  
       getReplacement()
-      if(userRole=='HOD'){
-        getLeave()
-        getChangeDayOff()
-      }
-      if(userRole=='coordinator')
-        getSlot()
-
+      
     }
     fetchData();
   }, []);
 
-  const getReplacement=()=>{
-    axios
+  const getReplacement=async()=>{
+    await axios
         .get('http://localhost:3001/ac/replacementRequest', {
           headers: {
             token: localStorage.getItem('UserToken')
@@ -335,8 +329,7 @@ export default function LivePreviewExample() {
         })
         .catch(function(error) {
           console.log(error.response.data);
-        })
-        onClickFunc('',1)
+        }) 
       onClickFuncRec('',1)
   }
   const getLeave=()=>{
@@ -352,8 +345,6 @@ export default function LivePreviewExample() {
           .catch(function(error) {
             console.log(error.response.data);
           });
-          onClickFunc('',1)
-          onClickFuncRec('',1)
   }
   const getChangeDayOff=()=>{
     axios
@@ -368,8 +359,6 @@ export default function LivePreviewExample() {
             .catch(function(error) {
               console.log(error.response.data);
             });
-            onClickFunc('',1)
-      onClickFuncRec('',1)
   }
   const getSlot=()=>{
     axios
@@ -384,8 +373,6 @@ export default function LivePreviewExample() {
             .catch(function(error) {
               console.log(error.response.data);
             });
-            onClickFunc('',1)
-      onClickFuncRec('',1)
   }
 
 
@@ -410,7 +397,6 @@ const reRender=async()=>{
         console.log(error.response);
       }) 
       onClickFunc('',1)
-      onClickFuncRec('',1)
 }
 
   const emptyRows =
@@ -497,6 +483,12 @@ const reRender=async()=>{
     }
   }
   const onClickFuncRec=(data,type)=>{
+    if(userRole=='HOD'){
+      getLeave()
+      getChangeDayOff()
+    }
+    if(userRole=='coordinator')
+      getSlot() 
     let viewx=requestViewRec
     let typex=requestTypeRec
     if(type==1){
@@ -508,7 +500,6 @@ const reRender=async()=>{
     }
     let replacement=(viewx=='all')?replacementReceived[0]:replacementReceived[0].filter(e=>e.statusInst==viewx)
     replacement.sort((a, b) => b.Date > a.Date?1:-1)
-    console.log(replacement)
     let hod=(viewx=='all')?replacementReceived[1]:replacementReceived[1].filter(e=>e.statusHod==viewx)
     hod.sort((a, b) => b.Date > a.Date?1:-1)
     let leave=(viewx=='all')?leaveReceived:leaveReceived.filter(e=>e.status==viewx)
@@ -524,7 +515,6 @@ const reRender=async()=>{
       case 'changeDayOffRequests':setRequestsFilteredRec(changeDay);break;
       case 'slotLinkingRequests':setRequestsFilteredRec(slot);break;
     }
-    console.log(requestsFilteredRec)
   }
 
   const setSeen=(bool)=>{
@@ -615,7 +605,7 @@ const reRender=async()=>{
       else{
         setOpen([true,'bottom',"success",response.data.msg]);
         //window.location.reload(false)
-        getLeave()
+        onClickFuncRec('',1)
       }
      })
 
@@ -642,7 +632,7 @@ const reRender=async()=>{
       else{
         setOpen([true,'bottom',"success",response.data.msg]);
         //window.location.reload(false)
-        getChangeDayOff()
+        onClickFuncRec('',1)
       }
      })
 
@@ -670,7 +660,7 @@ const reRender=async()=>{
       else{
         setOpen([true,'bottom',"success",response.data.msg]);
         //window.location.reload(false)
-        getSlot()
+        onClickFuncRec('',1)
       }
      })
 
@@ -697,7 +687,7 @@ const reRender=async()=>{
       else{
         setOpen([true,'bottom',"success",response.data.msg]);
         //window.location.reload(false)
-        getSlot()
+        onClickFuncRec('',1)
       }
      })
 
@@ -1109,9 +1099,9 @@ const onClickAddReplacement=()=>{
 }
 
 const onClickAddLeave=()=>{
-  console.log(111)
-  console.log(leaveHolder)
-  console.log(leaveHolder.typeOfLeave)
+  // console.log(111)
+  // console.log(leaveHolder)
+  // console.log(leaveHolder.typeOfLeave)
   axios
     .post(
       'http://localhost:3001/ac/leaveRequest',
