@@ -648,7 +648,7 @@ export default function LivePreviewExample() {
                     </IconButton>
                   </>
                 ) : (
-                  <>
+                  <div style={{display:'flex'}}>
                   <IconButton
                     title="edit"
                     aria-label="edit"
@@ -657,7 +657,7 @@ export default function LivePreviewExample() {
                     <EditIcon />
                   </IconButton>
                   <AlertDialog entry='Department' onClick={(e)=>onDelete({...e,id:row.id})} row={row.id}> </AlertDialog>
-                  </>
+                  </div>
                 )}
               </TableCell>
               {/* component="th" scope="row" */}

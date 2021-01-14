@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import DropdownsBasic from '../../example-components/Dropdowns/DropdownsBasic';
-import AlertDialog from '../../example-components/AlertDialog';
-import axios from 'axios';
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
+import DropdownsBasic from "../../example-components/Dropdowns/DropdownsBasic";
+import AlertDialog from "../../example-components/AlertDialog";
+import axios from "axios";
 import {
   TableBody,
   Table,
@@ -13,36 +13,36 @@ import {
   IconButton,
   Paper,
   Input
-} from '@material-ui/core';
+} from "@material-ui/core";
 
 // Icons
 
-import EditIcon from '@material-ui/icons/EditOutlined';
-import DoneIcon from '@material-ui/icons/DoneAllTwoTone';
-import DeleteIcon from '@material-ui/icons/DeleteOutlineOutlined';
-import CancelIcon from '@material-ui/icons/CancelOutlined';
-import PlusIcon from '@material-ui/icons/AddOutlined';
+import EditIcon from "@material-ui/icons/EditOutlined";
+import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
+import DeleteIcon from "@material-ui/icons/DeleteOutlineOutlined";
+import CancelIcon from "@material-ui/icons/CancelOutlined";
+import PlusIcon from "@material-ui/icons/AddOutlined";
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from "@material-ui/core/styles";
 
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
+import TableFooter from "@material-ui/core/TableFooter";
+import TablePagination from "@material-ui/core/TablePagination";
+import FirstPageIcon from "@material-ui/icons/FirstPage";
+import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
+import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import LastPageIcon from "@material-ui/icons/LastPage";
 
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import { ExampleWrapperSimple } from '../../layout-components';
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import { ExampleWrapperSimple } from "../../layout-components";
 //let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiZHVsQGdtYWlsLmNvbSIsImlkIjoiaHItMSIsIm5hbWUiOiJBYmR1bGxhaCIsImlhdCI6MTYxMDExNzU2OH0.0z56DTUtdz3iO0exClqVEzr9S0FkHkLX-cMzin1yOBU'
 const useStyles1 = makeStyles(theme => ({
   root: {
@@ -77,14 +77,16 @@ function TablePaginationActions(props) {
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
-        aria-label="first page">
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+        aria-label="first page"
+      >
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
-        aria-label="previous page">
-        {theme.direction === 'rtl' ? (
+        aria-label="previous page"
+      >
+        {theme.direction === "rtl" ? (
           <KeyboardArrowRight />
         ) : (
           <KeyboardArrowLeft />
@@ -93,8 +95,9 @@ function TablePaginationActions(props) {
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page">
-        {theme.direction === 'rtl' ? (
+        aria-label="next page"
+      >
+        {theme.direction === "rtl" ? (
           <KeyboardArrowLeft />
         ) : (
           <KeyboardArrowRight />
@@ -103,8 +106,9 @@ function TablePaginationActions(props) {
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page">
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+        aria-label="last page"
+      >
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </div>
   );
@@ -117,35 +121,49 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired
 };
 
-function createData(code, name, mainDepartment, deps, coverage) {
+function createData(
+  id,
+  email,
+  name,
+  salary,
+  gender,
+  officeLocation,
+  role,
+  signInLogs,
+  dayOff,
+  department
+) {
   return {
-    id: code,
-    idTemp: code,
-    code,
-    codeTemp: code,
+    id,
+    email,
     name,
-    nameTemp: name,
-    mainDepartment,
-    mainDepartmentTemp: mainDepartment,
-    depTemp: mainDepartment,
-    dep: mainDepartment,
-    deps,
-    coverage,
+    salary,
+    salaryTemp: salary,
+    gender,
+    officeLocation,
+    officeLocationTemp: officeLocation,
+    role,
+    roleTemp: role,
+    signInLogs,
+    dayOff,
+    department,
+    departmentTemp: department,
     // headId,headIdTemp:headId,
     isEditMode: false
   };
 }
+// "email" : "foo@guc.edu.eg","name" : "timo",
+// "salary" : 10000000000,"gender" : "male","officeLocation" : "C3.320","role": "TA","dayOff" :"Tuesday","department" :  "MET"
 let initRow = {
-  id: '',
-  idTemp: '',
-  code: '',
-  codeTemp: '',
-  name: '',
-  nameTemp: '',
-  mainDepartment: '',
-  mainDepartmentTemp: '',
-  dep: '',
-  depTemp: '',
+  id: "",
+  email: "",
+  name: "",
+  salary: "",
+  gender: "",
+  officeLocation: "",
+  dayOff: "",
+  role: "",
+  department: "",
   isEditMode: true
 };
 
@@ -165,22 +183,22 @@ const useStyles = makeStyles({
     height: 40
   },
   formControl: {
-    margin: '4px',
+    margin: "4px",
     minWidth: 120
   },
   selectEmpty: {
-    marginTop: '8px'
+    marginTop: "8px"
   }
 });
 
 //////
-const CustomTableCell = ({ row, name, onChange, facs }) => {
+const CustomTableCell = ({ row, name, onChange, deps }) => {
   const classes = useStyles();
   const { isEditMode } = row;
   console.log(row);
   return (
     <TableCell align="left" className={classes.tableCell}>
-      {name == 'depTemp' && !row.id == '' ? (
+      {name == "gender" && row.id == "" ? (
         <>
           <FormControl className={classes.formControl}>
             <Select
@@ -190,27 +208,60 @@ const CustomTableCell = ({ row, name, onChange, facs }) => {
               onChange={e => onChange(e, row)}
               displayEmpty
               className={classes.selectEmpty}
-              inputProps={{ 'aria-label': 'Without label' }}>
+              inputProps={{ "aria-label": "Without label" }}
+            >
               <MenuItem value={row[name]} disabled></MenuItem>
-              {row.deps.map(dep => (
-                <MenuItem value={dep}>{dep}</MenuItem>
-              ))}
+              {/* {row.deps.map(dep => ( */}
+              <MenuItem value="male">Male</MenuItem>
+              <MenuItem value="female">Female</MenuItem>
+              {/* ))} */}
             </Select>
           </FormControl>
         </>
-      ) : isEditMode &&
-        !(
-          (name == 'depTemp' || name == 'mainDepartmentTemp') &&
-          row.id != ''
-        ) &&
-        !(row.id == '' && name == 'mainDepartmentTemp') &&
-        name != 'coverage' ? ( //TODO }
-        <Input
-          value={row[name]}
-          name={name}
-          onChange={e => onChange(e, row)}
-          className={classes.input}
-        />
+      ) : name == "role" && row.id == "" ? ( //TODO }
+        <FormControl className={classes.formControl}>
+          <Select
+            value={row.depTemp}
+            name={name}
+            // onChange={handleChange}
+            onChange={e => onChange(e, row)}
+            displayEmpty
+            className={classes.selectEmpty}
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value={row[name]} disabled></MenuItem>
+            {/* {row.deps.map(dep => ( */}
+            <MenuItem value="HR">HR</MenuItem>
+            <MenuItem value="HOD">HOD</MenuItem>
+            <MenuItem value="instructor">instructor</MenuItem>
+            <MenuItem value="coordinator">coordinator</MenuItem>
+            <MenuItem value="TA">TA</MenuItem>
+            {/* ))} */}
+          </Select>
+        </FormControl>
+      ) : // <Input
+      //   value={row[name]}
+      //   name={name}
+      //   onChange={e => onChange(e, row)}
+      //   className={classes.input}
+      // />
+      name == "department" && row.id == "" ? (
+        <FormControl className={classes.formControl}>
+          <Select
+            value={row.depTemp}
+            name={name}
+            // onChange={handleChange}
+            onChange={e => onChange(e, row)}
+            displayEmpty
+            className={classes.selectEmpty}
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value={row[name]} disabled></MenuItem>
+            {deps.map(dep => (
+              <MenuItem value={dep}>{dep}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       ) : (
         row[name]
       )}
@@ -231,21 +282,22 @@ export default function LivePreviewExample() {
     setPage(0);
   };
   //for responsive entries
-  const [role, setRole] = React.useState('');
+  const [role, setRole] = React.useState("");
   const [rows, setRows] = React.useState([]);
   const [facs, setFacs] = React.useState([]);
-  const [open, setOpen] = React.useState([false, 'success', 'all good']);
+  const [deps, setDeps] = React.useState([]);
+  const [open, setOpen] = React.useState([false, "success", "all good"]);
 
   React.useEffect(() => {
     //console.log(open)
     async function fetchData() {
       const result = await axios
         .get(
-          'http://localhost:3001/staff/course',
+          "http://localhost:3001/staff/course",
 
           {
             headers: {
-              token: localStorage.getItem('UserToken') //to be added
+              token: localStorage.getItem("UserToken") //to be added
               // token
             }
           }
@@ -286,11 +338,11 @@ export default function LivePreviewExample() {
       //retrieve facs to show them
       const udata = await axios
         .get(
-          'http://localhost:3001/staff/getUserData',
+          "http://localhost:3001/staff/getUserData",
 
           {
             headers: {
-              token: localStorage.getItem('UserToken') //to be added
+              token: localStorage.getItem("UserToken") //to be added
               // token
             }
           }
@@ -361,10 +413,10 @@ export default function LivePreviewExample() {
 
     console.log(body);
     axios
-      .post('http://localhost:3001/hr/course', body, {
+      .post("http://localhost:3001/hr/course", body, {
         headers: {
           // 'Content-Type': 'application/json'
-          token: localStorage.getItem('UserToken') //to be added
+          token: localStorage.getItem("UserToken") //to be added
           //token: token
           //    'auth-token': localStorage.getItem('user'),
         }
@@ -374,21 +426,21 @@ export default function LivePreviewExample() {
         if (response.status != 200) {
           //that's an error
           // setOpen({val:true,severity:"error",display:response.data.err});
-          setOpen([true, 'error', response.data.err]);
+          setOpen([true, "error", response.data.err]);
         } else {
           //  initRow.codeTemp="";
-          initRow.nameTemp = '';
-          initRow.codeTemp = '';
-          initRow.depTemp = '';
+          initRow.nameTemp = "";
+          initRow.codeTemp = "";
+          initRow.depTemp = "";
           // setLocType(''); //TODOOOOO
           //setOpen({val:true,severity:"success",display:"Added successfully"});
           window.location.reload(false);
-          setOpen([true, 'success', response.data.msg]);
+          setOpen([true, "success", response.data.msg]);
           //setRows([...rows,obj]);
         }
       })
       .catch(function(error) {
-        setOpen([true, 'error', error.response.data.err]);
+        setOpen([true, "error", error.response.data.err]);
 
         console.log(error.response.data);
       });
@@ -407,19 +459,19 @@ export default function LivePreviewExample() {
     //console.log(name);
     const newRows = rows.map(row => {
       if (row.id === id) {
-        if (name == 'codeTemp') {
+        if (name == "codeTemp") {
           //TODO:
-          return { ...row, [name]: value, ['idTemp']: value };
+          return { ...row, [name]: value, ["idTemp"]: value };
         }
         return { ...row, [name]: value };
       }
       return row;
     });
-    if (row.id == '') {
+    if (row.id == "") {
       //RECHECKK TODO HOBA LALAA
       initRow = { ...initRow, [name]: value };
       // console.log(name)
-      if (name == 'typeTemp') {
+      if (name == "typeTemp") {
         //  setLocType(value);
       }
     }
@@ -430,11 +482,11 @@ export default function LivePreviewExample() {
   const onDelete = async e => {
     //console.log(e.id)
     const res = await axios
-      .delete('http://localhost:3001/hr/course', {
+      .delete("http://localhost:3001/hr/course", {
         headers: {
           //'Content-Type': 'application/json',
           // token: token,  //to be added
-          token: localStorage.getItem('UserToken') //to be added
+          token: localStorage.getItem("UserToken") //to be added
 
           // token
           //    'auth-token': localStorage.getItem('user'),
@@ -445,10 +497,10 @@ export default function LivePreviewExample() {
         //   console.log(response)
         if (response.status != 200) {
           //that's an error
-          setOpen([true, 'error', response.data.err]);
+          setOpen([true, "error", response.data.err]);
           return response.data.err;
         } else {
-          setOpen([true, 'success', response.data.msg]);
+          setOpen([true, "success", response.data.msg]);
           return response.data.msg;
           //setRows([obj,...rows]);
           //onToggleEditMode(e.id);
@@ -456,13 +508,13 @@ export default function LivePreviewExample() {
       })
       .catch(function(error) {
         console.log(error.response.data);
-        setOpen([true, 'error', error.response.data.err]);
+        setOpen([true, "error", error.response.data.err]);
         return error.response.data.err;
         //onToggleEditMode(e.id);
       });
 
     // console.log(res)
-    if (res && res.charAt(0) == 'D') {
+    if (res && res.charAt(0) == "D") {
       // const newRows = rows.map((row, index) => {
       //   const indexx = rows.indexOf(row)
       //  // console.log(indexx)
@@ -483,7 +535,7 @@ export default function LivePreviewExample() {
       // window.location.reload(false);
     } else {
       //display error
-      setOpen([true, 'error', res ? res : 'Something wrong happened']);
+      setOpen([true, "error", res ? res : "Something wrong happened"]);
     }
   };
   const onCancel = id => {
@@ -546,7 +598,7 @@ export default function LivePreviewExample() {
     });
     axios
       .put(
-        'http://localhost:3001/hr/department',
+        "http://localhost:3001/hr/department",
         {
           key: obj.id,
           name: obj.nameTemp,
@@ -557,7 +609,7 @@ export default function LivePreviewExample() {
         {
           headers: {
             // 'Content-Type': 'application/json'
-            token: localStorage.getItem('UserToken') //to be added
+            token: localStorage.getItem("UserToken") //to be added
             //token: token
             //    'auth-token': localStorage.getItem('user'),
           }
@@ -568,7 +620,7 @@ export default function LivePreviewExample() {
         if (response.status != 200) {
           //that's an error
           console.log(obj);
-          setOpen([true, 'error', response.data.err]);
+          setOpen([true, "error", response.data.err]);
           //setRows(newRows);
           //display error
           setDummy(dummy + 1);
@@ -590,7 +642,7 @@ export default function LivePreviewExample() {
 
           //obj.
           //console.log(obj)
-          setOpen([true, 'success', response.data.msg]);
+          setOpen([true, "success", response.data.msg]);
           setRows(newRows);
           setDummy(dummy + 1);
           // setRows([obj,...rows]);
@@ -598,14 +650,14 @@ export default function LivePreviewExample() {
         }
       })
       .catch(function(error) {
-        setOpen([true, 'error', error.response.data.err]);
+        setOpen([true, "error", error.response.data.err]);
         console.log(error.response.data);
       });
     // console.log(newRows)
     // onToggleEditMode(id);
   };
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       // setOpen(true);
       return;
     }
@@ -630,30 +682,31 @@ export default function LivePreviewExample() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {role == 'HR' ? (
+              {role == "HR" ? (
                 <>
                   <TableRow key="">
                     <TableCell className={classes.selectTableCell}>
                       <IconButton
                         title="add"
                         aria-label="add"
-                        onClick={() => onAdding('add')}>
+                        onClick={() => onAdding("add")}
+                      >
                         <PlusIcon />
                       </IconButton>
                     </TableCell>
                     <CustomTableCell
-                      {...{ row: initRow, name: 'codeTemp', onChange, facs }}
+                      {...{ row: initRow, name: "codeTemp", onChange, facs }}
                     />
                     <CustomTableCell
-                      {...{ row: initRow, name: 'nameTemp', onChange, facs }}
+                      {...{ row: initRow, name: "nameTemp", onChange, facs }}
                     />
                     <CustomTableCell
-                      {...{ row: initRow, name: 'depTemp', onChange, facs }}
+                      {...{ row: initRow, name: "depTemp", onChange, facs }}
                     />
                     <CustomTableCell
                       {...{
                         row: initRow,
-                        name: 'mainDepartmentTemp',
+                        name: "mainDepartmentTemp",
                         onChange,
                         facs
                       }}
@@ -672,27 +725,30 @@ export default function LivePreviewExample() {
               ).map(row => (
                 <TableRow key={row.id}>
                   <TableCell className={classes.selectTableCell}>
-                    {role == 'HR' && row.isEditMode ? (
+                    {role == "HR" && row.isEditMode ? (
                       <>
                         <IconButton
                           title="confirm"
                           aria-label="confirm"
-                          onClick={() => onApproval(row.id)}>
+                          onClick={() => onApproval(row.id)}
+                        >
                           <DoneIcon />
                         </IconButton>
                         <IconButton
                           title="cancel"
                           aria-label="cancel"
-                          onClick={() => onCancel(row.id)}>
+                          onClick={() => onCancel(row.id)}
+                        >
                           <CancelIcon />
                         </IconButton>
                       </>
-                    ) : role == 'HR' ? (
-                      <>
+                    ) : role == "HR" ? (
+                      <div style={{ display: "flex" }}>
                         <IconButton
                           title="edit"
                           aria-label="edit"
-                          onClick={() => onToggleEditMode(row.id)}>
+                          onClick={() => onToggleEditMode(row.id)}
+                        >
                           <EditIcon />
                         </IconButton>
                         <AlertDialog
@@ -700,10 +756,11 @@ export default function LivePreviewExample() {
                           onClick={e =>
                             onDelete({ ...e, id: row.id, dep: row.depTemp })
                           }
-                          row={row.id}>
-                          {' '}
+                          row={row.id}
+                        >
+                          {" "}
                         </AlertDialog>
-                      </>
+                      </div>
                     ) : (
                       <></>
                     )}
@@ -711,19 +768,19 @@ export default function LivePreviewExample() {
                   {/* component="th" scope="row" */}
 
                   <CustomTableCell
-                    {...{ row, name: 'codeTemp', onChange, facs }}
+                    {...{ row, name: "codeTemp", onChange, facs }}
                   />
                   <CustomTableCell
-                    {...{ row, name: 'nameTemp', onChange, facs }}
+                    {...{ row, name: "nameTemp", onChange, facs }}
                   />
                   <CustomTableCell
-                    {...{ row, name: 'depTemp', onChange, facs }}
+                    {...{ row, name: "depTemp", onChange, facs }}
                   />
                   <CustomTableCell
-                    {...{ row, name: 'mainDepartmentTemp', onChange, facs }}
+                    {...{ row, name: "mainDepartmentTemp", onChange, facs }}
                   />
                   <CustomTableCell
-                    {...{ row, name: 'coverage', onChange, facs }}
+                    {...{ row, name: "coverage", onChange, facs }}
                   />
                   {/* <TableCell component="th" scope="row" >
                   {row.name}
@@ -741,13 +798,13 @@ export default function LivePreviewExample() {
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                   colSpan={3}
                   count={rows.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   SelectProps={{
-                    inputProps: { 'aria-label': 'rows per page' },
+                    inputProps: { "aria-label": "rows per page" },
                     native: true
                   }}
                   onChangePage={handleChangePage}
@@ -763,7 +820,8 @@ export default function LivePreviewExample() {
         open={open[0]}
         autoHideDuration={3000}
         onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
         <MuiAlert variant="filled" onClose={handleClose} severity={open[1]}>
           {open[2]}
         </MuiAlert>
