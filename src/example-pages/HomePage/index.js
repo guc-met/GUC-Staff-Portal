@@ -334,11 +334,16 @@ export default function HomePage() {
             <Grid item xs={12} lg={7}>
               {profile["Off day"]}
             </Grid>
-            <Grid item xs={12} lg={1}>
-              <IconButton title="edit" aria-label="edit" onClick={setDayOff}>
-                <EditIcon />
-              </IconButton>
-            </Grid>
+            {profile.Role !== "HR" ? (
+              <Grid item xs={12} lg={1}>
+                <IconButton title="edit" aria-label="edit" onClick={setDayOff}>
+                  <EditIcon />
+                </IconButton>
+              </Grid>
+            ) : (
+              <p></p>
+            )}
+
             <Grid item xs={12} lg={4}>
               <h6> Faculty </h6>
             </Grid>

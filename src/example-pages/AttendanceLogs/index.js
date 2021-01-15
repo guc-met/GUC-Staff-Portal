@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { DataGrid } from '@material-ui/data-grid';
-import axios from 'axios';
-import { useLocation } from 'react-router-dom';
-import DeleteIcon from '@material-ui/icons/Delete';
+import React, { useState } from "react";
+import { DataGrid } from "@material-ui/data-grid";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 export default function AttendanceLogs() {
   const [logs, setLogs] = useState([]);
@@ -12,56 +12,56 @@ export default function AttendanceLogs() {
   const columns = [
     {
       icons: DeleteIcon,
-      field: 'Type',
+      field: "Type",
       hideable: false,
       filterable: false,
-      headerName: 'Type',
+      headerName: "Type",
       sortable: false,
       width: 130,
       toolbar: false
     },
     {
-      field: 'DayName',
+      field: "DayName",
       filterable: false,
-      headerName: 'Day',
+      headerName: "Day",
       sortable: false,
       width: 130
     },
     {
-      field: 'Month',
+      field: "Month",
       sortable: false,
       hideable: false,
-      headerName: 'Month',
+      headerName: "Month",
       width: 130
     },
     {
-      field: 'YearNo',
+      field: "YearNo",
       filterable: false,
-      headerName: 'Year',
+      headerName: "Year",
       sortable: false,
       width: 130
     },
     {
-      field: 'Time',
+      field: "Time",
       filterable: false,
-      headerName: 'Time',
+      headerName: "Time",
       sortable: false,
       width: 130
     }
   ];
   const columnsMissingDays = [
     {
-      field: 'DayName',
+      field: "DayName",
       filterable: false,
-      headerName: 'Day',
+      headerName: "Day",
       sortable: false,
       width: 130
     },
-    { field: 'Month', headerName: 'Month', sortable: false, width: 130 },
+    { field: "Month", headerName: "Month", sortable: false, width: 130 },
     {
-      field: 'YearNo',
+      field: "YearNo",
       filterable: false,
-      headerName: 'Year',
+      headerName: "Year",
       sortable: false,
       width: 130
     }
@@ -71,9 +71,9 @@ export default function AttendanceLogs() {
     async function FetchData() {
       if (!isMissingDays) {
         const response = await axios
-          .get('http://localhost:3001/staff/viewAttendance', {
+          .get("http://localhost:3001/staff/viewAttendance", {
             headers: {
-              token: localStorage.getItem('UserToken')
+              token: localStorage.getItem("UserToken")
             }
           })
           .then(function(response) {
@@ -81,14 +81,14 @@ export default function AttendanceLogs() {
           })
           .catch(function(error) {
             console.log(error.response.data);
-            return '';
+            return "";
           });
         setLogs(response);
       } else {
         const response = await axios
-          .get('http://localhost:3001/staff/viewMissingDays', {
+          .get("http://localhost:3001/staff/viewMissingDays", {
             headers: {
-              token: localStorage.getItem('UserToken')
+              token: localStorage.getItem("UserToken")
             }
           })
           .then(function(response) {
@@ -96,7 +96,7 @@ export default function AttendanceLogs() {
           })
           .catch(function(error) {
             console.log(error.response.data);
-            return '';
+            return "";
           });
         setMissingDays(response);
       }
@@ -104,7 +104,7 @@ export default function AttendanceLogs() {
     FetchData();
   }, [isMissingDays]);
   return (
-    <div style={{ height: 700, width: '100%' }}>
+    <div style={{ height: 700, width: "100%" }}>
       <DataGrid
         rows={isMissingDays ? MissingDays : logs}
         columns={isMissingDays ? columnsMissingDays : columns}
