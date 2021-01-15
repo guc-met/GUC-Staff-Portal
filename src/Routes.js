@@ -131,7 +131,6 @@ const Routes = () => {
                 '/AttendanceLogsHR',
                 '/InstructorsHOD',
                 '/TeachingAssignmentsHOD'
-
               ]}>
               <LeftSidebar>
                 <Switch location={location} key={location.pathname}>
