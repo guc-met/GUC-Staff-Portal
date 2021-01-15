@@ -7,6 +7,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
@@ -54,6 +56,7 @@ export default function Login() {
   const [newPass, setNewPass] = useState(false);
   const history = useHistory();
   const classes = useStyles();
+  const [open, setOpen] = useState([false, "", ""]);
 
   const takeMail = e => {
     setName(e.target.value);
@@ -90,82 +93,102 @@ export default function Login() {
       })
       .catch(function(error) {
         console.log(error);
-        console.log(error.response.data);
         if (
           error.response.data["msg"] ===
           "Must enter a new password on your first login"
         ) {
+          setOpen([true, "info", error.response.data["msg"]]);
           setNewPasswordFlag(true);
           setNewPass("");
+        } else {
+          setOpen([true, "error", error.response.data["msg"]]);
         }
       });
   };
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen([false, open[1], open[2]]);
+  };
   return (
-    <div className={classes.bigDiv}>
-      <Container className={classes.container} component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <form className={classes.form} noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              value={username}
-              onChange={takeMail}
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              value={password}
-              onChange={takePass}
-              id="password"
-              autoComplete="current-password"
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="First login choose a new password"
-              type="password"
-              value={newPass}
-              onChange={takeNewPass}
-              id="Newpassword"
-              autoComplete="current-password"
-              style={{ display: newPasswordFlag ? "block" : "none" }}
-            />
-            {/* <Link to={signIn} className="app-logo-link"> */}
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={signIn}
-              className={classes.submit}
-            >
-              Sign In
-            </Button>
-            {/* </Link> */}
-          </form>
-        </div>
-      </Container>
-    </div>
+    <>
+      <div className={classes.bigDiv}>
+        <Container className={classes.container} component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <form className={classes.form} noValidate>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                value={username}
+                onChange={takeMail}
+                autoComplete="email"
+                autoFocus
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={takePass}
+                id="password"
+                autoComplete="current-password"
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="First login choose a new password"
+                type="password"
+                value={newPass}
+                onChange={takeNewPass}
+                id="Newpassword"
+                autoComplete="current-password"
+                style={{ display: newPasswordFlag ? "block" : "none" }}
+              />
+              {/* <Link to={signIn} className="app-logo-link"> */}
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={signIn}
+                className={classes.submit}
+              >
+                Sign In
+              </Button>
+              {/* </Link> */}
+            </form>
+          </div>
+        </Container>
+      </div>
+      <Snackbar
+        open={open[0]}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MuiAlert variant="filled" onClose={handleClose} severity={open[1]}>
+          {open[2]}
+        </MuiAlert>
+      </Snackbar>
+    </>
   );
 }

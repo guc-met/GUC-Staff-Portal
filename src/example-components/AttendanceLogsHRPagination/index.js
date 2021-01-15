@@ -1,705 +1,245 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import AlertDialog from '../../example-components/AlertDialog';
-import axios from 'axios'
-import {
-  TableBody,
-  Table,
-  TableHead,
-  TableCell,
-  TableContainer,
-  TableRow,
-  IconButton,
-  Paper,
-  Input
-} from '@material-ui/core';
+import React, { useState } from "react";
+import { DataGrid } from "@material-ui/data-grid";
+import axios from "axios";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
-// Icons
-
-import EditIcon from "@material-ui/icons/EditOutlined";
-import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
-import CancelIcon from "@material-ui/icons/CancelOutlined";
-import PlusIcon from "@material-ui/icons/AddOutlined";
-
-import { makeStyles } from '@material-ui/core/styles';
-
-import { useTheme } from '@material-ui/core/styles';
-
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
-
-
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-//let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiZHVsQGdtYWlsLmNvbSIsImlkIjoiaHItMSIsIm5hbWUiOiJBYmR1bGxhaCIsImlhdCI6MTYxMDExNzU2OH0.0z56DTUtdz3iO0exClqVEzr9S0FkHkLX-cMzin1yOBU'
-const useStyles1 = makeStyles(theme => ({
-  root: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5)
+const useStyles = makeStyles(theme => ({
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
+    float: "right"
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200
   }
 }));
 
-function TablePaginationActions(props) {
-  const classes = useStyles1();
-  const theme = useTheme();
-  const { count, page, rowsPerPage, onChangePage } = props;
-
-  const handleFirstPageButtonClick = event => {
-    onChangePage(event, 0);
-  };
-
-  const handleBackButtonClick = event => {
-    onChangePage(event, page - 1);
-  };
-
-  const handleNextButtonClick = event => {
-    onChangePage(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = event => {
-    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  return (
-    <div className={classes.root}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page">
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page">
-        {theme.direction === 'rtl' ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page">
-        {theme.direction === 'rtl' ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page">
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
-    </div>
-  );
-}
-
-TablePaginationActions.propTypes = {
-  count: PropTypes.number.isRequired,
-  onChangePage: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired
-};
-
-function createData(code,name,facultyCode,headId) {
-  return { 
-    id:code,idTemp:code,
-    code,codeTemp:code,
-    name,nameTemp:name,
-    facultyCode,facultyCodeTemp:facultyCode,
-    headId,headIdTemp:headId,
-    isEditMode: false };
-}
- let initRow={
-  id:"",idTemp:"",
-  code:"",codeTemp:"",
-  name:"",nameTemp:"",
-  facultyCode:"",facultyCodeTemp:"",
-  headId:"",headIdTemp:"",
-  isEditMode: true 
- }
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 500
-  },
-  selectTableCell: {
-    width: 60
-  },
-  tableCell: {
-    width: 130,
-    height: 40
-  },
-  input: {
-    width: 130,
-    height: 40
-  },
-  formControl: {
-    margin: '4px',
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: '8px',
-  }
-});
-
-//////
-const CustomTableCell = ({ row, name, onChange,facs}) => {
-    const classes = useStyles();
-    const { isEditMode } = row;
-    console.log(row)
-    return (
-      <TableCell align="left" className={classes.tableCell}>
-        {name==='facultyCodeTemp'&&isEditMode?(
-                  <FormControl  className={classes.formControl}>
-                  <Select
-                    value={initRow.typeTemp}
-                    name={name}
-                    // onChange={handleChange}
-                    onChange={(e) => onChange(e, row)}
-                    displayEmpty
-                    className={classes.selectEmpty}
-                    inputProps={{ 'aria-label': 'Without label' }}
-                  >
-                    <MenuItem value={row[name]} disabled>
-                    </MenuItem>
-                    {facs.map(fac=>(<MenuItem value={fac.code}>{fac.code}</MenuItem>))}
-                   
-                    
-                  </Select>
-                </FormControl>
-        
-             
-        )
-        :isEditMode &&!(name==='headIdTemp'&&row.id==='')? (//TODO
-          <Input
-            value={row[name]}
-            name={name}
-            onChange={(e) => onChange(e, row)}
-            className={classes.input}
-          />
-        ) : (
-          row[name]
-        )}
-      </TableCell>
-    );
-  };
-  ////////
-
-export default function LivePreviewExample() {
+export default function AttendanceLogs(props) {
   const classes = useStyles();
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-  //for responsive entries
-  const [locType,setLocType]=React.useState('');
-  const [rows, setRows] = React.useState([]);
-  const [facs, setFacs] = React.useState([]);
-  const [open, setOpen] = React.useState([false,'success','all good']);
-  
+  const [logs, setLogs] = useState([]);
+  const [MissingDays, setMissingDays] = useState(0);
+  const [Missinghrs, setMissinghrs] = useState(0.0);
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [logType, setType] = React.useState("");
+  const [open, setOpen] = useState([false, "", ""]);
+  const userID = props.userID;
+  const columns = [
+    {
+      icons: DeleteIcon,
+      field: "Type",
+      hideable: false,
+      filterable: false,
+      headerName: "Type",
+      sortable: false,
+      width: 130,
+      toolbar: false
+    },
+    {
+      field: "DayName",
+      filterable: false,
+      headerName: "Day",
+      sortable: false,
+      width: 130
+    },
+    {
+      field: "Month",
+      sortable: false,
+      hideable: false,
+      headerName: "Month",
+      width: 130
+    },
+    {
+      field: "YearNo",
+      filterable: false,
+      headerName: "Year",
+      sortable: false,
+      width: 130
+    },
+    {
+      field: "Time",
+      filterable: false,
+      headerName: "Time",
+      sortable: false,
+      width: 130
+    }
+  ];
+  console.log(userID);
   React.useEffect(() => {
-    //console.log(open)
-    async function fetchData() {
-    
-      const result=await axios
-      .get(
-        'http://localhost:3001/hr/department',
-     
-        {
-          headers: {
-           token: localStorage.getItem('UserToken')  //to be added
-          // token
+    async function FetchData() {
+      const response = await axios
+        .post(
+          "http://localhost:3001/hr/viewAttendanceStaff",
+          {
+            id: userID
+          },
+          {
+            headers: {
+              token: localStorage.getItem("UserToken")
+            }
           }
-        }
-      )
-      .then(function(response) {
-       // console.log(response)
-        if(response.status!==200){//that's an error
-          return [];
-        }else{
-          //return array
-          //console.log(response.data)
-          let arr= response.data.map(dep=>{
-            //console.log(dep)
-            
-            return createData(dep._doc.code,dep._doc.name,dep.faculty,dep.head)
-          })
-          //let x=['a','b']
-          //console.log(arr)
-          arr.sort((a,b)=>(a.facultyCode.toLowerCase() > b.facultyCode.toLowerCase()) ? 1 : -1)
-          return arr;
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-        return [];
-      })
-      //console.log(result)
-
-      //retrieve facs to show them
-      const facs=await axios
-      .get(
-        'http://localhost:3001/hr/faculty',
-     
-        {
-          headers: {
-           token: localStorage.getItem('UserToken')  //to be added
-          // token
-          }
-        }
-      )
-      .then(function(response) {
-       // console.log(response)
-        if(response.status!==200){//that's an error
-          return [];
-        }else{
-          //return array
-        //  console.log(response)
-         // let arr= response.data.map(fac=>createData(fac.name,fac.code))
-          //let x=['a','b']
-         // console.log(arr)
+        )
+        .then(function(response) {
           return response.data;
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-        return [];
-      })
-      setFacs(facs);
-      setRows(result);
+        })
+        .catch(function(error) {
+          console.log(error.response.data);
+          return "";
+        });
+      setLogs(response);
     }
-    fetchData();
-  }, []);
- // console.log(rows)
-  const [previous, setPrevious] = React.useState({});
-  const [dummy, setDummy] = React.useState(0);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    FetchData();
+  }, [userID]);
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
-  //const classes = useStyles();
-
-  const onToggleEditMode = (id) => {
-    setRows((state) => {
-      return rows.map((row) => {
-        if (row.id === id) {
-          return { ...row, isEditMode: !row.isEditMode };
-        }
-        return row;
-      });
-    });
-  };
-  const onAdding = (id) => {
-     
-    // });
-    let name=initRow.nameTemp
-    let code=initRow.codeTemp
-    let facCode=initRow.facultyCodeTemp;
-    let headOfDepartmentId=initRow.headIdTemp
-    let obj={id:code,idTemp:code,code,codeTemp:code,name,nameTemp:name,
-      facultyCode:facCode,facultyCodeTemp:facCode,
-      headId:"N/A",headIdTemp:"N/A",
-      isEditMode:false};
-    let body={name,code,facCode};
-   
-    console.log(body)
-    axios
-      .post(
-        'http://localhost:3001/hr/department',
-        body,
-        {
-          headers: {
-           // 'Content-Type': 'application/json'
-           token: localStorage.getItem('UserToken')  //to be added
-          //token: token
-            //    'auth-token': localStorage.getItem('user'),
+  React.useEffect(() => {
+    async function FetchData() {
+      const response = await axios
+        .post(
+          "http://localhost:3001/hr/showMissingDaysHr",
+          {
+            id: userID
+          },
+          {
+            headers: {
+              token: localStorage.getItem("UserToken")
+            }
           }
-        }
-      )
-      .then(function(response) {
-        //console.log(response)
-        if(response.status!==200){//that's an error
-           // setOpen({val:true,severity:"error",display:response.data.err});
-            setOpen([true,"error",response.data.err]);
-
-        }else{
-        //  initRow.codeTemp="";
-          initRow.nameTemp="";
-          initRow.codeTemp="";
-          initRow.headIdTemp="";
-         // setLocType(''); //TODOOOOO
-          //setOpen({val:true,severity:"success",display:"Added successfully"});
-          setOpen([true,"success",response.data.msg]);
-          setRows([...rows,obj]);
-
-        }
-      })
-      .catch(function(error) {
-        setOpen([true,"error",error.response.data.err]);
-
-        console.log(error.response.data);
-      });
-   
-    
-     //setRows([obj,...rows]);
-  };
-
-  const onChange = (e, row) => {
-    if (!previous[row.id]) {
-      setPrevious((state) => ({ ...state, [row.id]: row }));
+        )
+        .then(function(response) {
+          return response.data;
+        })
+        .catch(function(error) {
+          console.log(error.response.data);
+          return "";
+        });
+      setMissingDays(response.days);
     }
-    const value = e.target.value;
-    //console.log(value);
-    const name = e.target.name;
-    const { id } = row;
-    //console.log(name);
-    const newRows = rows.map((row) => {
-      if (row.id === id) {
-          if(name==="codeTemp"){
-             //TODO:
-             return { ...row, [name]: value ,["idTemp"]:value};
+    FetchData();
+  }, [userID]);
+
+  React.useEffect(() => {
+    async function FetchData() {
+      const response = await axios
+        .post(
+          "http://localhost:3001/hr/showMissingHoursHr",
+          {
+            id: userID
+          },
+          {
+            headers: {
+              token: localStorage.getItem("UserToken")
+            }
           }
-          return { ...row, [name]: value };
-      }
-      return row;
-    });
-    if(row.id===''){//RECHECKK TODO HOBA LALAA
-        initRow={...initRow,[name]:value};
-       // console.log(name)
-        if(name==='typeTemp'){
-            setLocType(value);
-           
-        }
-        
+        )
+        .then(function(response) {
+          return response.data;
+        })
+        .catch(function(error) {
+          console.log(error.response.data);
+          return "";
+        });
+      console.log(response);
+      setMissinghrs(response.missingHours);
     }
-    //console.log(initRow);
-    setRows(newRows);
-    
-  };
+    FetchData();
+  }, [userID]);
 
-  const onDelete =async (e) => {
-    //console.log(e.id)
-    const res=await axios
-    .delete(
-      'http://localhost:3001/hr/department',
-      {
-        headers: {
-          //'Content-Type': 'application/json',
-        // token: token,  //to be added
-        token: localStorage.getItem('UserToken'),  //to be added
-
-        // token
-          //    'auth-token': localStorage.getItem('user'),
-        },data:{code:e.id}
-      }
-    )
-    .then(function(response) {
-  //   console.log(response)
-      if(response.status!==200){//that's an error
-      setOpen([true,"error",response.data.err]);
-        return response.data.err
-      }else{
-        setOpen([true,"success",response.data.msg]);
-        return response.data.msg;
-        //setRows([obj,...rows]);
-        //onToggleEditMode(e.id);
-      }
-    })
-    .catch(function(error) {
-      console.log(error.response.data);
-      setOpen([true,"error",error.response.data.err]);
-      return "";
-      //onToggleEditMode(e.id);
-    });
-    
-   // console.log(res)
-    if(res&&res.charAt(0)==='D'){
-      const newRows = rows.map((row, index) => {
-        const indexx = rows.indexOf(row)
-       // console.log(indexx)
-        if (row.id === e.id) {
-          //console.log(indexx)
-          rows.splice(indexx, 1);
-          //return previous[id] ? previous[id] : row;
-        }
-        return row;
-      });
-      //console.log(newRows)
-      //setRows(newRows);
-      setDummy(dummy+1)
-      setPrevious((state) => {
-        delete state[e.id];
-        return state;
-      });
-    }else{
-      //display error
-      setOpen([true,"error","Something wrong happened"]);
-    }
-    
+  const takeDatePicker = date => {
+    setSelectedDate(new Date(date.target.value));
+    console.log(selectedDate);
   };
-  const onCancel = (id) => {
-    const newRows = rows.map((row, index) => {
-       if (row.id === id) {
-           row.maxCapacityTemp=row.maxCapacity;
-           //row.curCapacityTemp=row.curCapacity;
-           //row.typeTemp=row.type;
-           row.codeTemp=row.code;
-           row.nameTemp=row.name;
-           row.headIdTemp=row.headId;
-           row.facultyCodeTemp=row.facultyCode;
-           row.idTemp=row.id;
-         return row;
-         //return previous[id] ? previous[id] : row;
-       }
-      return row;
-    });
-    console.log(newRows)
-    setRows(newRows);
-    setPrevious((state) => {
-      delete state[id];
-      return state;
-    });
-    onToggleEditMode(id);
-    /////////////////////////////////
-    
-  };
-    const onApproval = (id) => {
-    // const newRows = rows.map((row, index) => {
-    //    if (row.id === id) {
-    //       // row.type=row.typeTemp;
-    //        row.maxCapacity=row.maxCapacityTemp;
-    //        //row.curCapacity=row.curCapacityTemp;
-    //        row.name=row.nameTemp;
-    //        row.idTemp=row.nameTemp;
-    //        row.id=row.idTemp;
-    //      return { ...row, isEditMode: !row.isEditMode };
-    //      //return previous[id] ? previous[id] : row;
-    //    }
-    //   return row;
-    // });
-    // setRows(newRows);
-    // setPrevious((state) => {
-    //   delete state[id];
-    //   return state;
-    // });
-    //////////////////
-    let obj={};
-    for(let i=0;i<rows.length;i++) {
-       if (rows[i].id === id) {
-           obj=rows[i];
-           break
-       }
-    }
-   // console.log(obj)
-   
-    setPrevious((state) => {
-      delete state[id];
-      return state;
-    });
-    axios
-    .put(
-      'http://localhost:3001/hr/department',
-      {
-        key:obj.id,
-        name:obj.nameTemp,
-        code:obj.codeTemp,
-        facCode:obj.facultyCodeTemp,
-        headOfDepartmentId:obj.headIdTemp
-      },
-      {
-        headers: {
-         // 'Content-Type': 'application/json'
-         token: localStorage.getItem('UserToken')  //to be added
-        //token: token
-          //    'auth-token': localStorage.getItem('user'),
-        }
-      }
-    )
-    .then(function(response) {
-      //console.log(response)
-      if(response.status!==200){//that's an error
-        console.log(obj)
-        setOpen([true,"error",response.data.err]);
-        //setRows(newRows);
-      //display error
-        setDummy(dummy+1)
-
-      }else{
-       // onToggleEditMode(id);
-       const newRows = rows.map((row, index) => {
-        if (row.id === id) {
-          row.id=row.idTemp;
-          row.code=row.codeTemp;
-          row.name=row.nameTemp;
-          row.headId=row.headIdTemp;
-          row.facultyCode=row.facultyCodeTemp;
-            
-          return { ...row, isEditMode: !row.isEditMode };
-          //return previous[id] ? previous[id] : row;
-        }
-       return row;
-     });
-        
-        //obj.
-        //console.log(obj)
-        setOpen([true,"success",response.data.msg]);
-        setRows(newRows);
-        setDummy(dummy+1)
-       // setRows([obj,...rows]);
-       //display success
-      }
-    })
-    .catch(function(error) {
-      setOpen([true,"error",error.response.data.err]);
-      console.log(error.response.data);
-    });
-   // console.log(newRows)
-   // onToggleEditMode(id);
+  const takeLogType = e => {
+    setType(e.target.value);
   };
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-     // setOpen(true);
+    if (reason === "clickaway") {
       return;
     }
-
-    setOpen([false,open[1],open[2]]);
+    setOpen([false, open[1], open[2]]);
   };
-  //end of responsive entries
-  console.log(rows)
+  const onAddLog = () => {
+    axios
+      .post(
+        "http://localhost:3001/hr/addSignRec",
+        {
+          id: userID,
+          timeStamp: selectedDate,
+          type: logType
+        },
+        {
+          headers: {
+            token: localStorage.getItem("UserToken")
+          }
+        }
+      )
+      .then(function(response) {
+        console.log(response.data);
+        setOpen([true, "success", response.data.msg]);
+      })
+      .catch(function(error) {
+        setOpen([true, "error", error.response.data.err]);
+      });
+  };
+
   return (
     <>
-    <Fragment>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="custom pagination table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="left" />
-            <TableCell align="left">Code</TableCell>
-            <TableCell align="left">Name</TableCell>
-            <TableCell align="left">Faculty Code</TableCell>
-            <TableCell align="left">Head ID</TableCell>
-          </TableRow>
-        </TableHead>
-          <TableBody>
-          <TableRow key="">
-                  <TableCell className={classes.selectTableCell}>
-                    <IconButton
-                      title="add"
-                      aria-label="add"
-                      onClick={() => onAdding("add")}
-                    >
-                      <PlusIcon />
-                    </IconButton>
-                     
-              </TableCell>
-              {/* component="th" scope="row" */}
-              <CustomTableCell  {...{ row:initRow, name: "codeTemp", onChange ,facs}} />
-              <CustomTableCell  {...{ row:initRow, name: "nameTemp", onChange ,facs}} />
-              <CustomTableCell  {...{ row:initRow, name: "facultyCodeTemp", onChange,facs }} />
-              <CustomTableCell  {...{ row:initRow, name: "headIdTemp", onChange,facs }} />
-             
-              </TableRow>
-            {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
-            ).map(row => (
-              <TableRow key={row.id}>
-                  <TableCell className={classes.selectTableCell}>
-                {row.isEditMode ? (
-                  <>
-                    <IconButton
-                      title="confirm"
-                      aria-label="confirm"
-                      onClick={() => onApproval(row.id)}
-                    >
-                      <DoneIcon />
-                    </IconButton>
-                    <IconButton
-                      title="cancel"
-                      aria-label="cancel"
-                      onClick={() => onCancel(row.id)}
-                    >
-                      <CancelIcon />
-                    </IconButton>
-                  </>
-                ) : (
-                  <div style={{display:'flex'}}>
-                  <IconButton
-                    title="edit"
-                    aria-label="edit"
-                    onClick={() => onToggleEditMode(row.id)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <AlertDialog entry='Department' onClick={(e)=>onDelete({...e,id:row.id})} row={row.id}> </AlertDialog>
-                  </div>
-                )}
-              </TableCell>
-              {/* component="th" scope="row" */}
-            
-              <CustomTableCell  {...{ row, name: "codeTemp", onChange ,facs}} />
-              <CustomTableCell  {...{ row, name: "nameTemp", onChange ,facs}} />
-              <CustomTableCell  {...{ row, name: "facultyCodeTemp", onChange ,facs}} />
-              <CustomTableCell  {...{ row, name: "headIdTemp", onChange,facs }} />
-                {/* <TableCell component="th" scope="row" >
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.code}</TableCell> */}
-              </TableRow>
-            ))}
-
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                colSpan={3}
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { 'aria-label': 'rows per page' },
-                  native: true
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>
-    </Fragment>
-    <Snackbar open={open[0]} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal :'right'}}>
-    <MuiAlert variant='filled' onClose={handleClose} severity={open[1]}>
-      {open[2]}
-    </MuiAlert>
-  </Snackbar>
-  </>
+      <Button
+        variant="contained"
+        color="primary"
+        style={{
+          float: "right",
+          width: "100px",
+          position: "relative",
+          top: "10px"
+        }}
+        onClick={onAddLog}
+      >
+        Add Log
+      </Button>
+      <div>
+        <TextField
+          id="log"
+          label="Type of Log"
+          variant="outlined"
+          required
+          value={logType}
+          onChange={takeLogType}
+          style={{ float: "right" }}
+        />
+        <form className={classes.container} noValidate>
+          <TextField
+            id="datetime-local"
+            label="Log date"
+            type="datetime-local"
+            onChange={takeDatePicker}
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+        </form>
+      </div>
+      <h3>Missing Days {MissingDays}</h3>
+      <h3>Missing hours {Missinghrs}</h3>
+      <div style={{ height: 700, width: "100%" }}>
+        <DataGrid rows={logs} columns={columns} pageSize={10} />
+      </div>
+      <Snackbar
+        open={open[0]}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MuiAlert variant="filled" onClose={handleClose} severity={open[1]}>
+          {open[2]}
+        </MuiAlert>
+      </Snackbar>
+    </>
   );
 }
