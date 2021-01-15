@@ -5,9 +5,11 @@ import axios from 'axios'
 import FilterByCourse from '../../layout-components/FilterByCourse';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import OpenDialog from '../../example-components/OpenDialogInstructor'
 
-export default function HeaderColumnsGrid() {
+export default function SingleRowSelectionGrid() {
   const [rows, setRows] = useState([]);
+  const [course,setCourse]=React.useState('')
   const onChange = (e) => {
     const value = e.target.value;
     setState(value);
@@ -20,7 +22,9 @@ export default function HeaderColumnsGrid() {
   async (e) => {
      e.preventDefault();
      setBoolState(true);
+     console.log(state)
      let body={courseName:state}
+     setCourse(state)
      const response = await axios
  .post('http://localhost:3001/hod/viewStaffinDepartmentByCourse',body, {
  headers: {
@@ -34,14 +38,13 @@ return response.data;
 console.log(error.response.data);
 return [];
 });
-console.log(response);
-console.log(boolState);
 setRows(response);
-setState("");
+
   }
   const onClick2=
   async (e) => {
     e.preventDefault();
+    setBoolState(false);
     const response = await axios
     .get('http://localhost:3001/hod/viewStaffinDepartment', {
       headers: {
@@ -80,6 +83,13 @@ setState("");
     }
     FetchData();
   },[]);
+
+  const onRowSelected=(row)=>{
+    if(boolState){
+        return <OpenDialog course={course} id={row.id}></OpenDialog>
+    }
+    console.log(row)
+  }
 
   return (
     <div style={{ height: 800, width: "100%" }}>
@@ -138,11 +148,13 @@ setState("");
               disableColumnMenu:true,
               width: 200
               }
-              
-          
-        ]}
+          ]
+      }
         rows={rows}
+        onRowSelected={(row)=>onRowSelected(row)}
       />
+              
     </div>
   );
 }
+//onClick={()=>onClickDelete(row._id,requestType)}
