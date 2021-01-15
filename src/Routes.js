@@ -51,6 +51,7 @@ const myRequestsAC=lazy(()=>import('./example-pages/MyRequests'))
 const StaffDayOffHOD=lazy(()=>import('./example-pages/StaffDayOff'))
 const StaffInDepHOD=lazy(()=>import('./example-pages/StaffInDep'))
 const AttendanceLogsHR=lazy(()=>import('./example-pages/AttendanceLogsHR'))
+const InstructorsHOD=lazy(()=>import('./example-pages/Instructors'))
 
 const Routes = () => {
   const location = useLocation();
@@ -125,6 +126,7 @@ const Routes = () => {
                 '/StaffDayOffHOD',
                 '/StaffInDepHOD',
                 '/AttendanceLogsHR'
+                '/InstructorsHOD'
               ]}>
               <LeftSidebar>
                 <Switch location={location} key={location.pathname}>
@@ -178,6 +180,8 @@ const Routes = () => {
                     <Route path="/StaffDayOffHOD" component={StaffDayOffHOD} />
                     <Route path="/StaffInDepHOD" component={StaffInDepHOD} />
                     <Route path="/AttendanceLogsHR" component={AttendanceLogsHR} />
+                    <Route path="/InstructorsHOD" component={InstructorsHOD} />
+                   
                   </motion.div>
                 </Switch>
               </LeftSidebar>

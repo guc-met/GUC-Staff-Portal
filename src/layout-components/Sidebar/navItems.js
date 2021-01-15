@@ -255,6 +255,10 @@ export default [
   {
     "label": "Staff In Department",
     "to": "/StaffInDepHOD" 
+  },
+  {
+    "label": "Instructors",
+    "to": "/InstructorsHOD" 
   }
 ]`,
       (key, value) => {
