@@ -1,16 +1,16 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState } from "react";
 
-import { Grid, Card, CardContent, Button } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { Grid, Card, CardContent, Button } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 export default function Attendance() {
   React.useEffect(() => {
     async function FetchData() {
       const response = await axios
-        .get('http://localhost:3001/staff/viewMissingDays', {
+        .get("http://localhost:3001/staff/viewMissingDays", {
           headers: {
-            token: localStorage.getItem('UserToken')
+            token: localStorage.getItem("UserToken")
           }
         })
         .then(function(response) {
@@ -18,9 +18,9 @@ export default function Attendance() {
         })
         .catch(function(error) {
           console.log(error.response.data);
-          return '';
+          return "";
         });
-      console.log(response)
+      console.log(response);
       setDays(response);
     }
     FetchData();
@@ -29,9 +29,9 @@ export default function Attendance() {
   React.useEffect(() => {
     async function FetchData() {
       const response = await axios
-        .get('http://localhost:3001/staff/viewMissingHours', {
+        .get("http://localhost:3001/staff/viewMissingHours", {
           headers: {
-            token: localStorage.getItem('UserToken')
+            token: localStorage.getItem("UserToken")
           }
         })
         .then(function(response) {
@@ -39,7 +39,7 @@ export default function Attendance() {
         })
         .catch(function(error) {
           console.log(error.response.data);
-          return '';
+          return "";
         });
       setHours(response);
     }
@@ -60,48 +60,50 @@ export default function Attendance() {
               alt="..."
               className="card-img-top"
               src={
-                'https://www.cusd80.com/cms/lib/AZ01001175/Centricity/Domain/1290/Attendance%20Image%20.png'
+                "https://www.cusd80.com/cms/lib/AZ01001175/Centricity/Domain/1290/Attendance%20Image%20.png"
               }
             />
             <CardContent>
               <div>
-                <p style={{ marginTop: 2, display: 'inline-block' }}>
+                <p style={{ marginTop: 2, display: "inline-block" }}>
                   Missing days : {days}
                 </p>
                 <Button
                   color="secondary"
                   variant="contained"
                   size="small"
-                  style={{ float: 'right' }}
+                  style={{ float: "right" }}
                   onClick={() =>
                     history.push({
-                      pathname: '/AttendanceLogs',
+                      pathname: "/AttendanceLogs",
                       state: {
                         isMissingDays: true
                       }
                     })
-                  }>
+                  }
+                >
                   Missing days
                 </Button>
               </div>
-              <p style={{ marginTop: 2, display: 'block' }}>
+              <p style={{ marginTop: 2, display: "block" }}>
                 Missing hours : {hours.Missinghours}
               </p>
-              <p style={{ marginTop: 2, display: 'block' }}>
+              <p style={{ marginTop: 2, display: "block" }}>
                 Extra hours : {hours.ExtraHours}
               </p>
-              <div style={{ textAlign: 'center' }}>
+              <div style={{ textAlign: "center" }}>
                 <Button
                   color="primary"
                   variant="contained"
                   onClick={() =>
                     history.push({
-                      pathname: '/AttendanceLogs',
+                      pathname: "/AttendanceLogs",
                       state: {
                         isMissingDays: false
                       }
                     })
-                  }>
+                  }
+                >
                   View logs
                 </Button>
               </div>
