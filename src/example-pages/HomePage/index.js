@@ -14,6 +14,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
 import Attendance from "../../example-components/Attendance";
+import NotificationsTemplate from "../../example-components/NotificationsTemplate";
 
 const useStyles = makeStyles({
   input: {
@@ -223,6 +224,7 @@ export default function HomePage() {
   return (
     <>
       <Fragment>
+      <NotificationsTemplate/>
         <ExampleWrapperSimple sectionHeading="Profile">
           <Grid container spacing={4}>
             <Grid item xs={12} lg={4}>
@@ -367,7 +369,7 @@ export default function HomePage() {
           </Grid>
         </ExampleWrapperSimple>
       </Fragment>
-      <Attendance />
+      <Attendance/>
       <div>
         <Dialog open={openDial}>
           <h1
