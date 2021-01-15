@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import DropdownsBasic from '../../example-components/Dropdowns/DropdownsBasic';
 import AlertDialog from '../../example-components/AlertDialog';
 import axios from 'axios'
 import {
@@ -19,7 +18,6 @@ import {
 
 import EditIcon from "@material-ui/icons/EditOutlined";
 import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
-import DeleteIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import CancelIcon from "@material-ui/icons/CancelOutlined";
 import PlusIcon from "@material-ui/icons/AddOutlined";
 
@@ -38,12 +36,9 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { ExampleWrapperSimple } from '../../layout-components';
 //let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiZHVsQGdtYWlsLmNvbSIsImlkIjoiaHItMSIsIm5hbWUiOiJBYmR1bGxhaCIsImlhdCI6MTYxMDExNzU2OH0.0z56DTUtdz3iO0exClqVEzr9S0FkHkLX-cMzin1yOBU'
 const useStyles1 = makeStyles(theme => ({
   root: {
@@ -167,7 +162,7 @@ const CustomTableCell = ({ row, name, onChange,facs}) => {
     console.log(row)
     return (
       <TableCell align="left" className={classes.tableCell}>
-        {name=='facultyCodeTemp'&&isEditMode?(
+        {name==='facultyCodeTemp'&&isEditMode?(
                   <FormControl  className={classes.formControl}>
                   <Select
                     value={initRow.typeTemp}
@@ -188,7 +183,7 @@ const CustomTableCell = ({ row, name, onChange,facs}) => {
         
              
         )
-        :isEditMode &&!(name=='headIdTemp'&&row.id=='')? (//TODO
+        :isEditMode &&!(name==='headIdTemp'&&row.id==='')? (//TODO
           <Input
             value={row[name]}
             name={name}
@@ -237,7 +232,7 @@ export default function LivePreviewExample() {
       )
       .then(function(response) {
        // console.log(response)
-        if(response.status!=200){//that's an error
+        if(response.status!==200){//that's an error
           return [];
         }else{
           //return array
@@ -273,7 +268,7 @@ export default function LivePreviewExample() {
       )
       .then(function(response) {
        // console.log(response)
-        if(response.status!=200){//that's an error
+        if(response.status!==200){//that's an error
           return [];
         }else{
           //return array
@@ -343,7 +338,7 @@ export default function LivePreviewExample() {
       )
       .then(function(response) {
         //console.log(response)
-        if(response.status!=200){//that's an error
+        if(response.status!==200){//that's an error
            // setOpen({val:true,severity:"error",display:response.data.err});
             setOpen([true,"error",response.data.err]);
 
@@ -380,7 +375,7 @@ export default function LivePreviewExample() {
     //console.log(name);
     const newRows = rows.map((row) => {
       if (row.id === id) {
-          if(name=="codeTemp"){
+          if(name==="codeTemp"){
              //TODO:
              return { ...row, [name]: value ,["idTemp"]:value};
           }
@@ -388,10 +383,10 @@ export default function LivePreviewExample() {
       }
       return row;
     });
-    if(row.id==''){//RECHECKK TODO HOBA LALAA
+    if(row.id===''){//RECHECKK TODO HOBA LALAA
         initRow={...initRow,[name]:value};
        // console.log(name)
-        if(name=='typeTemp'){
+        if(name==='typeTemp'){
             setLocType(value);
            
         }
@@ -420,7 +415,7 @@ export default function LivePreviewExample() {
     )
     .then(function(response) {
   //   console.log(response)
-      if(response.status!=200){//that's an error
+      if(response.status!==200){//that's an error
       setOpen([true,"error",response.data.err]);
         return response.data.err
       }else{
@@ -438,11 +433,11 @@ export default function LivePreviewExample() {
     });
     
    // console.log(res)
-    if(res&&res.charAt(0)=='D'){
+    if(res&&res.charAt(0)==='D'){
       const newRows = rows.map((row, index) => {
         const indexx = rows.indexOf(row)
        // console.log(indexx)
-        if (row.id == e.id) {
+        if (row.id === e.id) {
           //console.log(indexx)
           rows.splice(indexx, 1);
           //return previous[id] ? previous[id] : row;
@@ -542,7 +537,7 @@ export default function LivePreviewExample() {
     )
     .then(function(response) {
       //console.log(response)
-      if(response.status!=200){//that's an error
+      if(response.status!==200){//that's an error
         console.log(obj)
         setOpen([true,"error",response.data.err]);
         //setRows(newRows);

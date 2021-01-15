@@ -4,12 +4,15 @@ import { PageTitle } from '../../layout-components';
 
 import { ExampleWrapperSimple } from '../../layout-components';
 
-import PaginationBasic from '../../example-components/StaffHRPagination';
+import PaginationBasic from '../../example-components/InstructorsHOD';
 export default function Pagination() {
   return (
     <Fragment>
-      <PageTitle titleHeading="Staff" titleDescription="" />
-      <ExampleWrapperSimple sectionHeading="Our Staff(Scroll to te right for more data)">
+      <PageTitle
+        titleHeading="Assign/delete/update courses to instructors"
+        titleDescription=""
+      />
+      <ExampleWrapperSimple sectionHeading="Instructors">
         <PaginationBasic />
       </ExampleWrapperSimple>
     </Fragment>

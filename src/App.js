@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import configureStore from './config/configureStore';
-import { Provider } from 'react-redux';
-import Routes from './Routes';
-import ScrollToTop from './utils/ScrollToTop';
-import './assets/base.scss';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import React, { Component } from "react";
+import { BrowserRouter } from "react-router-dom";
+import configureStore from "./config/configureStore";
+import { Provider } from "react-redux";
+import Routes from "./Routes";
+import ScrollToTop from "./utils/ScrollToTop";
+import "./assets/base.scss";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   fab,
   faFacebook,
@@ -23,7 +23,7 @@ import {
   faSlack,
   faDribbble,
   faGithub
-} from '@fortawesome/free-brands-svg-icons';
+} from "@fortawesome/free-brands-svg-icons";
 import {
   far,
   faSquare,
@@ -63,7 +63,7 @@ import {
   faFileAlt,
   faEye,
   faChartBar
-} from '@fortawesome/free-regular-svg-icons';
+} from "@fortawesome/free-regular-svg-icons";
 import {
   fas,
   faAngleDoubleRight,
@@ -129,7 +129,7 @@ import {
   faStar,
   faSignOutAlt,
   faLink
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
 library.add(
   far,
   faSquare,
