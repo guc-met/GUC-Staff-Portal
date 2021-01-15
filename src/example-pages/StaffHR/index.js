@@ -9,7 +9,7 @@ export default function Pagination() {
   return (
     <Fragment>
       <PageTitle titleHeading="Staff" titleDescription="" />
-      <ExampleWrapperSimple sectionHeading="Our Staff">
+      <ExampleWrapperSimple sectionHeading="Our Staff(Scroll to te right for more data)">
         <PaginationBasic />
       </ExampleWrapperSimple>
     </Fragment>

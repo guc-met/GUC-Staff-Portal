@@ -193,7 +193,7 @@ export default  function LivePreviewExample() {
       )
       .then(function(response) {
        // console.log(response)
-        if(response.status!=200){//that's an error
+        if(response.status!==200){//that's an error
           return [];
         }else{
           //return array
@@ -262,7 +262,7 @@ export default  function LivePreviewExample() {
       )
       .then(function(response) {
         //console.log(response)
-        if(response.status!=200){//that's an error
+        if(response.status!==200){//that's an error
            // setOpen({val:true,severity:"error",display:response.data.err});
             setOpen([true,"error",response.data.err]);
 
@@ -293,7 +293,7 @@ export default  function LivePreviewExample() {
     //console.log(name);
     const newRows = rows.map((row) => {
       if (row.id === id) {
-          if(name=="codeTemp"){
+          if(name==="codeTemp"){
              //TODO 
              return { ...row, [name]: value ,["idTemp"]:value};
           }
@@ -301,7 +301,7 @@ export default  function LivePreviewExample() {
       }
       return row;
     });
-    if(row.id=='add'){
+    if(row.id==='add'){
         initRow={...initRow,[name]:value};
     }
     //console.log(newRows);
@@ -326,7 +326,7 @@ export default  function LivePreviewExample() {
     )
     .then(function(response) {
      //console.log(response)
-      if(response.status!=200){//that's an error
+      if(response.status!==200){//that's an error
       setOpen([true,"error",response.data.err]);
         return response.data.err
       }else{
@@ -343,11 +343,11 @@ export default  function LivePreviewExample() {
     });
     
     //console.log(rows)
-    if(res&&res.charAt(0)=='D'){
+    if(res&&res.charAt(0)==='D'){
       const newRows = rows.map((row, index) => {
         const indexx = rows.indexOf(row)
        // console.log(indexx)
-        if (row.id == e.id) {
+        if (row.id === e.id) {
           //console.log(indexx)
           rows.splice(indexx, 1);
           //return previous[id] ? previous[id] : row;
@@ -419,7 +419,7 @@ export default  function LivePreviewExample() {
     )
     .then(function(response) {
       //console.log(response)
-      if(response.status!=200){//that's an error
+      if(response.status!==200){//that's an error
         console.log(obj)
         setOpen([true,"error",response.data.err]);
         //setRows(newRows);

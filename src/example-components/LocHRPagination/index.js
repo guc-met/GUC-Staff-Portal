@@ -166,7 +166,7 @@ const CustomTableCell = ({ row, name, onChange }) => {
     const { isEditMode } = row;
     return (
       <TableCell align="left" className={classes.tableCell}>
-        {row["id"]==""&&name=='typeTemp'?(
+        {row["id"]===""&&name==='typeTemp'?(
                   <FormControl  className={classes.formControl}>
                   <Select
                     value={initRow.typeTemp}
@@ -285,7 +285,7 @@ export default function LivePreviewExample() {
       //TODO
     // setRows((state) => {
     //   return rows.map((row) => {
-    //     if (row.id === id) {
+    //     if (row.id == id) {
     //       return { ...row, isEditMode: !row.isEditMode };
     //     }
     //     return row;
@@ -297,10 +297,10 @@ export default function LivePreviewExample() {
     let curCapacity=initRow.curCapacity
     let obj={id:name,idTemp:name,type,typeTemp:type,name,nameTemp:name,
       maxCapacity,maxCapacityTemp:maxCapacity,
-      curCapacity:type=='Office'?0:'',curCapacityTemp:type=='Office'?0:'',
+      curCapacity:type==='Office'?0:'',curCapacityTemp:type==='Office'?0:'',
       isEditMode:false};
     let body={name,type,maxCapacity};
-    if(type=='Office'){
+    if(type==='Office'){
       body.curCapacity=0
     }
     console.log(body)
@@ -355,7 +355,7 @@ export default function LivePreviewExample() {
     //console.log(name);
     const newRows = rows.map((row) => {
       if (row.id === id) {
-          if(name=="nameTemp"){
+          if(name==="nameTemp"){
              //TODO:
              return { ...row, [name]: value ,["idTemp"]:value};
           }
@@ -363,10 +363,10 @@ export default function LivePreviewExample() {
       }
       return row;
     });
-    if(row.id==''){
+    if(row.id===''){
         initRow={...initRow,[name]:value};
        // console.log(name)
-        if(name=='typeTemp'){
+        if(name==='typeTemp'){
             setLocType(value);
            
         }
@@ -411,11 +411,11 @@ export default function LivePreviewExample() {
     });
     
     //console.log(rows)
-    if(res&&res.charAt(0)=='D'){
+    if(res&&res.charAt(0)==='D'){
       const newRows = rows.map((row, index) => {
         const indexx = rows.indexOf(row)
        // console.log(indexx)
-        if (row.id == e.id) {
+        if (row.id === e.id) {
           //console.log(indexx)
           rows.splice(indexx, 1);
           //return previous[id] ? previous[id] : row;
@@ -460,7 +460,7 @@ export default function LivePreviewExample() {
   };
     const onApproval = (id) => {
     // const newRows = rows.map((row, index) => {
-    //    if (row.id === id) {
+    //    if (row.id == id) {
     //       // row.type=row.typeTemp;
     //        row.maxCapacity=row.maxCapacityTemp;
     //        //row.curCapacity=row.curCapacityTemp;
@@ -614,7 +614,7 @@ export default function LivePreviewExample() {
                     </IconButton>
                   </>
                 ) : (
-                  <div style={{display:'flex'}}>
+                  <>
                   <IconButton
                     title="edit"
                     aria-label="edit"
@@ -623,7 +623,7 @@ export default function LivePreviewExample() {
                     <EditIcon />
                   </IconButton>
                   <AlertDialog entry='Location' onClick={(e)=>onDelete({...e,id:row.id})} row={row.id}> </AlertDialog>
-                  </div>
+                  </>
                 )}
               </TableCell>
               {/* component="th" scope="row" */}

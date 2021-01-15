@@ -215,6 +215,11 @@ const Sidebar = props => {
             label: 'Departments',
             to: '/DepartmentsHR'
           }
+          ,
+          {
+            label: 'Staff',
+            to: '/StaffHR'
+          }
         );
       }
       setNav(navItems);
