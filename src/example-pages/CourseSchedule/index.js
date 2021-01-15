@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import axios from 'axios'
 
 import { PageTitle } from '../../layout-components';
 import {Button} from '@material-ui/core';
@@ -21,6 +22,7 @@ import {
   ListItem,
   TextField,
   FormControl,
+  FormLabel,
   ListItemText
 } from '@material-ui/core';
 
@@ -32,6 +34,10 @@ import PersonIcon from '@material-ui/icons/Person';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
 import AlertDialog from '../../example-components/AlertDialog';
+import { LinearProgress } from '@material-ui/core';
+
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 
 // import ScheduleTable from '../../example-components/ScheduleTable';
 const sched = 
@@ -264,9 +270,95 @@ const SingleSlot = function (props){
   )
 }
 
+const AddNewSlot = ()=>{
+  const [dayValue, setDayValue] = React.useState('');
+  const [slotValue, setSlotValue] = React.useState('');
+
+  const handleDayChange = (event)=>{
+    setDayValue(event.target.value);
+  }
+  const handleSlotChange = (event)=>{
+    setSlotValue(event.target.value);
+  }
+
+  const handleNewSlot = ()=>{
+
+  }
+
+  return (
+    <Fragment>
+      <h3> Add a New Slot</h3>
+      <div className="divider mb-3" />
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Day</FormLabel>
+        <RadioGroup row aria-label="day" name="day" onChange={handleDayChange}>
+          <FormControlLabel value="Saturday" control={<Radio />} label="Saturday"  />
+          <FormControlLabel value="Sunday" control={<Radio />} label="Sunday"/>
+          <FormControlLabel value="Monday" control={<Radio />} label="Monday"/>
+          <FormControlLabel value="Tuesday"  control={<Radio />}  label="Tuesday"/>
+          <FormControlLabel value="Wednesday"  control={<Radio />}  label="Wednesday"/>
+          <FormControlLabel value="Thursday"  control={<Radio />}  label="Thursday"/>
+        </RadioGroup>
+        <div className="divider mb-3" />
+        <FormLabel component="legend">Slot</FormLabel>
+        <RadioGroup row aria-label="slot" name="slot" onChange={handleSlotChange}>
+          <FormControlLabel value="1st" control={<Radio />} label="1st"  />
+          <FormControlLabel value="2nd" control={<Radio />} label="2nd"/>
+          <FormControlLabel value="3rd" control={<Radio />} label="3rd"/>
+          <FormControlLabel value="4th"  control={<Radio />}  label="4th"/>
+          <FormControlLabel value="5th"  control={<Radio />}  label="5th"/>
+        </RadioGroup>
+        
+      </FormControl>
+      <FormLabel component="legend">Location</FormLabel>
+      <TextField
+        autoFocus
+        margin="dense"
+        id="newSlotLocation"
+        name="newSlotLocation"
+        type=""
+      />
+      <div className="divider mb-2" />
+      <Button color="secondary" type="submit" onClick={handleNewSlot}> Submit</Button>
+    </Fragment>
+
+  )
+}
 
 export default function Schedule() {
   const course ="CSEN 2314";
+  const cvr = 30;
+
+  const [cours, courses] = React.useState();
+  const cvrOp = [];
+  React.useEffect(() => {
+    async function fetchData() {
+      const result=await axios.get(
+        'http://localhost:3001/inst/viewCoverage',
+        {
+          headers: {
+           token: localStorage.getItem('UserToken')  //to be added
+          }
+        }
+      )
+      .then(function(response) {
+        if(response.status!=200){//that's an error
+          return [];
+        }
+        else{
+          // processCoverages(response);
+          console.log(response);
+          //return
+        }
+      })
+      .catch(function(error){
+        console.log(error);
+        return [];
+      })
+    }
+    fetchData();
+  }, []);
+
   return (
     <Fragment>
       <PageTitle
@@ -274,7 +366,15 @@ export default function Schedule() {
         titleDescription="Here you can see schedules of courses"
       />
       <ExampleWrapperSimple sectionHeading= {course+" Schedule"}>
-        <ScheduleTable course={course}/>
+
+        {/* <div> */}
+          <label><b> Coverage:</b> </label>
+        <LinearProgress variant="determinate" value={15} className="m-3" style={{height:"30px"}}/>
+        {/* </div> */}
+        <div className="divider mb-3" />
+        <ScheduleTable course={course} sched={sched}/>
+        <div className="divider mb-5" />
+        <AddNewSlot />
       </ExampleWrapperSimple>
     </Fragment>
   );
