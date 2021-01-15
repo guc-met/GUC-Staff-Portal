@@ -128,7 +128,7 @@ const Routes = () => {
                 '/myRequestsAC',
                 '/StaffDayOffHOD',
                 '/StaffInDepHOD',
-                '/AttendanceLogsHR'
+                '/AttendanceLogsHR',
                 '/InstructorsHOD'
               ]}>
               <LeftSidebar>

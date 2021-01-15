@@ -55,11 +55,10 @@ export default function HomePage() {
           }
         })
         .then(function(response) {
-          return response.data;
+          return parseFloat(response.data);
         })
         .catch(function(error) {
-          console.log(error.response.data);
-          return "";
+          return error.response.data;
         });
       setSalaryDed(response);
     }
@@ -77,7 +76,7 @@ export default function HomePage() {
   const [dayyOff, setTakeDayyOff] = useState("");
   const [reason, setReason] = useState("");
   const [comment, setComment] = useState("");
-  const [salaryDed, setSalaryDed] = React.useState(0);
+  const [salaryDed, setSalaryDed] = React.useState(0.0);
 
   const onChangeEmail = e => {
     setEmail(e.target.value);
@@ -135,7 +134,6 @@ export default function HomePage() {
         }
       )
       .then(function(response) {
-        console.log(response.data);
         if (response.data === "please enter your old password") {
           setOpen([true, "error", response.data]);
         }
