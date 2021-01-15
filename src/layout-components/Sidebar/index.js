@@ -206,7 +206,49 @@ const Sidebar = props => {
       )
     }
   ];
-  const [nav, setNav] = useState(navItems);
+  const [nav, setNav] = useState([]);
+  React.useEffect(() => {
+    async function FetchData() {
+      const response = await axios
+        .get('http://localhost:3001/staff/getUserData', {
+          headers: {
+            token: localStorage.getItem('UserToken')
+          }
+        })
+        .then(function(response) {
+          return response.data;
+        })
+        .catch(function(error) {
+          console.log(error.response.data);
+          return '';
+        });
+      if (response.role === 'HR') {
+        navItems[0].content.push(
+          {
+            label: 'Locations',
+            to: '/LocationsHR'
+          },
+          {
+            label: 'Faculties',
+            to: '/FacultiesHR'
+          },
+          {
+            label: 'Departments',
+            to: '/DepartmentsHR'
+          }
+          ,
+          {
+            label: 'Staff',
+            to: '/StaffHR'
+          }
+        );
+      }
+      setNav(navItems);
+    }
+    FetchData();
+  }, []);
+
+  //const [nav, setNav] = useState(navItems);
   // const [nav, setNav] = useState([]);
   // React.useEffect(() => {
   //   async function FetchData() {

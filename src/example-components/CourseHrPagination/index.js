@@ -184,7 +184,7 @@ const CustomTableCell = ({ row, name, onChange, facs }) => {
   console.log(row);
   return (
     <TableCell align="left" className={classes.tableCell}>
-      {name == "depTemp" && !row.id == "" ? (
+      {name === "depTemp" && !row.id === "" ? (
         <>
           <FormControl className={classes.formControl}>
             <Select
@@ -205,10 +205,10 @@ const CustomTableCell = ({ row, name, onChange, facs }) => {
         </>
       ) : isEditMode &&
         !(
-          (name == "depTemp" || name == "mainDepartmentTemp") &&
+          (name === "depTemp" || name === "mainDepartmentTemp") &&
           row.id != ""
         ) &&
-        !(row.id == "" && name == "mainDepartmentTemp") &&
+        !(row.id === "" && name === "mainDepartmentTemp") &&
         name != "coverage" ? ( //TODO }
         <Input
           value={row[name]}
@@ -355,7 +355,7 @@ export default function LivePreviewExample() {
     let main = dep;
     //let first=true;
     // for(let i=0;i<rows.length;i++){
-    //   if(rows[i].codeTemp==code){
+    //   if(rows[i].codeTemp===code){
     //     dep=rows[i].mainDepartment;
     //     break;
     //   }
@@ -413,7 +413,7 @@ export default function LivePreviewExample() {
     //console.log(name);
     const newRows = rows.map(row => {
       if (row.id === id) {
-        if (name == "codeTemp") {
+        if (name === "codeTemp") {
           //TODO:
           return { ...row, [name]: value, ["idTemp"]: value };
         }
@@ -421,11 +421,11 @@ export default function LivePreviewExample() {
       }
       return row;
     });
-    if (row.id == "") {
+    if (row.id === "") {
       //RECHECKK TODO HOBA LALAA
       initRow = { ...initRow, [name]: value };
       // console.log(name)
-      if (name == "typeTemp") {
+      if (name === "typeTemp") {
         //  setLocType(value);
       }
     }
@@ -468,11 +468,11 @@ export default function LivePreviewExample() {
       });
 
     // console.log(res)
-    if (res && res.charAt(0) == "D") {
+    if (res && res.charAt(0) === "D") {
       // const newRows = rows.map((row, index) => {
       //   const indexx = rows.indexOf(row)
       //  // console.log(indexx)
-      //   if (row.id == e.id) {
+      //   if (row.id === e.id) {
       //     //console.log(indexx)
       //     rows.splice(indexx, 1);
       //     //return previous[id] ? previous[id] : row;
@@ -634,7 +634,7 @@ export default function LivePreviewExample() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {role == "HR" ? (
+              {role === "HR" ? (
                 <>
                   <TableRow key="">
                     <TableCell className={classes.selectTableCell}>
@@ -677,7 +677,7 @@ export default function LivePreviewExample() {
               ).map(row => (
                 <TableRow key={row.id}>
                   <TableCell className={classes.selectTableCell}>
-                    {role == "HR" && row.isEditMode ? (
+                    {role === "HR" && row.isEditMode ? (
                       <>
                         <IconButton
                           title="confirm"
@@ -694,7 +694,7 @@ export default function LivePreviewExample() {
                           <CancelIcon />
                         </IconButton>
                       </>
-                    ) : role == "HR" ? (
+                    ) : role === "HR" ? (
                       <div style={{display:'flex'}}>
                         <IconButton
                           title="edit"

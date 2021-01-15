@@ -44,14 +44,15 @@ const FacultiesHR = lazy(() => import("./example-pages/FacultiesHR"));
 const DepartmentsHR = lazy(() => import("./example-pages/DepartmentsHR"));
 const CoursesHR = lazy(() => import("./example-pages/CoursesHR"));
 
-const LocationsHR = lazy(() => import("./example-pages/LocationsHR"));
-const CourseSchedule = lazy(() => import("./example-pages/CourseSchedule"));
-const personalScheduleAC = lazy(() =>
-  import("./example-pages/personalSchedule")
-);
-const myRequestsAC = lazy(() => import("./example-pages/MyRequests"));
-const StaffDayOffHOD = lazy(() => import("./example-pages/StaffDayOff"));
-const StaffInDepHOD = lazy(() => import("./example-pages/StaffInDep"));
+
+const LocationsHR=lazy(() => import('./example-pages/LocationsHR'));
+const CourseSchedule=lazy(() => import('./example-pages/CourseSchedule'));
+const personalScheduleAC=lazy(()=>import('./example-pages/personalSchedule'));
+const myRequestsAC=lazy(()=>import('./example-pages/MyRequests'))
+const StaffDayOffHOD=lazy(()=>import('./example-pages/StaffDayOff'))
+const StaffInDepHOD=lazy(()=>import('./example-pages/StaffInDep'))
+const AttendanceLogsHR=lazy(()=>import('./example-pages/AttendanceLogsHR'))
+const InstructorsHOD=lazy(()=>import('./example-pages/Instructors'))
 
 const Routes = () => {
   const location = useLocation();
@@ -93,41 +94,43 @@ const Routes = () => {
             <Route path="/Login" component={Login} />
             <Route
               path={[
-                "/AttendanceLogs",
-                "/HomePage",
-                "/Buttons",
-                "/Dropdowns",
-                "/NavigationMenus",
-                "/ProgressBars",
-                "/Pagination",
-                "/Scrollable",
-                "/Badges",
-                "/Icons",
-                "/UtilitiesHelpers",
-                "/Cards3",
-                "/Accordions",
-                "/Modals",
-                "/Notifications",
-                "/Popovers",
-                "/Tabs",
-                "/RegularTables1",
-                "/RegularTables4",
-                "/FormsControls",
-                "/ApexCharts",
-                "/Maps",
-                "/ListGroups",
-                "/StaffHR",
-                "/LocationsHR",
-                "/FacultiesHR",
-                "/DepartmentsHR",
-                "/CoursesHR",
-                "/CourseSchedule",
-                "/personalScheduleAC",
-                "/myRequestsAC",
-                "/StaffDayOffHOD",
-                "/StaffInDepHOD"
-              ]}
-            >
+
+                '/AttendanceLogs',
+                '/HomePage',
+                '/Buttons',
+                '/Dropdowns',
+                '/NavigationMenus',
+                '/ProgressBars',
+                '/Pagination',
+                '/Scrollable',
+                '/Badges',
+                '/Icons',
+                '/UtilitiesHelpers',
+                '/Cards3',
+                '/Accordions',
+                '/Modals',
+                '/Notifications',
+                '/Popovers',
+                '/Tabs',
+                '/RegularTables1',
+                '/RegularTables4',
+                '/FormsControls',
+                '/ApexCharts',
+                '/Maps',
+                '/ListGroups',
+                '/StaffHR',
+                '/LocationsHR',
+                '/FacultiesHR',
+                '/DepartmentsHR',
+                '/CoursesHR',
+                '/CourseSchedule',
+                '/personalScheduleAC',
+                '/myRequestsAC',
+                '/StaffDayOffHOD',
+                '/StaffInDepHOD',
+                '/AttendanceLogsHR'
+                '/InstructorsHOD'
+              ]}>
               <LeftSidebar>
                 <Switch location={location} key={location.pathname}>
                   <motion.div
@@ -180,6 +183,9 @@ const Routes = () => {
                     <Route path="/myRequestsAC" component={myRequestsAC} />
                     <Route path="/StaffDayOffHOD" component={StaffDayOffHOD} />
                     <Route path="/StaffInDepHOD" component={StaffInDepHOD} />
+                    <Route path="/AttendanceLogsHR" component={AttendanceLogsHR} />
+                    <Route path="/InstructorsHOD" component={InstructorsHOD} />
+                   
                   </motion.div>
                 </Switch>
               </LeftSidebar>
