@@ -347,6 +347,7 @@ export default function Schedule() {
         }
         else{
           // processCoverages(response);
+          console.log("naw");
           console.log(response);
           //return
         }
