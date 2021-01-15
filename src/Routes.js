@@ -129,12 +129,8 @@ const Routes = () => {
                 '/StaffDayOffHOD',
                 '/StaffInDepHOD',
                 '/AttendanceLogsHR',
-<<<<<<< HEAD
-                '/InstructorsHOD'
-=======
                 '/InstructorsHOD',
                 '/TeachingAssignmentsHOD'
->>>>>>> o_e
               ]}>
               <LeftSidebar>
                 <Switch location={location} key={location.pathname}>
