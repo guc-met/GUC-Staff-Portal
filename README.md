@@ -1,6 +1,6 @@
 # GUC Staff Portal
 
-link for backend only (we ran out of time for deploying front)
 
-https://guckalabala.herokuapp.com/
+backend: https://guckalabala.herokuapp.com/
+frontend: https://gucstaff-front.herokuapp.com/
 - MERN Stack
