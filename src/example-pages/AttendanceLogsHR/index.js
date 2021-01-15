@@ -16,7 +16,7 @@ export default function Pagination() {
         titleDescription=""
       />
       <ExampleWrapperSimple sectionHeading={'Attendance of '+id}>
-        <PaginationBasic />
+        <PaginationBasic userID={id} />
       </ExampleWrapperSimple>
     </Fragment>
   );
