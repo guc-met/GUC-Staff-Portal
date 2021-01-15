@@ -40,6 +40,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 
 // import ScheduleTable from '../../example-components/ScheduleTable';
+
 const sched = 
 { 
     'Saturday': { '1st': [ { Location:'C3.102', Staff: 'N/A' }, { Location:'C5.208', Staff:'Eithar Elhinamy' }, { Location:'C3.305', Staff: 'Belal Medhat' } ], '2nd': [ { Location:'H11', Staff: 'Mervat Aboelkheir' }, { Location:'H16', Staff: 'Amr Elmougy' } ], '3rd': [ ], '4th': [ ], '5th': [ { Location:'H14', Staff: 'N/A' }, { Location:'D4.302', Staff: 'Mahmoud Gamal' }, { Location:'H13', Staff: 'Kalabala Person' }, { Location:'D4.305', Staff: 'Mahmoud Ahmed' } ] }, 
@@ -50,6 +51,16 @@ const sched =
     'Thursday': { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }, 
       'Friday': { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }      
 }
+
+// const sched = { 
+//   'Saturday':  { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }, 
+//     'Sunday':  { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }, 
+//     'Monday':  { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }, 
+//    'Tuesday':  { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }, 
+//  'Wednesday': { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }, 
+//   'Thursday': { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }, 
+//     'Friday': { '1st':[], '2nd':[], '3rd':[], '4th':[], '5th':[] }      
+// }
 
 const noRad = {borderRadius:"0"};
 
@@ -89,6 +100,8 @@ const ScheduleDay = function LivePreviewExample(props) {
 }
 
 const ScheduleTable = function LivePreviewExample(props) {
+  const sched = props.sched;
+  console.log(sched)
   return (
   <Fragment>
       <table className="table table-striped table-hover table-bordered mb-4">
@@ -142,6 +155,38 @@ const ScheduleTable = function LivePreviewExample(props) {
 }
 
 const UpdateLocationArea = function(props){
+  const [newLoc, setNewLoc ]= React.useState("")
+  
+  const handleChange = (e)=>{
+    setNewLoc(e.target.value); 
+  }
+
+  const handleUpdateSlot = ()=>{
+    async function putData(){
+      const result=await axios.put(
+        'http://localhost:3001/cor/courseSlot',
+        {
+          keyCourse: "CSEN 704",
+          keyDay:props.keyDay,
+          keySlot:props.keySlot,
+          keyLoc:props.keyLoc,
+          newLoc: newLoc
+        },
+        {
+          headers: {
+           token: localStorage.getItem('UserToken')  //to be added
+          }
+        }
+      )
+      .then(function(response) {
+        console.log(response)
+      })
+      .catch(function(err){
+        console.log(err.message);
+      })
+    }
+    putData();
+};
 
 
   return (
@@ -152,7 +197,9 @@ const UpdateLocationArea = function(props){
       id="location"
       label="Location"
       type=""
+      onChange={handleChange}
     />
+    <Button onClick={handleUpdateSlot}> Submit</Button>
     </DialogContentText>
   )
 }
@@ -185,6 +232,34 @@ const SingleSlot = function (props){
   // }
   const onDelete = (e)=>{
     //TODO: delete
+    axios.delete(
+      'http://localhost:3001/cor/courseSlot',
+      {
+        headers: {
+         token: localStorage.getItem('UserToken')  //to be added
+        }  ,
+        data:{
+          keyCourse:"CSEN 704",
+          keyDay:props.day,
+          keySlot: props.slot,
+          keyLoc:props.singleSlot.Location
+        }
+      }
+      
+    )
+    .then(function(response) {
+      if(response.status!=200){//that's an error
+        return [];
+      }
+      else{
+        // processCoverages(response);
+        console.log("Succeeded making the slot request");
+        //return
+      }
+    })
+    .catch(function(error){
+      console.log(error.message);
+    })
   }
   const onChangeUpdate =(e)=>{
     setStateUpdate(!stateUpdate);
@@ -198,6 +273,36 @@ const SingleSlot = function (props){
   }
   const handleSlotLinkingRequest = () => {
 
+    async function sendData() {
+      const result=await axios.post(
+        'http://localhost:3001/ac/slotLinkingRequest',
+        {
+          courseCode:"CSEN 704",
+          day:props.day,
+          slot: props.slot,
+          location:props.singleSlot.Location
+        },
+        {
+          headers: {
+           token: localStorage.getItem('UserToken')  //to be added
+          }  
+		    }
+      )
+      .then(function(response) {
+        if(response.status!=200){//that's an error
+          return [];
+        }
+        else{
+          // processCoverages(response);
+          console.log("Succeeded making the slot request");
+          //return
+        }
+      })
+      .catch(function(error){
+        console.log(error.message);
+      })
+    }
+    sendData();
   } 
 
   const handleClickOpen1 = () => {
@@ -246,7 +351,7 @@ const SingleSlot = function (props){
             <DialogContentText>
               
             </DialogContentText>
-            {stateUpdate && <UpdateLocationArea/> }
+            {stateUpdate && <UpdateLocationArea keyDay={props.day} keySlot={props.slot} keyLoc={props.singleSlot.Location}/> }
           </DialogContent>
           <DialogActions>
             <Button onClick={onChangeAssign}> Assign an academic </Button> <br></br>
@@ -273,17 +378,43 @@ const SingleSlot = function (props){
 const AddNewSlot = ()=>{
   const [dayValue, setDayValue] = React.useState('');
   const [slotValue, setSlotValue] = React.useState('');
-
+  const [locValue, setLocValue] = React.useState("");
   const handleDayChange = (event)=>{
     setDayValue(event.target.value);
   }
   const handleSlotChange = (event)=>{
     setSlotValue(event.target.value);
   }
+  const handleLocChange = (event) =>{
+    setLocValue(event.target.value);
+  }
 
   const handleNewSlot = ()=>{
-
-  }
+    console.log("Handle new slot");
+      async function fetchData() {
+        const result=await axios.post(
+          'http://localhost:3001/cor/courseSlot',
+          {
+            course: "CSEN 704",
+            day:dayValue,
+            slot:slotValue,
+            location:locValue
+          },
+          {
+            headers: {
+             token: localStorage.getItem('UserToken')  //to be added
+            }
+          }
+        )
+        .then(function(response) {
+          console.log(response)
+        })
+        .catch(function(err){
+          console.log(err.message);
+        })
+      }
+      fetchData();
+  };
 
   return (
     <Fragment>
@@ -317,6 +448,7 @@ const AddNewSlot = ()=>{
         id="newSlotLocation"
         name="newSlotLocation"
         type=""
+        onChange = {handleLocChange}
       />
       <div className="divider mb-2" />
       <Button color="secondary" type="submit" onClick={handleNewSlot}> Submit</Button>
@@ -329,12 +461,15 @@ export default function Schedule() {
   const course ="CSEN 2314";
   const cvr = 30;
 
-  const [cours, courses] = React.useState();
-  const cvrOp = [];
+  const [courses, setCourses] = React.useState([]);
+  // const cvrOp = [];
   React.useEffect(() => {
+    console.log("in use effect");
     async function fetchData() {
       const result=await axios.get(
-        'http://localhost:3001/inst/viewCoverage',
+        // 'http://localhost:3001/cor/viewCoverage',
+        // 'http://localhost:3001/cor/viewAssignments',
+        'http://localhost:3001/cor/viewSch',
         {
           headers: {
            token: localStorage.getItem('UserToken')  //to be added
@@ -348,6 +483,9 @@ export default function Schedule() {
         else{
           // processCoverages(response);
           console.log("naw");
+          setCourses(response.data);
+          console.log("response.data",response.data);
+          console.log("after set",courses);
           console.log(response);
           //return
         }
@@ -357,9 +495,17 @@ export default function Schedule() {
         return [];
       })
     }
+    console.log("here");
     fetchData();
   }, []);
 
+  const [c, setC] = React.useState('');
+  const changeTx = function(e){
+    setC(e.target.value);
+  }
+  // const refrs = function(req,res){
+    
+  // }
   return (
     <Fragment>
       <PageTitle
@@ -367,12 +513,17 @@ export default function Schedule() {
         titleDescription="Here you can see schedules of courses"
       />
       <ExampleWrapperSimple sectionHeading= {course+" Schedule"}>
+        {/* <TextField> 
+          name="Course"
+          onChange={changeTx}
 
-        {/* <div> */}
+        </TextField> */}
+        {/* <Button onClick={refrs}>Refresh</Button><br></br> */}
           <label><b> Coverage:</b> </label>
         <LinearProgress variant="determinate" value={15} className="m-3" style={{height:"30px"}}/>
         {/* </div> */}
         <div className="divider mb-3" />
+        {/* <div> {courses[0].courseSlots}</div> */}
         <ScheduleTable course={course} sched={sched}/>
         <div className="divider mb-5" />
         <AddNewSlot />
