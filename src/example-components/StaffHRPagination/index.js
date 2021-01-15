@@ -1,4 +1,6 @@
 import React, { Fragment } from "react";
+import { useHistory } from 'react-router-dom';
+
 import PropTypes from "prop-types";
 import DropdownsBasic from "../../example-components/Dropdowns/DropdownsBasic";
 import AlertDialog from "../../example-components/AlertDialog";
@@ -36,6 +38,7 @@ import LastPageIcon from "@material-ui/icons/LastPage";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import { Button } from '@material-ui/core';
 
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -192,13 +195,13 @@ const useStyles = makeStyles({
 });
 
 //////
-const CustomTableCell = ({ row, name, onChange, deps }) => {
+const CustomTableCell = ({ row, name, onChange, deps,locs }) => {
   const classes = useStyles();
   const { isEditMode } = row;
-  console.log(row);
+ // console.log(row);
   return (
     <TableCell align="left" className={classes.tableCell}>
-      {name == "gender" && row.id == "" ? (
+      {name === "gender" && row.id === "" ? (
         <>
           <FormControl className={classes.formControl}>
             <Select
@@ -218,7 +221,7 @@ const CustomTableCell = ({ row, name, onChange, deps }) => {
             </Select>
           </FormControl>
         </>
-      ) : name == "role" && row.id == "" ? ( //TODO }
+      ) : name === "roleTemp"  &&isEditMode? ( //TODO }
         <FormControl className={classes.formControl}>
           <Select
             value={row.depTemp}
@@ -234,18 +237,31 @@ const CustomTableCell = ({ row, name, onChange, deps }) => {
             <MenuItem value="HR">HR</MenuItem>
             <MenuItem value="HOD">HOD</MenuItem>
             <MenuItem value="instructor">instructor</MenuItem>
-            <MenuItem value="coordinator">coordinator</MenuItem>
             <MenuItem value="TA">TA</MenuItem>
             {/* ))} */}
           </Select>
         </FormControl>
-      ) : // <Input
-      //   value={row[name]}
-      //   name={name}
-      //   onChange={e => onChange(e, row)}
-      //   className={classes.input}
-      // />
-      name == "department" && row.id == "" ? (
+      ) : 
+      name === "departmentTemp" &&isEditMode ? (
+        <FormControl className={classes.formControl}>
+          <Select
+            value={row.depTemp}
+            name={name}
+            // onChange={handleChange}
+            onChange={e => onChange(e, row)}
+            displayEmpty
+            className={classes.selectEmpty}
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value='None'>None</MenuItem>
+            <MenuItem value={row[name]} disabled></MenuItem>
+            {deps.map(dep => (
+              <MenuItem value={dep}>{dep}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ) : 
+      name === "officeLocationTemp"&&isEditMode ? (
         <FormControl className={classes.formControl}>
           <Select
             value={row.depTemp}
@@ -257,12 +273,20 @@ const CustomTableCell = ({ row, name, onChange, deps }) => {
             inputProps={{ "aria-label": "Without label" }}
           >
             <MenuItem value={row[name]} disabled></MenuItem>
-            {deps.map(dep => (
-              <MenuItem value={dep}>{dep}</MenuItem>
+            {locs.map(loc => (
+              <MenuItem value={loc}>{loc}</MenuItem>
             ))}
           </Select>
         </FormControl>
-      ) : (
+      ):isEditMode&&(name=='salaryTemp'||(name=='name'&&row.id=='')||(name=='email'&&row.id=='')||(name=='dayOff'&&row.id==''))?(
+        <Input
+        value={row[name]}
+        name={name}
+        onChange={e => onChange(e, row)}
+        className={classes.input}
+      />
+      )
+      :(
         row[name]
       )}
     </TableCell>
@@ -272,7 +296,7 @@ const CustomTableCell = ({ row, name, onChange, deps }) => {
 
 export default function LivePreviewExample() {
   const classes = useStyles();
-
+  const history = useHistory();
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -284,7 +308,7 @@ export default function LivePreviewExample() {
   //for responsive entries
   const [role, setRole] = React.useState("");
   const [rows, setRows] = React.useState([]);
-  const [facs, setFacs] = React.useState([]);
+  const [locs, setLocs] = React.useState([]);
   const [deps, setDeps] = React.useState([]);
   const [open, setOpen] = React.useState([false, "success", "all good"]);
 
@@ -293,7 +317,7 @@ export default function LivePreviewExample() {
     async function fetchData() {
       const result = await axios
         .get(
-          "http://localhost:3001/staff/course",
+          "http://localhost:3001/hr/member",
 
           {
             headers: {
@@ -310,21 +334,26 @@ export default function LivePreviewExample() {
           } else {
             //return array
             // console.log(response.data)
-            let arr = response.data.map(crs => {
+            let arr = response.data.map(staff => {
               //console.log(dep)
-
+ 
               return createData(
-                crs._doc.code,
-                crs._doc.name,
-                crs._doc.mainDepartment,
-                crs.deps,
-                crs._doc.coverage
+                staff.id,
+                staff.email,
+                staff.name,
+                staff.salary,
+                staff.gender,
+                staff.officeLocation,
+                staff.role,
+                staff.signInLogs,
+                staff.dayOff,
+                staff.department
               );
             });
             //let x=['a','b']
-            console.log(arr);
+           // console.log(arr);
             arr.sort((a, b) =>
-              a.code.toLowerCase() > b.code.toLowerCase() ? 1 : -1
+              a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1
             );
             return arr;
           }
@@ -353,11 +382,6 @@ export default function LivePreviewExample() {
             //that's an error
             return {};
           } else {
-            //return array
-            //  console.log(response)
-            // let arr= response.data.map(fac=>createData(fac.name,fac.code))
-            //let x=['a','b']
-            // console.log(arr)
             return response.data;
           }
         })
@@ -366,7 +390,64 @@ export default function LivePreviewExample() {
           return {};
         });
       setRole(udata.role);
+      if(udata.role=='HR'){
+        const dps = await axios
+        .get(
+          "http://localhost:3001/hr/department",
 
+          {
+            headers: {
+              token: localStorage.getItem("UserToken") //to be added
+              // token
+            }
+          }
+        )
+        .then(function(response) {
+         //  console.log(response.data)
+          if (response.status != 200) {
+            //that's an error
+            return [];
+          } else {
+            let arr=response.data.map(res=>res._doc.code);
+            return arr;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          return {};
+        });
+        setDeps(dps)
+        const lc = await axios
+        .get(
+          "http://localhost:3001/hr/location",
+
+          {
+            headers: {
+              token: localStorage.getItem("UserToken") //to be added
+              // token
+            }
+          }
+        )
+        .then(function(response) {
+           //console.log(response.data)
+          if (response.status != 200) {
+            //that's an error
+            return [];
+          } else {
+            let arr=response.data.filter(a=>a.type==='Office')
+             arr=arr.map(res=>res.name);
+           
+
+            return arr;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          return {};
+        });
+        setLocs(lc)
+      }
+      console.log(udata)
       setRows(result);
     }
     fetchData();
@@ -392,16 +473,23 @@ export default function LivePreviewExample() {
       });
     });
   };
-  const onAdding = id => {
+  const onAdding =async id => {
     // });
-    let name = initRow.nameTemp;
-    let code = initRow.codeTemp;
-    let dep = initRow.depTemp;
+    let name = initRow.name;
+    let email = initRow.email;
+    let department = initRow.departmentTemp;
+    let role = initRow.roleTemp;
+    let dayOff = initRow.dayOff;
+    let salary = initRow.salaryTemp;
+    let gender = initRow.gender;
+    let officeLocation = initRow.officeLocationTemp;
+
+
+
     //let headOfDepartmentId=initRow.headIdTemp
-    let main = dep;
     //let first=true;
     // for(let i=0;i<rows.length;i++){
-    //   if(rows[i].codeTemp==code){
+    //   if(rows[i].codeTemp===code){
     //     dep=rows[i].mainDepartment;
     //     break;
     //   }
@@ -409,11 +497,11 @@ export default function LivePreviewExample() {
     // let obj={id:code,idTemp:code,code,codeTemp:code,name,nameTemp:name,
     //   mainDepartment:dep,mainDepartmentTemp:dep,
     //   isEditMode:false};
-    let body = { name, code, dep };
+    let body = { name, email, department,role,dayOff,gender,salary,officeLocation };
 
-    console.log(body);
+   // console.log(body);
     axios
-      .post("http://localhost:3001/hr/course", body, {
+      .post("http://localhost:3001/hr/member", body, {
         headers: {
           // 'Content-Type': 'application/json'
           token: localStorage.getItem("UserToken") //to be added
@@ -429,12 +517,17 @@ export default function LivePreviewExample() {
           setOpen([true, "error", response.data.err]);
         } else {
           //  initRow.codeTemp="";
-          initRow.nameTemp = "";
-          initRow.codeTemp = "";
-          initRow.depTemp = "";
+          initRow.name='';
+          initRow.email='';
+          initRow.departmentTemp='';
+          initRow.roleTemp='';
+          initRow.dayOff='';
+          initRow.salaryTemp='';
+          initRow.gender='';
+          initRow.officeLocationTemp='';
           // setLocType(''); //TODOOOOO
           //setOpen({val:true,severity:"success",display:"Added successfully"});
-          window.location.reload(false);
+         // window.location.reload(false);
           setOpen([true, "success", response.data.msg]);
           //setRows([...rows,obj]);
         }
@@ -444,6 +537,7 @@ export default function LivePreviewExample() {
 
         console.log(error.response.data);
       });
+      document.location.href=window.location.origin+'/StaffHR'
 
     //setRows([...rows]);
   };
@@ -452,14 +546,17 @@ export default function LivePreviewExample() {
     if (!previous[row.id]) {
       setPrevious(state => ({ ...state, [row.id]: row }));
     }
-    const value = e.target.value;
+    let value = e.target.value;
     //console.log(value);
     const name = e.target.name;
+    if(name=='departmentTemp'&&value=='None'){
+      value='';
+    }
     const { id } = row;
     //console.log(name);
     const newRows = rows.map(row => {
       if (row.id === id) {
-        if (name == "codeTemp") {
+        if (name === "codeTemp") {
           //TODO:
           return { ...row, [name]: value, ["idTemp"]: value };
         }
@@ -467,22 +564,22 @@ export default function LivePreviewExample() {
       }
       return row;
     });
-    if (row.id == "") {
+    if (row.id === "") {
       //RECHECKK TODO HOBA LALAA
       initRow = { ...initRow, [name]: value };
       // console.log(name)
-      if (name == "typeTemp") {
+     // if (name === "typeTemp") {
         //  setLocType(value);
-      }
+     // }
     }
     // console.log(initRow);
     setRows(newRows);
   };
 
   const onDelete = async e => {
-    //console.log(e.id)
+  //   console.log(e.id)
     const res = await axios
-      .delete("http://localhost:3001/hr/course", {
+      .delete("http://localhost:3001/hr/member", {
         headers: {
           //'Content-Type': 'application/json',
           // token: token,  //to be added
@@ -491,10 +588,9 @@ export default function LivePreviewExample() {
           // token
           //    'auth-token': localStorage.getItem('user'),
         },
-        data: { codeCourse: e.id, codeDepartment: e.dep }
+        data: { id: e.id }
       })
       .then(function(response) {
-        //   console.log(response)
         if (response.status != 200) {
           //that's an error
           setOpen([true, "error", response.data.err]);
@@ -514,19 +610,27 @@ export default function LivePreviewExample() {
       });
 
     // console.log(res)
-    if (res && res.charAt(0) == "D") {
+    if (res && res.charAt(0) === "D") {
+      let idx=0;
       // const newRows = rows.map((row, index) => {
       //   const indexx = rows.indexOf(row)
       //  // console.log(indexx)
-      //   if (row.id == e.id) {
+      //   if (row.id === e.id) {
       //     //console.log(indexx)
-      //     rows.splice(indexx, 1);
+          
       //     //return previous[id] ? previous[id] : row;
       //   }
       //   return row;
-      // });
-      //console.log(newRows)
-      //setRows(newRows);
+     // });
+      for(let i=0;i<rows.length;i++){
+        if(rows[i].id===e.id){
+          idx=i;
+          break;
+        }
+      }
+      rows.splice(idx, 1);;
+//console.log()
+      setRows([...rows]);
       setDummy(dummy + 1);
       setPrevious(state => {
         delete state[e.id];
@@ -541,20 +645,20 @@ export default function LivePreviewExample() {
   const onCancel = id => {
     const newRows = rows.map((row, index) => {
       if (row.id === id) {
-        row.maxCapacityTemp = row.maxCapacity;
+        row.roleTemp = row.role;
         //row.curCapacityTemp=row.curCapacity;
         //row.typeTemp=row.type;
-        row.codeTemp = row.code;
-        row.nameTemp = row.name;
+        row.departmentTemp = row.department;
+        row.officeLocationTemp = row.officeLocation;
         //  row.depTemp=row.dep;
         //  row.facultyCodeTemp=row.facultyCode;
-        row.idTemp = row.id;
+        row.salaryTemp = row.salary;
         return row;
         //return previous[id] ? previous[id] : row;
       }
       return row;
     });
-    console.log(newRows);
+    //console.log(newRows);
     setRows(newRows);
     setPrevious(state => {
       delete state[id];
@@ -564,24 +668,6 @@ export default function LivePreviewExample() {
     /////////////////////////////////
   };
   const onApproval = id => {
-    // const newRows = rows.map((row, index) => {
-    //    if (row.id === id) {
-    //       // row.type=row.typeTemp;
-    //        row.maxCapacity=row.maxCapacityTemp;
-    //        //row.curCapacity=row.curCapacityTemp;
-    //        row.name=row.nameTemp;
-    //        row.idTemp=row.nameTemp;
-    //        row.id=row.idTemp;
-    //      return { ...row, isEditMode: !row.isEditMode };
-    //      //return previous[id] ? previous[id] : row;
-    //    }
-    //   return row;
-    // });
-    // setRows(newRows);
-    // setPrevious((state) => {
-    //   delete state[id];
-    //   return state;
-    // });
     //////////////////
     let obj = {};
     for (let i = 0; i < rows.length; i++) {
@@ -590,7 +676,7 @@ export default function LivePreviewExample() {
         break;
       }
     }
-    // console.log(obj)
+     console.log(obj)
 
     setPrevious(state => {
       delete state[id];
@@ -598,13 +684,13 @@ export default function LivePreviewExample() {
     });
     axios
       .put(
-        "http://localhost:3001/hr/department",
+        "http://localhost:3001/hr/member",
         {
-          key: obj.id,
-          name: obj.nameTemp,
-          code: obj.codeTemp,
-          facCode: obj.facultyCodeTemp,
-          headOfDepartmentId: obj.headIdTemp
+          id: obj.id,
+          department: obj.departmentTemp,
+          salary: obj.salaryTemp,
+          officeLocation: obj.officeLocationTemp,
+          role: obj.roleTemp
         },
         {
           headers: {
@@ -619,7 +705,7 @@ export default function LivePreviewExample() {
         //console.log(response)
         if (response.status != 200) {
           //that's an error
-          console.log(obj);
+         // console.log(obj);
           setOpen([true, "error", response.data.err]);
           //setRows(newRows);
           //display error
@@ -628,11 +714,11 @@ export default function LivePreviewExample() {
           // onToggleEditMode(id);
           const newRows = rows.map((row, index) => {
             if (row.id === id) {
-              row.id = row.idTemp;
-              row.code = row.codeTemp;
-              row.name = row.nameTemp;
-              row.headId = row.headIdTemp;
-              row.facultyCode = row.facultyCodeTemp;
+             // row.id = row.idTemp;
+              row.role = row.roleTemp;
+              row.officeLocation = row.officeLocationTemp;
+              row.department = row.departmentTemp;
+              row.salary = row.salaryTemp;
 
               return { ...row, isEditMode: !row.isEditMode };
               //return previous[id] ? previous[id] : row;
@@ -668,21 +754,27 @@ export default function LivePreviewExample() {
   console.log(rows);
   return (
     <>
+
       <Fragment>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell align="left" />
-                <TableCell align="left">Code</TableCell>
+                <TableCell align="left">ID</TableCell>
                 <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Departments Codes</TableCell>
-                <TableCell align="left">Main Department</TableCell>
-                <TableCell align="left">Coverage </TableCell>
+                <TableCell align="left">Email</TableCell>
+                <TableCell align="left">Department </TableCell>
+                <TableCell align="left">Salary</TableCell>
+                <TableCell align="left">Office Location </TableCell>
+                <TableCell align="left">Role </TableCell>
+                <TableCell align="left">DayOff </TableCell>
+                <TableCell align="left">Gender </TableCell>
+                <TableCell align="left">Attendance </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {role == "HR" ? (
+              {role === "HR" ? (
                 <>
                   <TableRow key="">
                     <TableCell className={classes.selectTableCell}>
@@ -695,22 +787,34 @@ export default function LivePreviewExample() {
                       </IconButton>
                     </TableCell>
                     <CustomTableCell
-                      {...{ row: initRow, name: "codeTemp", onChange, facs }}
-                    />
-                    <CustomTableCell
-                      {...{ row: initRow, name: "nameTemp", onChange, facs }}
-                    />
-                    <CustomTableCell
-                      {...{ row: initRow, name: "depTemp", onChange, facs }}
-                    />
-                    <CustomTableCell
-                      {...{
-                        row: initRow,
-                        name: "mainDepartmentTemp",
-                        onChange,
-                        facs
-                      }}
-                    />
+                    {...{ row:initRow, name: "id", onChange, deps,locs }}
+                  />
+                  <CustomTableCell
+                    {...{ row:initRow, name: "name", onChange, deps,locs }}
+                  />
+                  <CustomTableCell
+                    {...{ row:initRow, name: "email", onChange, deps,locs }}
+                  />
+                     <CustomTableCell
+                    {...{ row:initRow, name: "departmentTemp", onChange, deps,locs }}
+                  />
+                  <CustomTableCell
+                    {...{ row:initRow, name: "salaryTemp", onChange, deps,locs }}
+                  />
+
+                  <CustomTableCell
+                    {...{ row:initRow, name: "officeLocationTemp", onChange, deps,locs }}
+                  />
+                  <CustomTableCell
+                    {...{ row:initRow, name: "roleTemp", onChange, deps,locs }}
+                  />
+                  <CustomTableCell
+                    {...{ row:initRow, name: "dayOff", onChange, deps,locs }}
+                  />
+                  <CustomTableCell
+                    {...{ row:initRow, name: "gender", onChange, deps,locs }}
+                  />
+                  <TableCell  align="left" className={classes.tableCell}></TableCell>
                   </TableRow>
                 </>
               ) : (
@@ -725,7 +829,7 @@ export default function LivePreviewExample() {
               ).map(row => (
                 <TableRow key={row.id}>
                   <TableCell className={classes.selectTableCell}>
-                    {role == "HR" && row.isEditMode ? (
+                    {role === "HR" && row.isEditMode ? (
                       <>
                         <IconButton
                           title="confirm"
@@ -742,7 +846,7 @@ export default function LivePreviewExample() {
                           <CancelIcon />
                         </IconButton>
                       </>
-                    ) : role == "HR" ? (
+                    ) : role === "HR" ? (
                       <div style={{ display: "flex" }}>
                         <IconButton
                           title="edit"
@@ -754,7 +858,7 @@ export default function LivePreviewExample() {
                         <AlertDialog
                           entry="Staff Member"
                           onClick={e =>
-                            onDelete({ ...e, id: row.id, dep: row.depTemp })
+                            onDelete({ ...e, id: row.id })
                           }
                           row={row.id}
                         >
@@ -765,23 +869,52 @@ export default function LivePreviewExample() {
                       <></>
                     )}
                   </TableCell>
-                  {/* component="th" scope="row" */}
-
+   
                   <CustomTableCell
-                    {...{ row, name: "codeTemp", onChange, facs }}
+                    {...{ row, name: "id", onChange, deps,locs }}
                   />
                   <CustomTableCell
-                    {...{ row, name: "nameTemp", onChange, facs }}
+                    {...{ row, name: "name", onChange, deps,locs }}
                   />
                   <CustomTableCell
-                    {...{ row, name: "depTemp", onChange, facs }}
+                    {...{ row, name: "email", onChange, deps,locs }}
                   />
                   <CustomTableCell
-                    {...{ row, name: "mainDepartmentTemp", onChange, facs }}
+                    {...{ row, name: "departmentTemp", onChange, deps,locs }}
                   />
                   <CustomTableCell
-                    {...{ row, name: "coverage", onChange, facs }}
+                    {...{ row, name: "salaryTemp", onChange, deps,locs }}
                   />
+                  <CustomTableCell
+                    {...{ row, name: "officeLocationTemp", onChange, deps,locs }}
+                  />
+                  <CustomTableCell
+                    {...{ row, name: "roleTemp", onChange, deps,locs }}
+                  />
+                  <CustomTableCell
+                    {...{ row, name: "dayOff", onChange, deps,locs }}
+                  />
+                  <CustomTableCell
+                    {...{ row, name: "gender", onChange, deps,locs }}
+                  />
+                  <TableCell align="left" className={classes.tableCell}>
+                  <Button
+                  style={{    width: "100px",
+                    position: "relative",
+                    left: "-16px"}}
+                  color="primary"
+                  variant="contained"
+                  onClick={() =>
+                    history.push({
+                      pathname: '/AttendanceLogsHR',
+                      state: {
+                        id:row.id
+                      }
+                    })
+                  }>
+                  View logs
+                </Button>
+                </TableCell>
                   {/* <TableCell component="th" scope="row" >
                   {row.name}
                 </TableCell>
@@ -799,7 +932,7 @@ export default function LivePreviewExample() {
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                  colSpan={3}
+                  colSpan={5}
                   count={rows.length}
                   rowsPerPage={rowsPerPage}
                   page={page}

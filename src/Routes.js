@@ -50,8 +50,8 @@ const personalScheduleAC=lazy(()=>import('./example-pages/personalSchedule'));
 const myRequestsAC=lazy(()=>import('./example-pages/MyRequests'))
 const StaffDayOffHOD=lazy(()=>import('./example-pages/StaffDayOff'))
 const StaffInDepHOD=lazy(()=>import('./example-pages/StaffInDep'))
+const AttendanceLogsHR=lazy(()=>import('./example-pages/AttendanceLogsHR'))
 const InstructorsHOD=lazy(()=>import('./example-pages/Instructors'))
-
 
 const Routes = () => {
   const location = useLocation();
@@ -125,6 +125,7 @@ const Routes = () => {
                 '/myRequestsAC',
                 '/StaffDayOffHOD',
                 '/StaffInDepHOD',
+                '/AttendanceLogsHR'
                 '/InstructorsHOD'
               ]}>
               <LeftSidebar>
@@ -178,6 +179,7 @@ const Routes = () => {
                     <Route path="/myRequestsAC" component={myRequestsAC} />
                     <Route path="/StaffDayOffHOD" component={StaffDayOffHOD} />
                     <Route path="/StaffInDepHOD" component={StaffInDepHOD} />
+                    <Route path="/AttendanceLogsHR" component={AttendanceLogsHR} />
                     <Route path="/InstructorsHOD" component={InstructorsHOD} />
                    
                   </motion.div>
