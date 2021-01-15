@@ -1,19 +1,19 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState } from "react";
 
-import Input from '@material-ui/core/Input';
-import { ExampleWrapperSimple } from '../../layout-components';
-import { Grid, makeStyles, IconButton, Button } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/EditOutlined';
-import DoneIcon from '@material-ui/icons/DoneAllTwoTone';
-import CancelIcon from '@material-ui/icons/CancelOutlined';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import axios from 'axios';
-import Attendance from '../../example-components/Attendance';
+import Input from "@material-ui/core/Input";
+import { ExampleWrapperSimple } from "../../layout-components";
+import { Grid, makeStyles, IconButton, Button } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/EditOutlined";
+import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
+import CancelIcon from "@material-ui/icons/CancelOutlined";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import axios from "axios";
+import Attendance from "../../example-components/Attendance";
 
 const useStyles = makeStyles({
   input: {
@@ -27,9 +27,9 @@ export default function HomePage() {
   React.useEffect(() => {
     async function FetchData() {
       const response = await axios
-        .get('http://localhost:3001/staff/viewProfile', {
+        .get("http://localhost:3001/staff/viewProfile", {
           headers: {
-            token: localStorage.getItem('UserToken')
+            token: localStorage.getItem("UserToken")
           }
         })
         .then(function(response) {
@@ -37,7 +37,7 @@ export default function HomePage() {
         })
         .catch(function(error) {
           console.log(error.response.data);
-          return '';
+          return "";
         });
       response.isEditMode = false;
       setProfile(response);
@@ -46,23 +46,44 @@ export default function HomePage() {
     FetchData();
   }, []);
 
-  const [profile, setProfile] = useState('');
-  const [email, setEmail] = useState('');
-  const [oldPass, setOldPass] = useState('');
-  const [newPass, setnewPass] = useState('');
-  const [newPass2, setnewPass2] = useState('');
-  const [open, setOpen] = useState([false, '', '']);
+  React.useEffect(() => {
+    async function FetchData() {
+      const response = await axios
+        .get("http://localhost:3001/staff/viewSalaryDeduction", {
+          headers: {
+            token: localStorage.getItem("UserToken")
+          }
+        })
+        .then(function(response) {
+          return response.data;
+        })
+        .catch(function(error) {
+          console.log(error.response.data);
+          return "";
+        });
+      setSalaryDed(response);
+    }
+    FetchData();
+  }, []);
+
+  const [profile, setProfile] = useState("");
+  const [email, setEmail] = useState("");
+  const [oldPass, setOldPass] = useState("");
+  const [newPass, setnewPass] = useState("");
+  const [newPass2, setnewPass2] = useState("");
+  const [open, setOpen] = useState([false, "", ""]);
   const [openDial, setopenDial] = React.useState(false);
   const [openDialD, setopenDialD] = React.useState(false);
-  const [dayyOff, setTakeDayyOff] = useState('');
-  const [reason, setReason] = useState('');
-  const [comment, setComment] = useState('');
+  const [dayyOff, setTakeDayyOff] = useState("");
+  const [reason, setReason] = useState("");
+  const [comment, setComment] = useState("");
+  const [salaryDed, setSalaryDed] = React.useState(0);
 
   const onChangeEmail = e => {
     setEmail(e.target.value);
   };
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setOpen([false, open[1], open[2]]);
@@ -97,52 +118,52 @@ export default function HomePage() {
   };
   const resetPass = () => {
     if (newPass !== newPass2) {
-      setOpen([true, 'error', 'New password does not match']);
+      setOpen([true, "error", "New password does not match"]);
       return;
     }
     axios
       .put(
-        'http://localhost:3001/staff/resetPassword',
+        "http://localhost:3001/staff/resetPassword",
         {
           oldPassword: oldPass,
           newPassword: newPass
         },
         {
           headers: {
-            token: localStorage.getItem('UserToken')
+            token: localStorage.getItem("UserToken")
           }
         }
       )
       .then(function(response) {
         console.log(response.data);
-        if (response.data === 'please enter your old password') {
-          setOpen([true, 'error', response.data]);
+        if (response.data === "please enter your old password") {
+          setOpen([true, "error", response.data]);
         }
-        if (response.data === 'Your password has changed successfully') {
-          setOpen([true, 'success', response.data]);
+        if (response.data === "Your password has changed successfully") {
+          setOpen([true, "success", response.data]);
           setopenDial(false);
         }
       })
       .catch(function(error) {
         console.log(error.response.data);
-        if (error.response.data === 'Old password is not correct') {
-          setOpen([true, 'error', error.response.data]);
+        if (error.response.data === "Old password is not correct") {
+          setOpen([true, "error", error.response.data]);
         }
         if (
-          error.response.data === 'New password must has at least 6 charachters'
+          error.response.data === "New password must has at least 6 charachters"
         ) {
-          setOpen([true, 'error', error.response.data]);
+          setOpen([true, "error", error.response.data]);
         }
       });
-    setnewPass('');
-    setnewPass2('');
-    setOldPass('');
+    setnewPass("");
+    setnewPass2("");
+    setOldPass("");
   };
 
   const sendDayOffRequest = async () => {
     axios
       .post(
-        'http://localhost:3001/ac/changeDayOff',
+        "http://localhost:3001/ac/changeDayOff",
         {
           newday: dayyOff,
           reasonOfChange: reason,
@@ -150,53 +171,53 @@ export default function HomePage() {
         },
         {
           headers: {
-            token: localStorage.getItem('UserToken')
+            token: localStorage.getItem("UserToken")
           }
         }
       )
       .then(function(response) {
         setopenDialD(false);
-        setOpen([true, 'success', response.data]);
+        setOpen([true, "success", response.data]);
       })
       .catch(function(error) {
         console.log(error.response.data.err);
-        setOpen([true, 'error', error.response.data.err]);
+        setOpen([true, "error", error.response.data.err]);
       });
   };
 
   const onApporval = async () => {
     axios
       .put(
-        'http://localhost:3001/staff/updateProfile',
+        "http://localhost:3001/staff/updateProfile",
         {
           email: email
         },
         {
           headers: {
-            token: localStorage.getItem('UserToken')
+            token: localStorage.getItem("UserToken")
           }
         }
       )
       .then(function(response) {
-        if (response.data === 'Cannot update empty mail') {
-          setOpen([true, 'error', response.data]);
+        if (response.data === "Cannot update empty mail") {
+          setOpen([true, "error", response.data]);
           return;
         }
-        if (response.data !== 'This email already in use') {
+        if (response.data !== "This email already in use") {
           setEmail(response.data);
           setProfile({
             ...profile,
             isEditMode: !profile.isEditMode,
             Email: response.data
           });
-          setOpen([true, 'success', 'Email updated successfully']);
+          setOpen([true, "success", "Email updated successfully"]);
         } else {
-          setOpen([true, 'error', response.data]);
+          setOpen([true, "error", response.data]);
         }
       })
       .catch(function(error) {
         console.log(error.response.data.err);
-        setOpen([true, 'error', error.response.data.err]);
+        setOpen([true, "error", error.response.data.err]);
       });
   };
   return (
@@ -232,13 +253,15 @@ export default function HomePage() {
                   <IconButton
                     title="confirm"
                     aria-label="confirm"
-                    onClick={onApporval}>
+                    onClick={onApporval}
+                  >
                     <DoneIcon />
                   </IconButton>
                   <IconButton
                     title="cancel"
                     aria-label="cancel"
-                    onClick={onCancel}>
+                    onClick={onCancel}
+                  >
                     <CancelIcon />
                   </IconButton>
                 </>
@@ -252,7 +275,8 @@ export default function HomePage() {
                         ...profile,
                         isEditMode: !profile.isEditMode
                       })
-                    }>
+                    }
+                  >
                     <EditIcon />
                   </IconButton>
                 </>
@@ -273,7 +297,7 @@ export default function HomePage() {
               <h6> Office </h6>
             </Grid>
             <Grid item xs={12} lg={8}>
-              {profile['Office location']}
+              {profile["Office location"]}
             </Grid>
 
             <Grid item xs={12} lg={4}>
@@ -287,15 +311,15 @@ export default function HomePage() {
               <h6> Salary </h6>
             </Grid>
             <Grid item xs={12} lg={8}>
-              {profile.Salary}
+              {profile.Salary} $
             </Grid>
 
-            {/* <Grid item xs={12} lg={4}>
-            <h6> Current Month Salary </h6>
-          </Grid>
-          <Grid item xs={12} lg={8}>   to be doneeeeeee
-          {profile.NewSalary}
-          </Grid> */}
+            <Grid item xs={12} lg={4}>
+              <h6> Salary Deduction </h6>
+            </Grid>
+            <Grid item xs={12} lg={8}>
+              {salaryDed} $
+            </Grid>
 
             <Grid item xs={12} lg={4}>
               <h6> Role </h6>
@@ -308,7 +332,7 @@ export default function HomePage() {
               <h6> Dayoff</h6>
             </Grid>
             <Grid item xs={12} lg={7}>
-              {profile['Off day']}
+              {profile["Off day"]}
             </Grid>
             <Grid item xs={12} lg={1}>
               <IconButton title="edit" aria-label="edit" onClick={setDayOff}>
@@ -333,7 +357,7 @@ export default function HomePage() {
               <h6> Courses </h6>
             </Grid>
             <Grid item xs={12} lg={8}>
-              <ol>{profile['My courses']}</ol>
+              <ol>{profile["My courses"]}</ol>
             </Grid>
           </Grid>
         </ExampleWrapperSimple>
@@ -343,11 +367,12 @@ export default function HomePage() {
         <Dialog open={openDial}>
           <h1
             style={{
-              textAlign: 'center',
-              width: '400px',
-              font: 'bold',
-              fontSize: '19px'
-            }}>
+              textAlign: "center",
+              width: "400px",
+              font: "bold",
+              fontSize: "19px"
+            }}
+          >
             Reset Password
           </h1>
           <DialogContent>
@@ -392,10 +417,11 @@ export default function HomePage() {
               color="primary"
               onClick={() => {
                 setopenDial(false);
-                setnewPass('');
-                setnewPass2('');
-                setOldPass('');
-              }}>
+                setnewPass("");
+                setnewPass2("");
+                setOldPass("");
+              }}
+            >
               Cancel
             </Button>
             <Button color="primary" onClick={resetPass}>
@@ -409,11 +435,12 @@ export default function HomePage() {
         <Dialog open={openDialD}>
           <h1
             style={{
-              textAlign: 'center',
-              width: '400px',
-              font: 'bold',
-              fontSize: '19px'
-            }}>
+              textAlign: "center",
+              width: "400px",
+              font: "bold",
+              fontSize: "19px"
+            }}
+          >
             Day Off Request
           </h1>
           <DialogContent>
@@ -455,11 +482,12 @@ export default function HomePage() {
             <Button
               color="primary"
               onClick={() => {
-                setDayOff('');
-                setReason('');
-                setComment('');
+                setDayOff("");
+                setReason("");
+                setComment("");
                 setopenDialD(false);
-              }}>
+              }}
+            >
               Cancel
             </Button>
             <Button color="primary" onClick={sendDayOffRequest}>
@@ -472,7 +500,8 @@ export default function HomePage() {
         open={open[0]}
         autoHideDuration={3000}
         onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
         <MuiAlert variant="filled" onClose={handleClose} severity={open[1]}>
           {open[2]}
         </MuiAlert>
