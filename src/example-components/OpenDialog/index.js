@@ -71,11 +71,17 @@ export default function CustomizedDialogs(props) {
         <DialogContent dividers>
           <Typography gutterBottom>
            <h4 style={{color:'midnightblue', fontFamily:'sans-serif'}}>{props.one}</h4>
+           <br/>
            <h4 style={{fontFamily:'sans-serif'}}>{props.two}</h4>
+           <br/>
            <h4 style={{color:'midnightblue', fontFamily:'sans-serif'}}>{props.three}</h4>
+           <br/>
            <h4 style={{fontFamily:'sans-serif'}}>{props.four}</h4>
+           <br/>
            <h4 style={{color:'midnightblue', fontFamily:'sans-serif'}}>{props.five}</h4>
+           <br/>
            <h4 style={{fontFamily:'sans-serif'}}>{props.six}</h4>
+           <br/>
            <h4 style={{color:'midnightblue', fontFamily:'sans-serif'}}>{props.seven}</h4>
           </Typography>
         </DialogContent>

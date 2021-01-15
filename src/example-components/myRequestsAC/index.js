@@ -225,6 +225,8 @@ const useStyles3 = makeStyles((theme) => ({
     },
   },
 }));
+// let replaceHolder={rl:1,colleagueId:'',date:'',slot:'',reason:''}
+// let leaveHolder={rl:2,typeOfLeave:'',startDate:'',periodOfLeave:'',compensatingDay:'',reason:'',document:''}
 
 export default function LivePreviewExample() {
   const classes3=useStyles3()
@@ -255,6 +257,8 @@ export default function LivePreviewExample() {
   const [leaveHolder,setLeaveHolder]=React.useState({rl:2,typeOfLeave:'',
   startDate:'',periodOfLeave:'',compensatingDay:'',reason:'',document:''})
 
+  //const [dummy,setDummy]=React.useState(0)
+
   const [open, setOpen] = React.useState([false,'bottom','success','all good']);
 
   const [userRole, setUserRole] = React.useState('');
@@ -277,7 +281,8 @@ export default function LivePreviewExample() {
           console.log(error.response.data);
           return '';
         });
-      setUserRole(response.role);
+     setUserRole(response.role);
+      
     }
     FetchData();
   }, []);
@@ -309,22 +314,15 @@ export default function LivePreviewExample() {
         return [];
       })
       
-      setRequests(result)  //mesh sha8ala leh?
-
+      setRequests(result)  
       getReplacement()
-      if(userRole=='HOD'){
-        getLeave()
-        getChangeDayOff()
-      }
-      if(userRole=='coordinator')
-        getSlot()
-
+      
     }
     fetchData();
   }, []);
 
-  const getReplacement=()=>{
-    axios
+  const getReplacement=async()=>{
+    await axios
         .get('http://localhost:3001/ac/replacementRequest', {
           headers: {
             token: localStorage.getItem('UserToken')
@@ -335,8 +333,7 @@ export default function LivePreviewExample() {
         })
         .catch(function(error) {
           console.log(error.response.data);
-        })
-        onClickFunc('',1)
+        }) 
       onClickFuncRec('',1)
   }
   const getLeave=()=>{
@@ -352,8 +349,6 @@ export default function LivePreviewExample() {
           .catch(function(error) {
             console.log(error.response.data);
           });
-          onClickFunc('',1)
-          onClickFuncRec('',1)
   }
   const getChangeDayOff=()=>{
     axios
@@ -368,8 +363,6 @@ export default function LivePreviewExample() {
             .catch(function(error) {
               console.log(error.response.data);
             });
-            onClickFunc('',1)
-      onClickFuncRec('',1)
   }
   const getSlot=()=>{
     axios
@@ -384,8 +377,6 @@ export default function LivePreviewExample() {
             .catch(function(error) {
               console.log(error.response.data);
             });
-            onClickFunc('',1)
-      onClickFuncRec('',1)
   }
 
 
@@ -410,7 +401,6 @@ const reRender=async()=>{
         console.log(error.response);
       }) 
       onClickFunc('',1)
-      onClickFuncRec('',1)
 }
 
   const emptyRows =
@@ -472,6 +462,7 @@ const reRender=async()=>{
   }
 
   const onClickFunc=(data,type)=>{
+    console.log(requests)
     let viewx=requestView
     let typex=requestType
     if(type==1){
@@ -497,6 +488,12 @@ const reRender=async()=>{
     }
   }
   const onClickFuncRec=(data,type)=>{
+    if(userRole=='HOD'){
+      getLeave()
+      getChangeDayOff()
+    }
+    if(userRole=='coordinator')
+      getSlot() 
     let viewx=requestViewRec
     let typex=requestTypeRec
     if(type==1){
@@ -508,7 +505,6 @@ const reRender=async()=>{
     }
     let replacement=(viewx=='all')?replacementReceived[0]:replacementReceived[0].filter(e=>e.statusInst==viewx)
     replacement.sort((a, b) => b.Date > a.Date?1:-1)
-    console.log(replacement)
     let hod=(viewx=='all')?replacementReceived[1]:replacementReceived[1].filter(e=>e.statusHod==viewx)
     hod.sort((a, b) => b.Date > a.Date?1:-1)
     let leave=(viewx=='all')?leaveReceived:leaveReceived.filter(e=>e.status==viewx)
@@ -524,7 +520,6 @@ const reRender=async()=>{
       case 'changeDayOffRequests':setRequestsFilteredRec(changeDay);break;
       case 'slotLinkingRequests':setRequestsFilteredRec(slot);break;
     }
-    console.log(requestsFilteredRec)
   }
 
   const setSeen=(bool)=>{
@@ -615,7 +610,7 @@ const reRender=async()=>{
       else{
         setOpen([true,'bottom',"success",response.data.msg]);
         //window.location.reload(false)
-        getLeave()
+        onClickFuncRec('',1)
       }
      })
 
@@ -642,7 +637,7 @@ const reRender=async()=>{
       else{
         setOpen([true,'bottom',"success",response.data.msg]);
         //window.location.reload(false)
-        getChangeDayOff()
+        onClickFuncRec('',1)
       }
      })
 
@@ -670,7 +665,7 @@ const reRender=async()=>{
       else{
         setOpen([true,'bottom',"success",response.data.msg]);
         //window.location.reload(false)
-        getSlot()
+        onClickFuncRec('',1)
       }
      })
 
@@ -697,7 +692,7 @@ const reRender=async()=>{
       else{
         setOpen([true,'bottom',"success",response.data.msg]);
         //window.location.reload(false)
-        getSlot()
+        onClickFuncRec('',1)
       }
      })
 
@@ -1063,6 +1058,8 @@ const CustomTableCell = ({ row, name, onChange }) => {
     </TableCell>
   );
 };
+//setReplaceHolder(newRow)
+//    setLeaveHolder(newRow)
 
 const onChange = (e, row) => {
   const value = e.target.value;
@@ -1070,9 +1067,10 @@ const onChange = (e, row) => {
   let newRow={ ...row, [name]:value };
   let {rl}=row
   if(rl==1)
-    setReplaceHolder(newRow)
+  setReplaceHolder(newRow)
   else
     setLeaveHolder(newRow)
+  //setDummy(dummy+1)
 };
 
 
@@ -1109,9 +1107,9 @@ const onClickAddReplacement=()=>{
 }
 
 const onClickAddLeave=()=>{
-  console.log(111)
-  console.log(leaveHolder)
-  console.log(leaveHolder.typeOfLeave)
+  // console.log(111)
+  // console.log(leaveHolder)
+  // console.log(leaveHolder.typeOfLeave)
   axios
     .post(
       'http://localhost:3001/ac/leaveRequest',
@@ -1237,10 +1235,19 @@ const receivedRequestsEnable=()=>{
   )
               }
 }
-
-const makeRequest=()=>{
-  if(replaceOrLeave=='replacement')
-    return (
+ 
+  return (
+      <>
+      <Fragment>
+        <h3>Make a Request</h3>
+        <div className={classes3.root}>
+        <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
+        <Button color={setButtonColorMake('replacement')} onClick={()=>setReplaceOrLeave('replacement')}>Replacement Request</Button>
+        <Button color={setButtonColorMake('leave')} onClick={()=>setReplaceOrLeave('leave')}>Leave Request</Button>
+        </ButtonGroup>
+        </div>
+        {
+  (replaceOrLeave=='replacement')?
       <Table className={classes.table}>
       <TableHead >
         <TableRow >
@@ -1263,16 +1270,30 @@ const makeRequest=()=>{
                   </IconButton>
                    
             </TableCell>
-              <CustomTableCell  {...{ row:replaceHolder, name: "colleagueId", onChange }} />
+            <TableCell align="center" className={classes.tableCell}>
+            <Input
+          value={replaceHolder['colleagueId']}
+          name={'colleagueId'}
+          onChange={(e) => onChange(e, replaceHolder)}
+          className={classes.input}
+        />
+        </TableCell>
               <CustomTableCell  {...{ row:replaceHolder, name: "date", onChange }} />
               <CustomTableCell  {...{ row:replaceHolder, name: "slot", onChange }} />
-              <CustomTableCell  {...{ row:replaceHolder, name: "reason", onChange }} />
+              <TableCell align="center" className={classes.tableCell}>
+              <Input
+                value={replaceHolder['reason']}
+                name={'reason'}
+                onChange={(e) => onChange(e, replaceHolder)}
+                className={classes.input}
+              />
+              </TableCell>
             </TableRow>
       </TableBody>
       </Table>
-    )
-  else
-    return(
+
+  :
+
       <Table className={classes.table}>
       <TableHead >
         <TableRow >
@@ -1282,7 +1303,7 @@ const makeRequest=()=>{
           <TableCell align="center">Period Of Leave</TableCell>
           <TableCell align="center">Compensating Day <h6 style={{color:'skyblue'}}>Only for Compensation Leaves</h6></TableCell>
           <TableCell align="center">Reason</TableCell>
-          <TableCell align="center">Document</TableCell>
+          <TableCell align="center">Document <h6 style={{color:'skyblue'}}>Put Google Drive link</h6></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -1299,27 +1320,36 @@ const makeRequest=()=>{
             </TableCell>
               <CustomTableCell  {...{ row:leaveHolder, name: "typeOfLeave", onChange }} />
               <CustomTableCell  {...{ row:leaveHolder, name: "startDate", onChange }} />
-              <CustomTableCell  {...{ row:leaveHolder, name: "periodOfLeave", onChange }} />
+              <TableCell align="center" className={classes.tableCell}>
+              <Input
+                value={leaveHolder['periodOfLeave']}
+                name={'periodOfLeave'}
+                onChange={(e) => onChange(e, leaveHolder)}
+                className={classes.input}
+              />
+              </TableCell>
               <CustomTableCell  {...{ row:leaveHolder, name: "compensatingDay", onChange }} />
-              <CustomTableCell  {...{ row:leaveHolder, name: "reason", onChange }} />
-              <CustomTableCell  {...{ row:leaveHolder, name: "document", onChange }} />
+              <TableCell align="center" className={classes.tableCell}>
+              <Input
+                value={leaveHolder['reason']}
+                name={'reason'}
+                onChange={(e) => onChange(e, leaveHolder)}
+                className={classes.input}
+              />
+              </TableCell>
+              <TableCell align="center" className={classes.tableCell}>
+              <Input
+                value={leaveHolder['document']}
+                name={'document'}
+                onChange={(e) => onChange(e, leaveHolder)}
+                className={classes.input}
+              />
+              </TableCell>
             </TableRow>
       </TableBody>
       </Table>
-    )    
-}
   
-  return (
-      <>
-      <Fragment>
-        <h3>Make a Request</h3>
-        <div className={classes3.root}>
-        <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
-        <Button color={setButtonColorMake('replacement')} onClick={()=>setReplaceOrLeave('replacement')}>Replacement Request</Button>
-        <Button color={setButtonColorMake('leave')} onClick={()=>setReplaceOrLeave('leave')}>Leave Request</Button>
-        </ButtonGroup>
-        </div>
-        {makeRequest()}
+}
       </Fragment>
       <br/><br/>
     <Fragment><h3>Sent Requests</h3>
@@ -1392,7 +1422,7 @@ const makeRequest=()=>{
     <br/>
     <br/>
     {receivedRequestsEnable()}
-    <Snackbar open={open[0]} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical:open[1], horizontal :'center'}}>
+    <Snackbar open={open[0]} onClose={handleClose} anchorOrigin={{ vertical:open[1], horizontal :'center'}}>
       <MuiAlert variant='filled' onClose={handleClose} severity={open[2]}>
         {open[3]}
       </MuiAlert>
