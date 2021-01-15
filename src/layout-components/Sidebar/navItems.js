@@ -259,6 +259,10 @@ export default [
   {
     "label": "Instructors",
     "to": "/InstructorsHOD" 
+  },
+  {
+    "label": "Teaching Assignments",
+    "to": "/TeachingAssignmentsHOD" 
   }
 ]`,
       (key, value) => {

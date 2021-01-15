@@ -14,6 +14,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
 import Attendance from "../../example-components/Attendance";
+import NotificationsTemplate from "../../example-components/NotificationsTemplate";
 
 const useStyles = makeStyles({
   input: {
@@ -55,11 +56,10 @@ export default function HomePage() {
           }
         })
         .then(function(response) {
-          return response.data;
+          return parseFloat(response.data);
         })
         .catch(function(error) {
-          console.log(error.response.data);
-          return "";
+          return error.response.data;
         });
       setSalaryDed(response);
     }
@@ -77,7 +77,7 @@ export default function HomePage() {
   const [dayyOff, setTakeDayyOff] = useState("");
   const [reason, setReason] = useState("");
   const [comment, setComment] = useState("");
-  const [salaryDed, setSalaryDed] = React.useState(0);
+  const [salaryDed, setSalaryDed] = React.useState(0.0);
 
   const onChangeEmail = e => {
     setEmail(e.target.value);
@@ -135,7 +135,6 @@ export default function HomePage() {
         }
       )
       .then(function(response) {
-        console.log(response.data);
         if (response.data === "please enter your old password") {
           setOpen([true, "error", response.data]);
         }
@@ -223,6 +222,7 @@ export default function HomePage() {
   return (
     <>
       <Fragment>
+      <NotificationsTemplate/>
         <ExampleWrapperSimple sectionHeading="Profile">
           <Grid container spacing={4}>
             <Grid item xs={12} lg={4}>
@@ -367,7 +367,7 @@ export default function HomePage() {
           </Grid>
         </ExampleWrapperSimple>
       </Fragment>
-      <Attendance />
+      <Attendance/>
       <div>
         <Dialog open={openDial}>
           <h1
