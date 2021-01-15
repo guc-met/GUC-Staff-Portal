@@ -53,7 +53,7 @@ const StaffDayOffHOD=lazy(()=>import('./example-pages/StaffDayOff'))
 const StaffInDepHOD=lazy(()=>import('./example-pages/StaffInDep'))
 const AttendanceLogsHR=lazy(()=>import('./example-pages/AttendanceLogsHR'))
 const InstructorsHOD=lazy(()=>import('./example-pages/Instructors'))
-
+const TeachingAssignmentsHOD=lazy(()=>import('./example-pages/TeachingAssignments'))
 const Routes = () => {
   const location = useLocation();
   const pageVariants = {
@@ -129,7 +129,12 @@ const Routes = () => {
                 '/StaffDayOffHOD',
                 '/StaffInDepHOD',
                 '/AttendanceLogsHR',
+<<<<<<< HEAD
                 '/InstructorsHOD'
+=======
+                '/InstructorsHOD',
+                '/TeachingAssignmentsHOD'
+>>>>>>> o_e
               ]}>
               <LeftSidebar>
                 <Switch location={location} key={location.pathname}>
@@ -185,7 +190,7 @@ const Routes = () => {
                     <Route path="/StaffInDepHOD" component={StaffInDepHOD} />
                     <Route path="/AttendanceLogsHR" component={AttendanceLogsHR} />
                     <Route path="/InstructorsHOD" component={InstructorsHOD} />
-                   
+                    <Route path="/TeachingAssignmentsHOD" component={TeachingAssignmentsHOD} />
                   </motion.div>
                 </Switch>
               </LeftSidebar>
