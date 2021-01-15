@@ -17,6 +17,9 @@ export default function SingleRowSelectionGrid() {
 
   const [state,setState]=React.useState("");
   const [boolState,setBoolState] =React.useState(false);
+  const [viewDialog,setViewDialog]=React.useState(false)
+  const [selectedMember,setSelectedMember]=React.useState('')
+  const [selectedMemberName,setSelectedMemberName]=React.useState('')
 
   const onClick1=
   async (e) => {
@@ -32,6 +35,7 @@ export default function SingleRowSelectionGrid() {
 }
 })
 .then(function(response) {
+  console.log(response.data)
 return response.data;
 })
 .catch(function(error) {
@@ -86,17 +90,19 @@ setRows(response);
 
   const onRowSelected=(row)=>{
     if(boolState){
-        return <OpenDialog course={course} id={row.id}></OpenDialog>
+      setViewDialog(true)
+      setSelectedMember(row.data.id)
+      setSelectedMemberName(row.data.name)
     }
-    console.log(row)
   }
 
   return (
     <div style={{ height: 800, width: "100%" }}>
         <form  style={{display:'flex'}}>
-        <TextField id="outlined-basic" name="course" label="Filter By Course" variant="outlined" onChange={onChange} />
+        <TextField id="outlined-basic" name="course" label="Filter By Course Code" variant="outlined" onChange={onChange} />
         <Button variant="outlined" type="submit" hight='10' onClick={onClick1} >Filter</Button>
         <Button variant="outlined" type="submit" hight='10' onClick={onClick2} >All</Button>
+        {(viewDialog)?<OpenDialog course={course} id={selectedMember} name={selectedMemberName}></OpenDialog>:<></>}
         </form>
       <DataGrid
         columns={[

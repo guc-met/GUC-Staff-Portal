@@ -66,6 +66,8 @@ export default function CustomizedDialogs(props) {
     setOpen(false);
   };
   const removeMember=()=>{
+    console.log(props.id)
+    console.log(props.name)
     axios
     .delete(
       'http://localhost:3001/inst/removeAssignedMember',
@@ -76,7 +78,7 @@ export default function CustomizedDialogs(props) {
       }
     )
     .then(function(response) {
-      //console.log(response)
+      console.log(response)
       if(response.status!=200)//that's an error
         setOpenX([true,'top',"error",response.data.err]);
       else{
@@ -92,6 +94,8 @@ export default function CustomizedDialogs(props) {
   }
 
   const setCoordinator=()=>{
+    console.log(props.id)
+    console.log(props.name)
     axios
     .post(
       'http://localhost:3001/inst/assignCoordinator',
@@ -105,7 +109,7 @@ export default function CustomizedDialogs(props) {
       }
     )
     .then(function(response) {
-      //console.log(response)
+      console.log(response)
       if(response.status!=200)//that's an error
         setOpenX([true,'top',"error",response.data.err]);
       else{
@@ -130,16 +134,18 @@ export default function CustomizedDialogs(props) {
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open dialog
+      Select Member
       </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Modal title
+          Member 
         </DialogTitle>
         <DialogContent dividers>
           <Typography gutterBottom>
-          Remove an assigned academic member in course(s) he/she is assigned to.
-        Assign an academic member in each of his/her course(s) to be a course coordinator.
+          <h4 style={{color:'midnightblue', fontFamily:'sans-serif'}}>{props.name}</h4>
+          <h3 style={{color:'blue', fontFamily:'sans-serif'}}>Remove an assigned academic member in course(s) he/she is assigned to.
+        Assign an academic member in each of his/her course(s) to be a course coordinator.</h3>
+        <h6 style={{color:'midnightblue', fontFamily:'sans-serif'}}>Refresh the page after succsseful operation</h6>
           </Typography>
         </DialogContent>
         <DialogActions>
