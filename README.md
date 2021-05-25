@@ -1,12 +1,9 @@
 # GUC Staff Portal
 
+A full stack(MERN) website that is dedicated for staff members to manage courses, schedules and other technicalities related to GUC staff members.
 
-backend: https://guckalabala.herokuapp.com/
-frontend: https://gucstaff-front.herokuapp.com/
-- MERN Stack
-
+The deployed version:
+https://gucstaff-front.herokuapp.com/
 
 Email : abdul@gmail.com
 Password: abdul00
-
-Added this to login with in the website
